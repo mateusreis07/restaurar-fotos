@@ -213,12 +213,29 @@ export default function Dashboard() {
 
                        return (
                          <div key={photo.id} className="bg-white rounded-[1.5rem] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-300 group border border-[#c7c4d7]/40 flex flex-col hover:-translate-y-1">
-                           <div className="relative aspect-[4/3] overflow-hidden bg-[#f0f3ff]">
-                               <img src={photo.restoredUrl || photo.originalUrl} alt="Restored portrait" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                            <div className="relative aspect-[4/3] overflow-hidden bg-[#f0f3ff]">
+                               {photo.animatedUrl ? (
+                                 <video 
+                                   src={photo.animatedUrl} 
+                                   autoPlay 
+                                   loop 
+                                   muted 
+                                   playsInline 
+                                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                 />
+                               ) : (
+                                 <img 
+                                   src={photo.restoredUrl || photo.originalUrl} 
+                                   alt="Restored portrait" 
+                                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                                 />
+                               )}
                                <div className="absolute top-4 right-4 z-10">
-                                   <span className="bg-[#e2f9ec] text-[#0f6b40] px-3.5 py-1.5 rounded-full text-[10.5px] font-extrabold uppercase tracking-widest shadow-lg">PRONTA</span>
+                                   <span className={`px-3.5 py-1.5 rounded-full text-[10.5px] font-extrabold uppercase tracking-widest shadow-lg ${photo.animatedUrl ? 'bg-[#ffdad6] text-[#ba1a1a]' : 'bg-[#e2f9ec] text-[#0f6b40]'}`}>
+                                     {photo.animatedUrl ? 'ANIMADA' : 'PRONTA'}
+                                   </span>
                                </div>
-                           </div>
+                            </div>
                            <div className="p-6 flex flex-col flex-1">
                                <div className="flex justify-between items-start mb-6 w-full">
                                    <div className="w-full">
@@ -231,10 +248,10 @@ export default function Dashboard() {
                                        <span className="material-symbols-outlined text-[18px]">contrast</span>
                                        Comparar
                                    </button>
-                                   <a href={photo.restoredUrl} target="_blank" download className="flex items-center justify-center gap-2 bg-[#483ede] text-white px-4 py-3 rounded-[12px] font-bold text-[14px] hover:bg-[#3b32c6] transition-colors shadow-md shadow-[#483ede]/20">
-                                       <span className="material-symbols-outlined text-[18px]">download</span>
-                                       Baixar
-                                   </a>
+                                    <a href={photo.animatedUrl || photo.restoredUrl || photo.originalUrl} target="_blank" download className="flex items-center justify-center gap-2 bg-[#483ede] text-white px-4 py-3 rounded-[12px] font-bold text-[14px] hover:bg-[#3b32c6] transition-colors shadow-md shadow-[#483ede]/20">
+                                        <span className="material-symbols-outlined text-[18px]">download</span>
+                                        Baixar
+                                    </a>
                                </div>
                            </div>
                          </div>

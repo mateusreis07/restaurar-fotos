@@ -25,6 +25,7 @@ model Photo {
   user        User     @relation(fields: [userId], references: [id])
   originalUrl String
   restoredUrl String?
+  animatedUrl String?
   status      String   @default("PENDING") // PENDING, PROCESSING, COMPLETED, FAILED
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

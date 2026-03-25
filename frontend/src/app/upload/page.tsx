@@ -10,6 +10,7 @@ export default function UploadPage() {
   const [preview, setPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [colorize, setColorize] = useState(false);
+  const [animate, setAnimate] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -58,6 +59,7 @@ export default function UploadPage() {
     formData.append('file', file);
     formData.append('userId', user.id);
     formData.append('colorize', colorize.toString());
+    formData.append('animate', animate.toString());
 
     try {
       const res = await fetch('/api/photos/upload', {
@@ -201,19 +203,46 @@ export default function UploadPage() {
 
               {/* AI Options */}
               {preview && !uploading && (
-                <div className="w-full mb-6 p-4 rounded-3xl bg-white border border-[#EEECFF] shadow-sm flex items-center justify-between group cursor-pointer hover:bg-[#F9F9FF] transition-colors" onClick={() => setColorize(!colorize)}>
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${colorize ? 'bg-[#604AF0] text-white' : 'bg-[#F1F5F9] text-slate-400'}`}>
-                      <span className="material-symbols-outlined text-[20px]">palette</span>
+                <div className="w-full mb-6 flex flex-col gap-4">
+                {/* Toggle: Colorize */}
+                <div className="flex items-center justify-between p-6 bg-white/60 rounded-3xl border border-[#c7c4d7]/40 shadow-sm backdrop-blur-sm">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-[#483ede] to-[#6366f1] rounded-2xl flex items-center justify-center shadow-lg shadow-[#483ede]/20">
+                      <span className="material-symbols-outlined text-white text-[24px]">palette</span>
                     </div>
-                    <div className="text-left">
-                      <p className="font-bold text-[#1E293B] text-[14px]">Colorir Automático</p>
-                      <p className="text-[#64748B] text-[12px] font-semibold">Usar IA DeOldify para fotos P&B</p>
+                    <div>
+                      <h4 className="font-headline font-bold text-[#151c27] text-[15px]">Colorir Automático</h4>
+                      <p className="text-[12px] font-semibold text-[#575f6a]/80">Restaura as cores de fotos P&B</p>
                     </div>
                   </div>
-                  <div className={`w-11 h-6 rounded-full relative transition-colors ${colorize ? 'bg-[#604AF0]' : 'bg-[#E2E8F0]'}`}>
-                    <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${colorize ? 'left-6' : 'left-1'}`}></div>
+                  <button 
+                    type="button"
+                    onClick={() => setColorize(!colorize)}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 focus:outline-none shadow-inner ${colorize ? 'bg-[#483ede]' : 'bg-[#e2e8f8]'}`}
+                  >
+                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-all duration-300 shadow-md ${colorize ? 'translate-x-6' : 'translate-x-1'}`} />
+                  </button>
+                </div>
+
+                {/* Toggle: Animate */}
+                <div className="flex items-center justify-between p-6 bg-white/60 rounded-3xl border border-[#c7c4d7]/40 shadow-sm backdrop-blur-sm">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-[#f43f5e] to-[#fb7185] rounded-2xl flex items-center justify-center shadow-lg shadow-[#f43f5e]/20">
+                      <span className="material-symbols-outlined text-white text-[24px]">movie</span>
+                    </div>
+                    <div>
+                      <h4 className="font-headline font-bold text-[#151c27] text-[15px]">Animar Retrato (SadTalker)</h4>
+                      <p className="text-[12px] font-semibold text-[#575f6a]/80">Cria movimento e vida no rosto</p>
+                    </div>
                   </div>
+                  <button 
+                    type="button"
+                    onClick={() => setAnimate(!animate)}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 focus:outline-none shadow-inner ${animate ? 'bg-[#f43f5e]' : 'bg-[#e2e8f8]'}`}
+                  >
+                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-all duration-300 shadow-md ${animate ? 'translate-x-6' : 'translate-x-1'}`} />
+                  </button>
+                </div>
                 </div>
               )}
 
