@@ -76,7 +76,7 @@ export async function POST(req: Request) {
             version: "a519cc0cfebaaeade068b23899165a11ec76aaa1d2b313d40d214f204ec957a3", // cjwbw/sadtalker
             input: {
               source_image: imageUrl,
-              driven_audio: "https://github.com/anars/blank-audio/raw/master/1-second-of-silence.mp3",
+              driven_audio: "https://raw.githubusercontent.com/anars/blank-audio/master/5-seconds-of-silence.mp3",
               use_eyeblink: true,
               still_mode: true,
               use_enhancer: true,
