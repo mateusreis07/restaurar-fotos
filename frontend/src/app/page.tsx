@@ -1,19 +1,54 @@
 'use client';
 import Link from 'next/link';
+import { useState, useRef, useEffect } from 'react';
 
 export default function Home() {
+  const [sliderPosition, setSliderPosition] = useState(50);
+  const [isDragging, setIsDragging] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const imageUrl = "https://images.unsplash.com/photo-1543430720-fa600c67e423?auto=format&fit=crop&q=100&w=1200";
+
+  const handleMove = (clientX: number) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+    const percent = Math.max(0, Math.min((x / rect.width) * 100, 100));
+    setSliderPosition(percent);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (isDragging) handleMove(e.clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (isDragging) handleMove(e.touches[0].clientX);
+  };
+
+  useEffect(() => {
+    const handleMouseUp = () => setIsDragging(false);
+    window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('touchend', handleMouseUp);
+    return () => {
+      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('touchend', handleMouseUp);
+    };
+  }, []);
+
   return (
     <>
       <nav className="fixed top-0 w-full z-50 glass-panel shadow-sm">
         <div className="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
           <div className="text-2xl font-bold tracking-tighter text-primary font-headline">Aura Recall</div>
           <div className="hidden md:flex items-center space-x-8">
-            <a className="font-headline font-medium text-sm tracking-tight text-primary font-bold border-b-2 border-primary pb-1" href="#">Como funciona</a>
-            <a className="font-headline font-medium text-sm tracking-tight text-slate-600 hover:text-primary transition-colors duration-300" href="#">Preços</a>
+            <a className="font-headline font-medium text-sm tracking-tight text-slate-600 hover:text-primary transition-colors duration-300" href="#como-funciona">Como funciona</a>
+            <a className="font-headline font-medium text-sm tracking-tight text-slate-600 hover:text-primary transition-colors duration-300" href="#precos">Preços</a>
             <Link href="/dashboard" className="font-headline font-medium text-sm tracking-tight text-slate-600 hover:text-primary transition-colors duration-300">Minha Área</Link>
           </div>
           <div className="flex items-center space-x-4">
-            <button className="hidden sm:block text-slate-600 font-headline font-medium text-sm hover:text-primary transition-colors duration-300">Login</button>
+            <Link href="/dashboard" className="hidden sm:block text-slate-600 font-headline font-medium text-sm hover:text-primary transition-colors duration-300">
+              Login
+            </Link>
             <Link href="/dashboard">
               <button className="editorial-gradient text-on-primary px-6 py-2.5 rounded-full font-headline font-semibold text-sm shadow-md active:scale-95 transition-transform duration-150">
                   Começar a Restaurar
@@ -22,144 +57,198 @@ export default function Home() {
           </div>
         </div>
       </nav>
+      
       <main className="pt-24 flex-grow">
         {/* Hero Section */}
         <section className="px-6 py-12 md:py-24 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">
             <h1 className="font-headline font-extrabold text-5xl md:text-6xl text-on-surface leading-[1.1] tracking-tight">
-                Restaure suas fotos antigas com IA em segundos
+                Salve as lembranças da sua família do esquecimento.
             </h1>
             <p className="text-lg md:text-xl text-secondary leading-relaxed max-w-lg">
-                Transforme fotos desbotadas, riscadas ou embaçadas em recordações vívidas e cristalinas. Uma herança digital para sua família.
+                Nossa Inteligência Artificial remove arranhões, corrige desfoque e revive as cores perdidas pelo tempo em questão de segundos. Suas memórias merecem viver para sempre.
             </p>
-            <div className="space-y-4">
-              <Link href="/dashboard" className="block w-full">
-                <button className="w-full editorial-gradient text-on-primary py-5 rounded-xl font-headline font-bold text-lg shadow-lg active:scale-95 transition-all">
-                    Restaurar minha foto agora
+            <div className="space-y-4 pt-4">
+              <Link href="/dashboard" className="block w-full max-w-md">
+                <button className="w-full editorial-gradient text-on-primary py-5 rounded-xl font-headline font-bold text-lg shadow-xl shadow-primary/20 hover:shadow-primary/40 active:scale-95 transition-all">
+                    Restaurar minha primeira foto
                 </button>
               </Link>
+              <p className="text-sm font-medium text-slate-400 mt-2">Sem assinaturas. Pague apenas pelo pacote que usar.</p>
             </div>
           </div>
-          <div className="relative rounded-xl overflow-hidden shadow-2xl group w-full aspect-[4/5] bg-slate-300" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBMk8dagUlvtrjUg2jh1pucdn5sF77rIg4yZjlf_Agk2DUGtnLuf7mytHYLorNQPAd1Atvhs9Gpt-5jO41DYDeUITjeUOQT7_I7c3-Ur7aGDIx-JWBL3ysQtoe8dCjAAl_Tlvzc6OVgfPkGK-nDH16dlo6qFJCECGelDmD0JMVPFMfUB5hXUJBZyCrRrkXtsdfyuGmd3z2kR_9IQymwGOOpvYzSlipNq7o7PsuXEf93RF4ipbHdmspXRS2owhP0VlF7Gr0W1ingZKhE')", backgroundSize: 'cover' }}>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-1 h-full bg-white/80 shadow-lg relative cursor-ew-resize">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-xl">
-                  <span className="material-symbols-outlined text-primary">unfold_more</span>
-                </div>
+          
+          {/* Interactive Before/After Slider */}
+          <div 
+            ref={containerRef}
+            className="relative lg:h-[600px] rounded-2xl overflow-hidden shadow-2xl group w-full aspect-[4/5] lg:aspect-auto select-none cursor-ew-resize bg-slate-900 border border-slate-200"
+            onMouseMove={handleMouseMove}
+            onTouchMove={handleTouchMove}
+            onMouseDown={(e) => { setIsDragging(true); handleMove(e.clientX); }}
+            onTouchStart={(e) => { setIsDragging(true); handleMove(e.touches[0].clientX); }}
+          >
+            {/* After (Restored) - Base Image */}
+            <div 
+              className="absolute inset-0 w-full h-full bg-cover bg-center pointer-events-none"
+              style={{ backgroundImage: `url(${imageUrl})` }}
+            />
+            
+            {/* Before (Damaged) - Clipped Overlay */}
+            <div 
+              className="absolute inset-0 h-full overflow-hidden pointer-events-none"
+              style={{ width: `${sliderPosition}%` }}
+            >
+              <div 
+                className="absolute inset-0 h-full bg-cover bg-center"
+                style={{ 
+                  backgroundImage: `url(${imageUrl})`,
+                  width: '100vw',
+                  maxWidth: containerRef.current?.offsetWidth || 1000,
+                  filter: 'sepia(80%) grayscale(40%) blur(1px) contrast(80%) brightness(0.9)'
+                }}
+              />
+            </div>
+
+            {/* Slider Handle */}
+            <div 
+              className="absolute inset-y-0 w-1 bg-white/90 shadow-[0_0_10px_rgba(0,0,0,0.5)] z-10 pointer-events-none"
+              style={{ left: `calc(${sliderPosition}% - 2px)` }}
+            >
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-xl border border-slate-200 transition-transform group-hover:scale-110">
+                <span className="material-symbols-outlined text-primary">unfold_more</span>
               </div>
             </div>
-            <div className="absolute bottom-4 left-4 glass-panel px-4 py-2 rounded-lg text-sm font-bold text-primary">Antes</div>
-            <div className="absolute bottom-4 right-4 glass-panel px-4 py-2 rounded-lg text-sm font-bold text-primary">Depois</div>
+
+            {/* Labels */}
+            <div className="absolute bottom-6 left-6 glass-panel px-4 py-2 rounded-xl text-sm font-bold text-primary shadow-sm pointer-events-none transition-opacity duration-300" style={{ opacity: sliderPosition < 20 ? 0 : 1 }}>
+              Antiga
+            </div>
+            <div className="absolute bottom-6 right-6 glass-panel px-4 py-2 rounded-xl text-sm font-bold text-primary shadow-sm pointer-events-none transition-opacity duration-300" style={{ opacity: sliderPosition > 80 ? 0 : 1 }}>
+              Restaurada
+            </div>
           </div>
         </section>
 
         {/* How it Works */}
-        <section className="bg-surface-container-low py-24 px-6">
+        <section id="como-funciona" className="bg-surface-container-low py-24 px-6 border-y border-slate-200/60">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-20">
-              <h2 className="font-headline font-extrabold text-4xl text-on-surface mb-4">Como funciona</h2>
-              <p className="text-secondary max-w-xl mx-auto">Três passos simples para trazer suas memórias de volta à vida.</p>
+              <h2 className="font-headline font-extrabold text-4xl text-on-surface mb-4">A magia acontece em 3 cliques</h2>
+              <p className="text-secondary max-w-xl mx-auto text-lg">Esqueça softwares complexos de edição gráfica. Traga suas memórias de volta à vida imediatamente.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-              <div className="bg-surface rounded-xl p-10 space-y-6 shadow-sm hover:translate-y-[-8px] transition-transform duration-300">
-                <div className="w-16 h-16 bg-primary-fixed rounded-full flex items-center justify-center">
-                  <span className="material-symbols-outlined text-primary text-3xl">upload_file</span>
+              <div className="bg-surface rounded-2xl p-10 space-y-6 shadow-sm hover:-translate-y-2 transition-transform duration-300 border border-slate-100">
+                <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center transform -rotate-3">
+                  <span className="material-symbols-outlined text-primary text-3xl">add_photo_alternate</span>
                 </div>
-                <h3 className="font-headline font-bold text-2xl">1. Upload</h3>
-                <p className="text-secondary leading-relaxed">Envie uma foto digitalizada ou até mesmo tire uma foto da imagem antiga com seu celular.</p>
+                <h3 className="font-headline font-bold text-2xl">1. Faça o Upload</h3>
+                <p className="text-secondary leading-relaxed">Pode ser uma foto escaneada ou até mesmo uma foto tirada do álbum de família com o seu próprio celular.</p>
               </div>
-              <div className="bg-surface rounded-xl p-10 space-y-6 shadow-sm hover:translate-y-[-8px] transition-transform duration-300">
-                <div className="w-16 h-16 bg-primary-fixed rounded-full flex items-center justify-center">
-                  <span className="material-symbols-outlined text-primary text-3xl">auto_fix_high</span>
+              <div className="bg-surface rounded-2xl p-10 space-y-6 shadow-sm hover:-translate-y-2 transition-transform duration-300 border border-slate-100 relative">
+                <div className="absolute top-0 right-10 -translate-y-1/2 editorial-gradient text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">IA Avançada</div>
+                <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center transform rotate-3">
+                  <span className="material-symbols-outlined text-primary text-3xl">auto_awesome</span>
                 </div>
-                <h3 className="font-headline font-bold text-2xl">2. IA Melhora</h3>
-                <p className="text-secondary leading-relaxed">Nossa inteligência artificial analisa cada pixel, remove riscos e recria os detalhes perdidos pelo tempo.</p>
+                <h3 className="font-headline font-bold text-2xl">2. Nossa Máquina Analisa</h3>
+                <p className="text-secondary leading-relaxed">Em menos de 10 segundos nossa inteligência artificial mapeia traços, corrige texturas e injeta as cores corretas.</p>
               </div>
-              <div className="bg-surface rounded-xl p-10 space-y-6 shadow-sm hover:translate-y-[-8px] transition-transform duration-300">
-                <div className="w-16 h-16 bg-primary-fixed rounded-full flex items-center justify-center">
+              <div className="bg-surface rounded-2xl p-10 space-y-6 shadow-sm hover:-translate-y-2 transition-transform duration-300 border border-slate-100">
+                <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center transform -rotate-3">
                   <span className="material-symbols-outlined text-primary text-3xl">download</span>
                 </div>
-                <h3 className="font-headline font-bold text-2xl">3. Download</h3>
-                <p className="text-secondary leading-relaxed">Baixe sua foto restaurada em alta definição, pronta para ser impressa e emoldurada novamente.</p>
+                <h3 className="font-headline font-bold text-2xl">3. Emoção Pronta</h3>
+                <p className="text-secondary leading-relaxed">Emocione sua família. Baixe o retrato restaurado em ultra-definição para imprimir, emoldurar ou postar.</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* Pricing */}
-        <section className="bg-surface py-24 px-6">
+        <section id="precos" className="bg-surface py-24 px-6">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="font-headline font-extrabold text-4xl text-on-surface mb-4">Escolha seu plano</h2>
-              <p className="text-secondary">Pague apenas pelo que precisar. Sem assinaturas mensais.</p>
+              <h2 className="font-headline font-extrabold text-4xl text-on-surface mb-4">Escolha seu pacote</h2>
+              <p className="text-secondary text-lg">Pague apenas pelo que precisar através da plataforma ultra segura Stripe.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-surface-container-low p-10 rounded-xl shadow-sm space-y-8 flex flex-col">
+              <div className="bg-surface-container-low p-10 rounded-2xl shadow-sm space-y-8 flex flex-col border border-slate-200/60">
                 <div className="space-y-2">
-                  <h3 className="font-headline font-bold text-xl">Iniciante</h3>
+                  <h3 className="font-headline font-bold text-xl text-slate-700">Iniciante</h3>
                   <div className="flex items-baseline space-x-1">
-                    <span className="text-2xl font-bold">R$</span>
-                    <span className="text-5xl font-extrabold">29</span>
+                    <span className="text-2xl font-bold text-slate-400">R$</span>
+                    <span className="text-5xl font-extrabold text-slate-800">29</span>
                   </div>
                 </div>
                 <ul className="space-y-4 flex-grow">
                   <li className="flex items-center space-x-3 text-secondary">
-                    <span className="material-symbols-outlined text-primary">check_circle</span>
-                    <span>5 fotos restauradas</span>
+                    <span className="material-symbols-outlined text-emerald-500">check_circle</span>
+                    <span className="font-medium text-slate-700">5 fotos restauradas</span>
                   </li>
                   <li className="flex items-center space-x-3 text-secondary">
-                    <span className="material-symbols-outlined text-primary">check_circle</span>
+                    <span className="material-symbols-outlined text-emerald-500">check_circle</span>
                     <span>Alta definição (HD)</span>
+                  </li>
+                  <li className="flex items-center space-x-3 text-secondary">
+                    <span className="material-symbols-outlined text-emerald-500">check_circle</span>
+                    <span>Download Livre</span>
                   </li>
                 </ul>
                 <Link href="/dashboard">
-                  <button className="w-full py-4 rounded-xl border-2 border-primary text-primary font-headline font-bold hover:bg-primary-fixed transition-colors">
-                    Comprar Agora
+                  <button className="w-full py-4 rounded-xl border-2 border-primary text-primary font-headline font-bold hover:bg-primary/5 transition-colors">
+                    Adquirir
                   </button>
                 </Link>
               </div>
-              <div className="bg-surface p-10 rounded-xl shadow-xl ring-2 ring-primary relative space-y-8 flex flex-col scale-105">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 editorial-gradient text-on-primary text-xs font-bold px-4 py-1 rounded-full uppercase tracking-widest">Mais popular</div>
+              <div className="bg-surface p-10 rounded-2xl shadow-2xl ring-2 ring-primary relative space-y-8 flex flex-col scale-105 z-10">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 editorial-gradient text-on-primary text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg">O Maior Retorno</div>
                 <div className="space-y-2">
-                  <h3 className="font-headline font-bold text-xl text-primary">Memórias de Família</h3>
+                  <h3 className="font-headline font-bold text-xl text-primary">Baú da Família</h3>
                   <div className="flex items-baseline space-x-1 text-primary">
                     <span className="text-2xl font-bold">R$</span>
                     <span className="text-5xl font-extrabold">49</span>
                   </div>
                 </div>
                 <ul className="space-y-4 flex-grow">
-                  <li className="flex items-center space-x-3 text-secondary">
-                    <span className="material-symbols-outlined text-primary">check_circle</span>
+                  <li className="flex items-center space-x-3">
+                    <span className="material-symbols-outlined text-primary">verified</span>
                     <span className="font-bold text-on-surface">10 fotos restauradas</span>
                   </li>
                   <li className="flex items-center space-x-3 text-secondary">
-                    <span className="material-symbols-outlined text-primary">check_circle</span>
-                    <span>Restauração facial avançada</span>
+                    <span className="material-symbols-outlined text-primary">verified</span>
+                    <span className="font-medium text-slate-700">Restauração facial avançada</span>
+                  </li>
+                  <li className="flex items-center space-x-3 text-secondary">
+                    <span className="material-symbols-outlined text-primary">verified</span>
+                    <span>Tratamento Colorido IA</span>
                   </li>
                 </ul>
                 <Link href="/dashboard">
-                  <button className="w-full py-4 rounded-xl editorial-gradient text-on-primary font-headline font-bold shadow-lg hover:shadow-primary/20 transition-all">
-                    Comprar Agora
+                  <button className="w-full py-4 rounded-xl editorial-gradient text-on-primary font-headline font-bold shadow-xl hover:shadow-primary/40 active:scale-95 transition-all text-lg tracking-wide">
+                    Quero este pacote
                   </button>
                 </Link>
               </div>
-              <div className="bg-surface-container-low p-10 rounded-xl shadow-sm space-y-8 flex flex-col">
+              <div className="bg-surface-container-low p-10 rounded-2xl shadow-sm space-y-8 flex flex-col border border-slate-200/60">
                 <div className="space-y-2">
-                  <h3 className="font-headline font-bold text-xl">Legado Completo</h3>
+                  <h3 className="font-headline font-bold text-xl text-slate-700">Legado Completo</h3>
                   <div className="flex items-baseline space-x-1">
-                    <span className="text-2xl font-bold">R$</span>
-                    <span className="text-5xl font-extrabold">79</span>
+                    <span className="text-2xl font-bold text-slate-400">R$</span>
+                    <span className="text-5xl font-extrabold text-slate-800">79</span>
                   </div>
                 </div>
                 <ul className="space-y-4 flex-grow">
                   <li className="flex items-center space-x-3 text-secondary">
-                    <span className="material-symbols-outlined text-primary">check_circle</span>
-                    <span>20 fotos restauradas</span>
+                    <span className="material-symbols-outlined text-emerald-500">check_circle</span>
+                    <span className="font-medium text-slate-700">20 fotos restauradas</span>
+                  </li>
+                  <li className="flex items-center space-x-3 text-secondary">
+                    <span className="material-symbols-outlined text-emerald-500">check_circle</span>
+                    <span>Mesmos benefícios anteriores</span>
                   </li>
                 </ul>
                 <Link href="/dashboard">
-                  <button className="w-full py-4 rounded-xl border-2 border-primary text-primary font-headline font-bold hover:bg-primary-fixed transition-colors">
-                    Comprar Agora
+                  <button className="w-full py-4 rounded-xl border-2 border-primary text-primary font-headline font-bold hover:bg-primary/5 transition-colors">
+                    Adquirir
                   </button>
                 </Link>
               </div>
@@ -168,11 +257,17 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="bg-surface-container-low w-full py-12 px-6 mt-auto">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <div className="space-y-4">
-            <div className="text-lg font-bold text-slate-900 font-headline">Aura Recall</div>
-            <p className="font-body text-sm text-slate-500 max-w-sm">© 2026 Aura Recall. Suas memórias, perfeitamente preservadas.</p>
+      <footer className="bg-surface-container-low w-full py-16 px-6 mt-auto border-t border-slate-200">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex flex-col items-center md:items-start space-y-2">
+            <div className="text-xl font-bold text-slate-900 font-headline">Aura Recall</div>
+            <p className="font-body text-sm text-slate-500 max-w-sm text-center md:text-left">
+              © 2026 Aura Recall. Suas memórias, perfeitamente preservadas usando o poder da criatividade computacional avançada.
+            </p>
+          </div>
+          <div className="flex space-x-6 text-slate-400">
+             <Link href="#" className="hover:text-primary transition-colors text-sm">Termos de Uso</Link>
+             <Link href="#" className="hover:text-primary transition-colors text-sm">Privacidade</Link>
           </div>
         </div>
       </footer>
