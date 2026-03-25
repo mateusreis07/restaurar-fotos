@@ -50,7 +50,9 @@ export async function POST(req: Request) {
       auth: process.env.REPLICATE_API_TOKEN,
     });
 
-    const host = process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : process.env.FRONTEND_URL || 'http://localhost:3000';
+    // Detectar o Host dinamicamente para que o Webhook funcione tanto em Local (ngrok) quanto em Produção
+    const origin = req.headers.get('origin') || req.headers.get('host');
+    const host = origin?.startsWith('http') ? origin : `https://${origin}`;
     const webhookUrl = `${host}/api/webhook/replicate?photoId=${photo.id}`;
 
     try {
