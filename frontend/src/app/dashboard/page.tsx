@@ -56,7 +56,16 @@ export default function Dashboard() {
     }
   };
 
-
+  useEffect(() => {
+    // Polling contínuo apenas se houver fotos processando
+    const hasProcessing = photos.some(p => p.status === 'PROCESSING');
+    if (hasProcessing && user) {
+      const interval = setInterval(() => {
+        loadPhotos(user.id);
+      }, 4000);
+      return () => clearInterval(interval);
+    }
+  }, [photos, user]);
 
   // Slider Handlers
   const handleMove = (clientX: number) => {
@@ -192,6 +201,13 @@ export default function Dashboard() {
                                <h3 className="font-headline font-bold text-[20px] text-[#151c27] truncate">Foto {idx + 1}</h3>
                                <p className="text-[#575f6a] text-[14px] font-semibold tracking-wide">Tempo estimado: ~2 minutos</p>
                            </div>
+                         </div>
+                       );
+                       if (photo.status === 'FAILED') return (
+                         <div key={photo.id} className="bg-[#fff0f0] rounded-[1.5rem] overflow-hidden group border border-[#ffdad6] shadow-sm flex flex-col items-center justify-center p-8 text-center text-[#ba1a1a]">
+                            <span className="material-symbols-outlined text-[48px] mb-3 opacity-80">error</span>
+                            <h3 className="font-headline font-bold text-[20px] mb-1">Processamento Falhou</h3>
+                            <p className="text-[14px] font-medium opacity-80">A conexão com a Replicate (IA) foi bloqueada pelo seu computador local ou falhou ao analisar os dados.</p>
                          </div>
                        );
 

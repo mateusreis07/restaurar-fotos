@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { v2 as cloudinary } from 'cloudinary';
+import Replicate from 'replicate';
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -44,14 +45,38 @@ export async function POST(req: Request) {
       data: { credits: user.credits - 1 }
     });
 
-    // Mock AI background process (does not block Next.js response)
-    setTimeout(async () => {
-      const mockRestoredUrl = uploadResult.secure_url.replace('/upload/', '/upload/e_improve,e_sharpen,e_saturation:30/');
+    // Replicate Integration (GFPGAN for Face Verification and Restoration)
+    const replicate = new Replicate({
+      auth: process.env.REPLICATE_API_TOKEN,
+    });
+
+    const host = process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : process.env.FRONTEND_URL || 'http://localhost:3000';
+    const webhookUrl = `${host}/api/webhook/replicate?photoId=${photo.id}`;
+
+    try {
+      console.log(`[Replicate] Dispatching GFPGAN with Webhook: ${webhookUrl}`);
+      // Usando CodeFormer (Muito superior: restaura rosto, fundo e faz upscale real)
+      const prediction = await replicate.predictions.create({
+        version: "7de2ea26c616d5bf2245ad0d5e24f0ff9a6204578a5c876db53142edd9d2cd56",
+        input: {
+          image: uploadResult.secure_url,
+          upscale: 2,
+          face_upsample: true,
+          background_enhance: true,
+          codeformer_fidelity: 0.5
+        },
+        webhook: webhookUrl,
+        webhook_events_filter: ["completed"]
+      });
+      console.log(`[Replicate] Predição iniciada com sucesso! ID: ${prediction.id} | Status: ${prediction.status}`);
+    } catch (repError: any) {
+      console.error("[Replicate] Falha ao disparar predição:", repError.message || repError);
+      // Se a IA der pau, vamos marcar a foto como FAILED para não ficar processando infinito!
       await prisma.photo.update({
         where: { id: photo.id },
-        data: { status: 'COMPLETED', restoredUrl: mockRestoredUrl }
+        data: { status: 'FAILED' }
       });
-    }, 5000);
+    }
 
     return NextResponse.json({ photo, creditsLeft: user.credits - 1 });
   } catch (error) {

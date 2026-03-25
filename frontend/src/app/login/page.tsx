@@ -15,7 +15,10 @@ export default function Login() {
     try {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true' // Impede que o Ngrok intercepte a API e bloqueie o payload de login
+        },
         body: JSON.stringify({ email })
       });
       const data = await res.json();
@@ -45,7 +48,7 @@ export default function Login() {
           <h1 className="font-headline font-extrabold text-4xl text-on-surface mb-3">Bem-vindo de volta</h1>
           <p className="text-secondary text-lg mb-10">Acesse sua conta para restaurar suas memórias ou adquirir novos pacotes de magia.</p>
           
-          <form onSubmit={handleLogin} className="space-y-6">
+          <div className="space-y-6">
             <div className="space-y-2">
               <label htmlFor="email" className="block text-sm font-bold text-slate-700">Seu E-mail Institucional ou Pessoal</label>
               <input 
@@ -55,18 +58,20 @@ export default function Login() {
                 className="w-full p-4 rounded-xl border-2 border-slate-200 bg-white focus:outline-none focus:border-primary transition-colors text-slate-800"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onKeyDown={(e) => { if(e.key === 'Enter') handleLogin(e); }}
                 required
               />
             </div>
             
             <button 
-              type="submit" 
+              type="button" 
+              onClick={handleLogin}
               disabled={loading}
               className="w-full editorial-gradient text-on-primary py-4 rounded-xl font-headline font-bold text-lg shadow-lg hover:shadow-primary/30 active:scale-95 transition-all disabled:opacity-70 flex justify-center items-center"
             >
               {loading ? 'Entrando...' : 'Acessar meu painel'}
             </button>
-          </form>
+          </div>
           
           <p className="text-slate-500 text-sm mt-8 text-center lg:text-left">
             Ao entrar, você concorda com nossos <Link href="#" className="underline hover:text-primary">Termos de Uso</Link> e <Link href="#" className="underline hover:text-primary">Privacidade</Link>.
