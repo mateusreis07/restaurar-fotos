@@ -41,9 +41,9 @@ export async function POST(req: Request) {
 
           try {
             await replicate.predictions.create({
-              version: "9621da309e37704df37f808006d64993134e4a2c59a35e7df5d1f88c8801d9f0", // piddnad/deoldify
+              version: "0da600fab0c45a66211339f1c16b71345d22f26ef5fea3dca1bb90bb5711e950", // arielreplicate/deoldify_image
               input: {
-                model_name: "Artistic", // Opção focada em restauração de fotos antigas
+                model_name: "Artistic", 
                 input_image: restoredUrl,
                 render_factor: 35
               },
