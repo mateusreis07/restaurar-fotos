@@ -50,10 +50,14 @@ export async function POST(req: Request) {
       auth: process.env.REPLICATE_API_TOKEN,
     });
 
-    // Detectar o Host dinamicamente para que o Webhook funcione tanto em Local (ngrok) quanto em Produção
-    const origin = req.headers.get('origin') || req.headers.get('host');
-    const host = origin?.startsWith('http') ? origin : `https://${origin}`;
+    // Detectar o Host dinamicamente priorizando o ambiente oficial da Vercel ou o cabeçalho da requisição
+    const vercelUrl = process.env.VERCEL_URL;
+    let host = vercelUrl ? `https://${vercelUrl}` : (req.headers.get('origin') || req.headers.get('host') || process.env.FRONTEND_URL || '');
+    
+    if (host && !host.startsWith('http')) host = `https://${host}`;
+    
     const webhookUrl = `${host}/api/webhook/replicate?photoId=${photo.id}`;
+    console.log(`[Replicate Webhook Target]: ${webhookUrl}`);
 
     try {
       console.log(`[Replicate] Dispatching GFPGAN with Webhook: ${webhookUrl}`);
