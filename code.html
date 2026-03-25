@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aura Recall | Restaure suas memórias com IA</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary": "#7f23cd",
+              "on-tertiary": "#ffffff",
+              "primary-container": "#625bf8",
+              "on-error": "#ffffff",
+              "surface-variant": "#dce2f3",
+              "on-tertiary-fixed": "#2c0051",
+              "tertiary-container": "#9945e8",
+              "secondary-container": "#dbe3f0",
+              "secondary": "#575f6a",
+              "on-tertiary-fixed-variant": "#6900b3",
+              "outline": "#767586",
+              "on-primary-fixed-variant": "#3323cc",
+              "secondary-fixed-dim": "#bfc7d4",
+              "on-secondary-container": "#5d6570",
+              "error": "#ba1a1a",
+              "on-tertiary-container": "#fff6ff",
+              "surface-container": "#e7eefe",
+              "primary-fixed": "#e2dfff",
+              "on-background": "#151c27",
+              "on-primary-container": "#faf6ff",
+              "surface-bright": "#f9f9ff",
+              "inverse-on-surface": "#ebf1ff",
+              "on-secondary": "#ffffff",
+              "error-container": "#ffdad6",
+              "surface-container-highest": "#dce2f3",
+              "outline-variant": "#c7c4d7",
+              "on-secondary-fixed": "#141c25",
+              "surface-container-low": "#f0f3ff",
+              "surface-container-lowest": "#ffffff",
+              "on-primary": "#ffffff",
+              "on-surface": "#151c27",
+              "background": "#f9f9ff",
+              "on-surface-variant": "#464555",
+              "on-primary-fixed": "#0f0069",
+              "surface-dim": "#d3daea",
+              "secondary-fixed": "#dbe3f0",
+              "tertiary-fixed": "#f0dbff",
+              "inverse-primary": "#c3c0ff",
+              "primary": "#483ede",
+              "surface-tint": "#4d44e3",
+              "surface": "#f9f9ff",
+              "surface-container-high": "#e2e8f8",
+              "on-error-container": "#93000a",
+              "on-secondary-fixed-variant": "#3f4752",
+              "tertiary-fixed-dim": "#ddb7ff",
+              "inverse-surface": "#2a313d",
+              "primary-fixed-dim": "#c3c0ff"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .editorial-gradient {
+            background: linear-gradient(135deg, #483ede 0%, #625bf8 100%);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed-variant">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 glass-panel shadow-sm">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<div class="text-2xl font-bold tracking-tighter text-primary font-headline">Aura Recall</div>
+<div class="hidden md:flex items-center space-x-8">
+<a class="font-headline font-medium text-sm tracking-tight text-primary font-bold border-b-2 border-primary pb-1" href="#">How it Works</a>
+<a class="font-headline font-medium text-sm tracking-tight text-slate-600 hover:text-primary transition-colors duration-300" href="#">Pricing</a>
+<a class="font-headline font-medium text-sm tracking-tight text-slate-600 hover:text-primary transition-colors duration-300" href="#">Memories</a>
+</div>
+<div class="flex items-center space-x-4">
+<button class="hidden sm:block text-slate-600 font-headline font-medium text-sm hover:text-primary transition-colors duration-300">Login</button>
+<button class="editorial-gradient text-on-primary px-6 py-2.5 rounded-full font-headline font-semibold text-sm shadow-md active:scale-95 transition-transform duration-150">
+                    Start Restoring
+                </button>
+</div>
+</div>
+</nav>
+<main class="pt-24">
+<!-- Hero Section -->
+<section class="px-6 py-12 md:py-24 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="space-y-8">
+<h1 class="font-headline font-extrabold text-5xl md:text-6xl text-on-surface leading-[1.1] tracking-tight">
+                    Restaure suas fotos antigas com IA em segundos
+                </h1>
+<p class="text-lg md:text-xl text-secondary leading-relaxed max-w-lg">
+                    Transforme fotos desbotadas, riscadas ou embaçadas em recordações vívidas e cristalinas. Uma herança digital para sua família.
+                </p>
+<div class="space-y-4">
+<div class="p-8 bg-surface-container-highest rounded-xl shadow-sm border border-outline-variant/15 flex flex-col items-center justify-center border-dashed border-2 min-h-[200px] cursor-pointer hover:bg-primary-fixed/30 transition-colors group">
+<span class="material-symbols-outlined text-5xl text-primary mb-4 group-hover:scale-110 transition-transform" data-icon="cloud_upload">cloud_upload</span>
+<p class="font-headline font-semibold text-primary">Arraste sua foto aqui</p>
+<p class="text-sm text-secondary">ou clique para selecionar do computador</p>
+</div>
+<button class="w-full editorial-gradient text-on-primary py-5 rounded-xl font-headline font-bold text-lg shadow-lg active:scale-95 transition-all">
+                        Restaurar minha foto agora
+                    </button>
+</div>
+</div>
+<div class="relative rounded-xl overflow-hidden shadow-2xl group">
+<img alt="Restoration Preview" class="w-full aspect-[4/5] object-cover" data-alt="Side by side comparison of a grainy vintage black and white portrait of an elderly man being restored to clear color detail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMk8dagUlvtrjUg2jh1pucdn5sF77rIg4yZjlf_Agk2DUGtnLuf7mytHYLorNQPAd1Atvhs9Gpt-5jO41DYDeUITjeUOQT7_I7c3-Ur7aGDIx-JWBL3ysQtoe8dCjAAl_Tlvzc6OVgfPkGK-nDH16dlo6qFJCECGelDmD0JMVPFMfUB5hXUJBZyCrRrkXtsdfyuGmd3z2kR_9IQymwGOOpvYzSlipNq7o7PsuXEf93RF4ipbHdmspXRS2owhP0VlF7Gr0W1ingZKhE"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-1 h-full bg-white/80 shadow-lg relative cursor-ew-resize">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-xl">
+<span class="material-symbols-outlined text-primary" data-icon="unfold_more">unfold_more</span>
+</div>
+</div>
+</div>
+<div class="absolute bottom-4 left-4 glass-panel px-4 py-2 rounded-lg text-sm font-bold text-primary">Antes</div>
+<div class="absolute bottom-4 right-4 glass-panel px-4 py-2 rounded-lg text-sm font-bold text-primary">Depois</div>
+</div>
+</section>
+<!-- How it Works (Editorial Style) -->
+<section class="bg-surface-container-low py-24 px-6">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-20">
+<h2 class="font-headline font-extrabold text-4xl text-on-surface mb-4">Como funciona</h2>
+<p class="text-secondary max-w-xl mx-auto">Três passos simples para trazer suas memórias de volta à vida.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<!-- Step 1 -->
+<div class="bg-surface rounded-xl p-10 space-y-6 shadow-sm hover:translate-y-[-8px] transition-transform duration-300">
+<div class="w-16 h-16 bg-primary-fixed rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="upload_file">upload_file</span>
+</div>
+<h3 class="font-headline font-bold text-2xl">1. Upload</h3>
+<p class="text-secondary leading-relaxed">Envie uma foto digitalizada ou até mesmo tire uma foto da imagem antiga com seu celular.</p>
+</div>
+<!-- Step 2 -->
+<div class="bg-surface rounded-xl p-10 space-y-6 shadow-sm hover:translate-y-[-8px] transition-transform duration-300">
+<div class="w-16 h-16 bg-primary-fixed rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="auto_fix_high">auto_fix_high</span>
+</div>
+<h3 class="font-headline font-bold text-2xl">2. IA Melhora</h3>
+<p class="text-secondary leading-relaxed">Nossa inteligência artificial analisa cada pixel, remove riscos e recria os detalhes perdidos pelo tempo.</p>
+</div>
+<!-- Step 3 -->
+<div class="bg-surface rounded-xl p-10 space-y-6 shadow-sm hover:translate-y-[-8px] transition-transform duration-300">
+<div class="w-16 h-16 bg-primary-fixed rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="download">download</span>
+</div>
+<h3 class="font-headline font-bold text-2xl">3. Download</h3>
+<p class="text-secondary leading-relaxed">Baixe sua foto restaurada em alta definição, pronta para ser impressa e emoldurada novamente.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Benefits Bento Grid -->
+<section class="py-24 px-6 max-w-7xl mx-auto">
+<h2 class="font-headline font-extrabold text-4xl text-on-surface mb-16 text-center lg:text-left">Feito para suas melhores lembranças</h2>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<div class="md:col-span-8 bg-surface-container-highest rounded-xl p-12 flex flex-col justify-between overflow-hidden relative min-h-[360px]">
+<div class="relative z-10 max-w-md">
+<h3 class="font-headline font-bold text-3xl mb-4">Restauração Facial Profunda</h3>
+<p class="text-on-surface-variant">Reconhecemos rostos embaçados e devolvemos a nitidez original dos olhos, sorrisos e expressões.</p>
+</div>
+<img alt="Face Detail Restoration" class="absolute right-0 bottom-0 w-1/2 h-full object-cover opacity-20 md:opacity-100 mix-blend-multiply" data-alt="Close up detail of a perfectly restored woman's face with crystal clear eyes and soft skin texture in a vintage style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEiTYwbO2iueJLAqvN1wKqGfGVdXvbhuSE5lBahtcXRNxGCxTeAvMkv8ZL7wgXQNw1lR-Nrvlipz7z7fqW2ActYqdFyOI41oWItApr_U81M2KiBeUoj2_Ur52rLl1C8obxCfL_wbZ46uk4UkcZBpRY1QiGuyUyObBOYN__JLRpW6uiomLNOH1OBStnEhYpWyWAAvyclQYZSd16uUxuJIHl_1vmsfSlcbsBGTCgw2LMUn5gH9noaaA9HH18oIdJau3l8bNCe3KKSarg"/>
+</div>
+<div class="md:col-span-4 bg-tertiary-fixed rounded-xl p-10 flex flex-col items-center text-center justify-center space-y-4">
+<span class="material-symbols-outlined text-6xl text-tertiary" data-icon="shutter_speed">shutter_speed</span>
+<h3 class="font-headline font-bold text-2xl">Resultados Instantâneos</h3>
+<p class="text-on-tertiary-fixed-variant">Não espere dias. Nossa IA restaura fotos complexas em menos de 10 segundos.</p>
+</div>
+<div class="md:col-span-4 bg-primary-fixed rounded-xl p-10 space-y-4">
+<span class="material-symbols-outlined text-5xl text-primary" data-icon="cleaning_services">cleaning_services</span>
+<h3 class="font-headline font-bold text-2xl">Remoção de Riscos</h3>
+<p class="text-on-primary-fixed-variant">Elimina automaticamente marcas de dobras, poeira e arranhões de décadas de desgaste.</p>
+</div>
+<div class="md:col-span-8 bg-surface-container-low rounded-xl p-12 flex flex-col md:flex-row items-center gap-8">
+<div class="flex-1">
+<h3 class="font-headline font-bold text-3xl mb-4">Colorização Inteligente</h3>
+<p class="text-secondary">Dê vida às fotos em preto e branco com cores naturais e realistas baseadas em pesquisa histórica.</p>
+</div>
+<div class="flex-1 grid grid-cols-2 gap-4">
+<div class="bg-slate-300 w-full aspect-square rounded-lg shadow-sm" data-alt="Monochrome vintage street scene" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCi88Qj1zuVlDxw1D-NFOZvjxtuTDq9r7R7F_aDhB2OAk2DJSgMwa47quYlmP8kYVFU8jYEDIk3ajb5lwecRNejmsoe8-cANs78BTduMtRTGnrgNt8M165D0SGTtcHmhfHq6AnmTxHE53U4xQvRLk2G7s-DzkjBAcMBzW-s_k5S37dfglWBcdipfEV5ZAYgLQBibifMJf5J3pj8m6Nnl6VHlLz28mPa6IWFg7lEcHcvoOpRFh6yPmuDrwfUFXDTnh8xgEkgdOfQIrZJ'); background-size: cover;"></div>
+<div class="bg-primary-fixed w-full aspect-square rounded-lg shadow-md" data-alt="Vibrantly colorized vintage street scene with warm sunlight" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAs3otwmOVd1PDKqU2d8GhAZ3cyuhMb1O8IX5Kj7QIC_wL8xX8gvKREKGkl9kFueeKvUPL88D4f_1bSI0JMwtTF-KofXKcQ9qoYGkDQ61bOBc-Op616BrQum-dWz6StTixakfAodfG3VLF5TQRU5IGPrTDRPac4y3yWzaVeli1fh5jkhocpvki6gCLhJYw-rim8-84BxoT9C15cBdfeDl6rz5ZBm0JGEjvpzVBFjsAIdb_KJPSk3xWApBGcLjZia1kfYT1-YELxKr2m'); background-size: cover; filter: sepia(0) saturate(1.5);"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Social Proof / Testimonials -->
+<section class="bg-surface py-24 px-6">
+<div class="max-w-7xl mx-auto">
+<h2 class="font-headline font-extrabold text-4xl text-on-surface mb-16 text-center">O que nossos clientes dizem</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="bg-surface-container-low p-10 rounded-xl space-y-6">
+<div class="flex text-primary">
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill">star</span>
+</div>
+<p class="text-lg italic font-medium leading-relaxed">"Consegui restaurar a única foto que tinha do meu avô. A qualidade ficou impressionante, parece que foi tirada hoje. Meus pais choraram de emoção."</p>
+<div class="flex items-center space-x-4">
+<div class="w-12 h-12 rounded-full bg-slate-200" data-alt="Portrait of a satisfied customer" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAefLNraAYmrh2w1rWHessbyA_W_D3Vzwip9luM-iqWUKtoFqQnSs0mnvUCss5-yZMiTUYqJcc02OD6lFTN9s6Ycr9hrQXUUvbBc-3JYM4byLngF1UsIXQAcZyEfDMt3m8jHuu5E_irxY8EPFHIWvt8C27XiBkw9psSoo_0MtZQU2HP7BqDIJPaNYZEN2XMYo0JeMfkGTw1m93wPm38x2hIC8pxuK-xmCOazvXW3bW3Wb2UxDNGDMGCL5r3-DnOrriwsRtWVy64S1NL'); background-size: cover;"></div>
+<div>
+<p class="font-headline font-bold">Maria Helena</p>
+<p class="text-sm text-secondary">São Paulo, SP</p>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-10 rounded-xl space-y-6">
+<div class="flex text-primary">
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill">star</span>
+</div>
+<p class="text-lg italic font-medium leading-relaxed">"Muito fácil de usar. Eu não entendo nada de computador e consegui fazer tudo sozinha. Recomendo para todos os meus amigos."</p>
+<div class="flex items-center space-x-4">
+<div class="w-12 h-12 rounded-full bg-slate-200" data-alt="Portrait of a senior man smiling" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA_NDw7-OyLXtKIRQxSaBJmUQ11OTxmiIkDQznLROVY6TYJJA4MEyOvwbBtjtFQI4JyUm9sA1ZS8g2CJfCZ0UsbsTpQfdIVGFKB_CGYX-ghMwUDFAUH3-LreDsFBmrEpIvrPOAIR-KH7rDCx37H1Ipdveas-aIp5yYvxzHYt7UyimooMIQIttDy4DixnGEYUpmhaMsScj9qvr-7WEUxsfZyaqChb0izlTLyJnmcLJ1YKUZ6HOutvoAX8_CCU_tRz2KtsEKQ5zhvwB1i'); background-size: cover;"></div>
+<div>
+<p class="font-headline font-bold">João Carlos</p>
+<p class="text-sm text-secondary">Curitiba, PR</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Pricing Section -->
+<section class="bg-surface-container-low py-24 px-6">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-16">
+<h2 class="font-headline font-extrabold text-4xl text-on-surface mb-4">Escolha seu plano</h2>
+<p class="text-secondary">Pague apenas pelo que precisar. Sem assinaturas mensais.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Plan 1 -->
+<div class="bg-surface p-10 rounded-xl shadow-sm space-y-8 flex flex-col">
+<div class="space-y-2">
+<h3 class="font-headline font-bold text-xl">Iniciante</h3>
+<div class="flex items-baseline space-x-1">
+<span class="text-2xl font-bold">R$</span>
+<span class="text-5xl font-extrabold">29</span>
+</div>
+</div>
+<ul class="space-y-4 flex-grow">
+<li class="flex items-center space-x-3 text-secondary">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span>
+<span>5 fotos restauradas</span>
+</li>
+<li class="flex items-center space-x-3 text-secondary">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span>
+<span>Alta definição (HD)</span>
+</li>
+<li class="flex items-center space-x-3 text-secondary">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span>
+<span>Download imediato</span>
+</li>
+</ul>
+<button class="w-full py-4 rounded-xl border-2 border-primary text-primary font-headline font-bold hover:bg-primary-fixed transition-colors">
+                            Comprar Agora
+                        </button>
+</div>
+<!-- Plan 2 (Featured) -->
+<div class="bg-surface p-10 rounded-xl shadow-xl ring-2 ring-primary relative space-y-8 flex flex-col scale-105">
+<div class="absolute -top-4 left-1/2 -translate-x-1/2 editorial-gradient text-on-primary text-xs font-bold px-4 py-1 rounded-full uppercase tracking-widest">Mais popular</div>
+<div class="space-y-2">
+<h3 class="font-headline font-bold text-xl text-primary">Memórias de Família</h3>
+<div class="flex items-baseline space-x-1 text-primary">
+<span class="text-2xl font-bold">R$</span>
+<span class="text-5xl font-extrabold">49</span>
+</div>
+</div>
+<ul class="space-y-4 flex-grow">
+<li class="flex items-center space-x-3 text-secondary">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span>
+<span class="font-bold text-on-surface">10 fotos restauradas</span>
+</li>
+<li class="flex items-center space-x-3 text-secondary">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span>
+<span>Restauração facial avançada</span>
+</li>
+<li class="flex items-center space-x-3 text-secondary">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span>
+<span>Colorização incluída</span>
+</li>
+</ul>
+<button class="w-full py-4 rounded-xl editorial-gradient text-on-primary font-headline font-bold shadow-lg hover:shadow-primary/20 transition-all">
+                            Comprar Agora
+                        </button>
+</div>
+<!-- Plan 3 -->
+<div class="bg-surface p-10 rounded-xl shadow-sm space-y-8 flex flex-col">
+<div class="space-y-2">
+<h3 class="font-headline font-bold text-xl">Legado Completo</h3>
+<div class="flex items-baseline space-x-1">
+<span class="text-2xl font-bold">R$</span>
+<span class="text-5xl font-extrabold">79</span>
+</div>
+</div>
+<ul class="space-y-4 flex-grow">
+<li class="flex items-center space-x-3 text-secondary">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span>
+<span>20 fotos restauradas</span>
+</li>
+<li class="flex items-center space-x-3 text-secondary">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span>
+<span>Suporte prioritário</span>
+</li>
+<li class="flex items-center space-x-3 text-secondary">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span>
+<span>Galeria privada vitalícia</span>
+</li>
+</ul>
+<button class="w-full py-4 rounded-xl border-2 border-primary text-primary font-headline font-bold hover:bg-primary-fixed transition-colors">
+                            Comprar Agora
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-24 px-6 text-center max-w-4xl mx-auto">
+<h2 class="font-headline font-extrabold text-4xl md:text-5xl mb-8 leading-tight">Traga suas memórias de volta à vida</h2>
+<p class="text-xl text-secondary mb-12">Junte-se a milhares de pessoas que já redescobriram o passado com a Aura Recall.</p>
+<button class="editorial-gradient text-on-primary px-12 py-6 rounded-full font-headline font-bold text-xl shadow-2xl active:scale-95 transition-all">
+                Restaurar minha primeira foto
+            </button>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-low w-full py-12 px-6 mt-auto">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+<div class="space-y-4">
+<div class="text-lg font-bold text-slate-900 font-headline">Aura Recall</div>
+<p class="font-body text-sm text-slate-500 max-w-sm">© 2024 Aura Recall. Your memories, beautifully preserved.</p>
+</div>
+<div class="flex flex-wrap gap-6 md:justify-end">
+<a class="font-body text-sm text-slate-500 hover:text-slate-800 transition-opacity" href="#">Privacy Policy</a>
+<a class="font-body text-sm text-slate-500 hover:text-slate-800 transition-opacity" href="#">Terms of Service</a>
+<a class="font-body text-sm text-slate-500 hover:text-slate-800 transition-opacity" href="#">Security</a>
+<a class="font-body text-sm text-slate-500 hover:text-slate-800 transition-opacity" href="#">Cookie Settings</a>
+</div>
+</div>
+</footer>
+</body></html>

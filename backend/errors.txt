@@ -1,0 +1,14 @@
+Error: Cannot find module 'C:\Users\mateus.pereira\Documents\app\restaurar-fotos\backend\node_modules\@prisma\client\runtime\library.js'
+    at createEsmNotFoundErr (node:internal/modules/cjs/loader:1256:15)
+    at finalizeEsmResolution (node:internal/modules/cjs/loader:1244:15)
+    at resolveExports (node:internal/modules/cjs/loader:628:14)
+    at Function.Module._findPath (node:internal/modules/cjs/loader:718:31)
+    at Function.Module._resolveFilename (node:internal/modules/cjs/loader:1205:27)
+    at Function.Module._resolveFilename.sharedData.moduleResolveFilenameHook.installedValue [as _resolveFilename] (C:\Users\mateus.pereira\Documents\app\restaurar-fotos\backend\node_modules\@cspotcode\source-map-support\source-map-support.js:811:30)
+    at Function.Module._load (node:internal/modules/cjs/loader:1045:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:315:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:215:24)
+    at Module.require (node:internal/modules/cjs/loader:1304:12) {
+  code: 'MODULE_NOT_FOUND',
+  path: 'C:\\Users\\mateus.pereira\\Documents\\app\\restaurar-fotos\\backend\\node_modules\\@prisma\\client\\package.json'
+}
