@@ -39,19 +39,36 @@ export async function POST(req: Request) {
           const { origin } = new URL(req.url);
           const nextWebhookUrl = `${origin}/api/webhook/replicate?photoId=${photoId}`; // Sem o "&colorize=true" para que o próximo passo seja o Cloudinary
 
+          // Função auxiliar para retry em caso de Rate Limit (429) do Replicate (comum em contas grátis)
+          const callWithRetry = async (retries = 2, delay = 2000) => {
+            for (let i = 0; i <= retries; i++) {
+              try {
+                await replicate.predictions.create({
+                  version: "ca494ba129e44e45f661d6ece83c4c98a9a7c774309beca01429b58fce8aa695", // piddnad/ddcolor
+                  input: {
+                    image: restoredUrl,
+                    model_size: "large"
+                  },
+                  webhook: nextWebhookUrl,
+                  webhook_events_filter: ["completed"]
+                });
+                return true;
+              } catch (error: any) {
+                if (error.status === 429 && i < retries) {
+                  console.warn(`[AI Chain] Rate limit (429). Tentando novamente em ${delay}ms... (Tentativa ${i+1}/${retries})`);
+                  await new Promise(resolve => setTimeout(resolve, delay));
+                  continue;
+                }
+                throw error;
+              }
+            }
+          };
+
           try {
-            await replicate.predictions.create({
-              version: "ca494ba129e44e45f661d6ece83c4c98a9a7c774309beca01429b58fce8aa695", // piddnad/ddcolor (Substituto superior ao DeOldify)
-              input: {
-                image: restoredUrl,
-                model_size: "large"
-              },
-              webhook: nextWebhookUrl,
-              webhook_events_filter: ["completed"]
-            });
+            await callWithRetry();
             return NextResponse.json({ success: true, status: 'COLORIZING' }, { status: 200 });
           } catch (colorError: any) {
-            console.error(`[AI Chain] Erro ao disparar DDColor: ${colorError.message}`);
+            console.error(`[AI Chain] Falha definitiva ao disparar DDColor: ${colorError.message}`);
             // Se falhar a colorização, salva o resultado da restauração (CodeFormer) pelo menos!
             const uploadResult = await cloudinary.uploader.upload(restoredUrl, {
               folder: 'aura_recall/restored'
