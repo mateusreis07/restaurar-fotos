@@ -39,17 +39,30 @@ export async function POST(req: Request) {
           const { origin } = new URL(req.url);
           const nextWebhookUrl = `${origin}/api/webhook/replicate?photoId=${photoId}`; // Sem o "&colorize=true" para que o próximo passo seja o Cloudinary
 
-          await replicate.predictions.create({
-            version: "02046200639d48b1d977e26084ca5362cdbab0f1f1a58c387f34c670b1686616", // cjwbw/deoldify
-            input: {
-              image: restoredUrl,
-              render_factor: 35
-            },
-            webhook: nextWebhookUrl,
-            webhook_events_filter: ["completed"]
-          });
-
-          return NextResponse.json({ success: true, status: 'COLORIZING' }, { status: 200 });
+          try {
+            await replicate.predictions.create({
+              version: "9621da309e37704df37f808006d64993134e4a2c59a35e7df5d1f88c8801d9f0", // piddnad/deoldify
+              input: {
+                model_name: "Artistic", // Opção focada em restauração de fotos antigas
+                input_image: restoredUrl,
+                render_factor: 35
+              },
+              webhook: nextWebhookUrl,
+              webhook_events_filter: ["completed"]
+            });
+            return NextResponse.json({ success: true, status: 'COLORIZING' }, { status: 200 });
+          } catch (colorError: any) {
+            console.error(`[AI Chain] Erro ao disparar DeOldify: ${colorError.message}`);
+            // Se falhar a colorização, salva o resultado da restauração (CodeFormer) pelo menos!
+            const uploadResult = await cloudinary.uploader.upload(restoredUrl, {
+              folder: 'aura_recall/restored'
+            });
+            await prisma.photo.update({
+              where: { id: photoId },
+              data: { status: 'COMPLETED', restoredUrl: uploadResult.secure_url }
+            });
+            return NextResponse.json({ success: true, status: 'COMPLETED_WITHOUT_COLOR' }, { status: 200 });
+          }
         }
 
         // Upload final para o Cloudinary para ter armazenamento permanente
