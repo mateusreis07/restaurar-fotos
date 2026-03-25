@@ -14,6 +14,7 @@ export async function POST(req: Request) {
     const formData = await req.formData();
     const file = formData.get('file') as Blob;
     const userId = formData.get('userId') as string;
+    const colorize = formData.get('colorize') === 'true';
 
     if (!file) return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
     if (!userId) return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
@@ -52,7 +53,7 @@ export async function POST(req: Request) {
 
     // Detectar a URL base de forma infalível baseada na própria requisição atual
     const { origin } = new URL(req.url);
-    const webhookUrl = `${origin}/api/webhook/replicate?photoId=${photo.id}`;
+    const webhookUrl = `${origin}/api/webhook/replicate?photoId=${photo.id}${colorize ? '&colorize=true' : ''}`;
     console.log(`[Replicate Webhook Target]: ${webhookUrl}`);
     console.log(`[Replicate Webhook Target]: ${webhookUrl}`);
 

@@ -9,6 +9,7 @@ export default function UploadPage() {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [colorize, setColorize] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -56,6 +57,7 @@ export default function UploadPage() {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('userId', user.id);
+    formData.append('colorize', colorize.toString());
 
     try {
       const res = await fetch('/api/photos/upload', {
@@ -195,6 +197,24 @@ export default function UploadPage() {
                       </p>
                     </div>
                  </div>
+              )}
+
+              {/* AI Options */}
+              {preview && !uploading && (
+                <div className="w-full mb-6 p-4 rounded-3xl bg-white border border-[#EEECFF] shadow-sm flex items-center justify-between group cursor-pointer hover:bg-[#F9F9FF] transition-colors" onClick={() => setColorize(!colorize)}>
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${colorize ? 'bg-[#604AF0] text-white' : 'bg-[#F1F5F9] text-slate-400'}`}>
+                      <span className="material-symbols-outlined text-[20px]">palette</span>
+                    </div>
+                    <div className="text-left">
+                      <p className="font-bold text-[#1E293B] text-[14px]">Colorir Automático</p>
+                      <p className="text-[#64748B] text-[12px] font-semibold">Usar IA DeOldify para fotos P&B</p>
+                    </div>
+                  </div>
+                  <div className={`w-11 h-6 rounded-full relative transition-colors ${colorize ? 'bg-[#604AF0]' : 'bg-[#E2E8F0]'}`}>
+                    <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${colorize ? 'left-6' : 'left-1'}`}></div>
+                  </div>
+                </div>
               )}
 
               {/* Action Button */}
