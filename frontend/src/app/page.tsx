@@ -46,7 +46,7 @@ export default function Home() {
             <Link href="/dashboard" className="font-headline font-medium text-sm tracking-tight text-slate-600 hover:text-primary transition-colors duration-300">Minha Área</Link>
           </div>
           <div className="flex items-center space-x-4">
-            <Link href="/dashboard" className="hidden sm:block text-slate-600 font-headline font-medium text-sm hover:text-primary transition-colors duration-300">
+            <Link href="/login" className="hidden sm:block text-slate-600 font-headline font-medium text-sm hover:text-primary transition-colors duration-300">
               Login
             </Link>
             <Link href="/dashboard">
@@ -163,8 +163,52 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Benefits Section */}
+        <section className="bg-surface py-24 px-6">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="font-headline font-extrabold text-4xl text-on-surface mb-4">Feito para suas melhores lembranças</h2>
+              <p className="text-secondary max-w-2xl mx-auto text-lg">Tecnologia de ponta trabalhando nos bastidores para devolver a perfeição às suas fotos históricas.</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="flex flex-col items-center text-center space-y-4 p-8 rounded-2xl bg-surface-container-low border border-slate-200/60 shadow-sm hover:-translate-y-1 transition-transform">
+                <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+                  <span className="material-symbols-outlined text-3xl">face</span>
+                </div>
+                <h3 className="font-headline font-bold text-xl">Restauração Facial</h3>
+                <p className="text-slate-500 text-sm leading-relaxed">Reconstruímos rostos borrados ou desfocados com uma precisão impressionante, recuperando a identidade original.</p>
+              </div>
+
+              <div className="flex flex-col items-center text-center space-y-4 p-8 rounded-2xl bg-surface-container-low border border-slate-200/60 shadow-sm hover:-translate-y-1 transition-transform">
+                <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+                  <span className="material-symbols-outlined text-3xl">cleaning_services</span>
+                </div>
+                <h3 className="font-headline font-bold text-xl">Remoção de Danos</h3>
+                <p className="text-slate-500 text-sm leading-relaxed">Adeus a rasgos, manchas de mofo, dobras e riscos de caneta que arruinaram e envelheceram a sua fotografia.</p>
+              </div>
+
+              <div className="flex flex-col items-center text-center space-y-4 p-8 rounded-2xl bg-surface-container-low border border-slate-200/60 shadow-sm hover:-translate-y-1 transition-transform">
+                <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+                  <span className="material-symbols-outlined text-3xl">palette</span>
+                </div>
+                <h3 className="font-headline font-bold text-xl">Colorização Mágica</h3>
+                <p className="text-slate-500 text-sm leading-relaxed">Dê vida ao passado e veja seus avós em cores vibrantes transformando fotos preto e branco em pinturas vivas.</p>
+              </div>
+              
+              <div className="flex flex-col items-center text-center space-y-4 p-8 rounded-2xl bg-surface-container-low border border-slate-200/60 shadow-sm hover:-translate-y-1 transition-transform">
+                <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+                  <span className="material-symbols-outlined text-3xl">high_quality</span>
+                </div>
+                <h3 className="font-headline font-bold text-xl">Ultra Resolução</h3>
+                <p className="text-slate-500 text-sm leading-relaxed">Multiplicamos a qualidade e os pixels das imagens pequenas para o formato 4K, perfeitas para impressão e quadros.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Pricing */}
-        <section id="precos" className="bg-surface py-24 px-6">
+        <section id="precos" className="bg-surface-container-low py-24 px-6 border-y border-slate-200/60">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="font-headline font-extrabold text-4xl text-on-surface mb-4">Escolha seu pacote</h2>
