@@ -41,18 +41,17 @@ export async function POST(req: Request) {
 
           try {
             await replicate.predictions.create({
-              version: "0da600fab0c45a66211339f1c16b71345d22f26ef5fea3dca1bb90bb5711e950", // arielreplicate/deoldify_image
+              version: "ca494ba129e44e45f661d6ece83c4c98a9a7c774309beca01429b58fce8aa695", // piddnad/ddcolor (Substituto superior ao DeOldify)
               input: {
-                model_name: "Artistic", 
-                input_image: restoredUrl,
-                render_factor: 35
+                image: restoredUrl,
+                model_size: "large"
               },
               webhook: nextWebhookUrl,
               webhook_events_filter: ["completed"]
             });
             return NextResponse.json({ success: true, status: 'COLORIZING' }, { status: 200 });
           } catch (colorError: any) {
-            console.error(`[AI Chain] Erro ao disparar DeOldify: ${colorError.message}`);
+            console.error(`[AI Chain] Erro ao disparar DDColor: ${colorError.message}`);
             // Se falhar a colorização, salva o resultado da restauração (CodeFormer) pelo menos!
             const uploadResult = await cloudinary.uploader.upload(restoredUrl, {
               folder: 'aura_recall/restored'
