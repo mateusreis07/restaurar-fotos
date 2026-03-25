@@ -54,27 +54,27 @@ export async function POST(req: Request) {
     // Detectar a URL base de forma infalível baseada na própria requisição atual
     const { origin } = new URL(req.url);
     const webhookUrl = `${origin}/api/webhook/replicate?photoId=${photo.id}${colorize ? '&colorize=true' : ''}`;
-    console.log(`[Replicate Webhook Target]: ${webhookUrl}`);
-    console.log(`[Replicate Webhook Target]: ${webhookUrl}`);
 
     try {
-      console.log(`[Replicate] Dispatching GFPGAN with Webhook: ${webhookUrl}`);
+      const token = process.env.REPLICATE_API_TOKEN || '';
+      console.log(`[Replicate] Iniciando predição (Token: ${token.substring(0, 5)}...)`);
+      console.log(`[Replicate] Webhook Target: ${webhookUrl}`);
       // Usando CodeFormer (Muito superior: restaura rosto, fundo e faz upscale real)
       const prediction = await replicate.predictions.create({
-        version: "7de2ea26c616d5bf2245ad0d5e24f0ff9a6204578a5c876db53142edd9d2cd56",
+        version: "7de2ea26c616d5bf2245ad0d5e24f0ff9a6204578a5c876db53142edd9d2cd56", // CodeFormer
         input: {
           image: uploadResult.secure_url,
           upscale: 2,
           face_upsample: true,
           background_enhance: true,
-          codeformer_fidelity: 0.5
+          codeformer_fidelity: 0.7
         },
         webhook: webhookUrl,
         webhook_events_filter: ["completed"]
       });
       console.log(`[Replicate] Predição iniciada com sucesso! ID: ${prediction.id} | Status: ${prediction.status}`);
     } catch (repError: any) {
-      console.error("[Replicate] Falha ao disparar predição:", repError.message || repError);
+      console.error("[Replicate] Falha ao disparar predição:", repError.message || JSON.stringify(repError));
       // Se a IA der pau, vamos marcar a foto como FAILED para não ficar processando infinito!
       await prisma.photo.update({
         where: { id: photo.id },
