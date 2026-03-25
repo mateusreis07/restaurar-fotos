@@ -1,5 +1,12 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { v2 as cloudinary } from 'cloudinary';
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export async function POST(req: Request) {
   try {
@@ -20,11 +27,16 @@ export async function POST(req: Request) {
                           : payload.output;
 
       if (restoredUrl) {
+        // Upload para o Cloudinary para ter armazenamento permanente e evitar expiração do link da Replicate
+        const uploadResult = await cloudinary.uploader.upload(restoredUrl, {
+          folder: 'aura_recall/restored'
+        });
+
         await prisma.photo.update({
           where: { id: photoId },
           data: { 
             status: 'COMPLETED',
-            restoredUrl: restoredUrl
+            restoredUrl: uploadResult.secure_url
           }
         });
         return NextResponse.json({ success: true, status: 'COMPLETED' }, { status: 200 });
