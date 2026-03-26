@@ -28,8 +28,8 @@ export async function POST(req: Request) {
 
     // --- FUNÇÕES AUXILIARES DE CHAINING ---
     
-    // Retry em caso de Rate Limit (429) do Replicate (comum em contas grátis)
-    const callWithRetry = async (replicateCall: () => Promise<any>, retries = 2, delay = 2000) => {
+    // Retry em caso de Rate Limit (429) do Replicate (comum em contas grátis ou saldo baixo < $5)
+    const callWithRetry = async (replicateCall: () => Promise<any>, retries = 3, delay = 8000) => {
       for (let i = 0; i <= retries; i++) {
         try {
           await replicateCall();
