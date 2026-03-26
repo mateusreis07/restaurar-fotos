@@ -29,15 +29,17 @@ export async function POST(req: Request) {
 
     // --- FUNÇÕES AUXILIARES DE CHAINING ---
     
-    // Retry em caso de Rate Limit (429) do Replicate (comum em contas grátis ou saldo baixo < $5)
-    const callWithRetry = async (replicateCall: () => Promise<any>, retries = 3, delay = 8000) => {
+    // Retry em caso de Rate Limit (429) do Replicate (comum em saldo baixo < $5)
+    const callWithRetry = async (replicateCall: () => Promise<any>, retries = 4, delay = 12000) => {
       for (let i = 0; i <= retries; i++) {
         try {
-          await replicateCall();
-          return true;
+          return await replicateCall();
         } catch (error: any) {
-          if (error.status === 429 && i < retries) {
-            console.warn(`[AI Chain] Rate limit (429). Tentando novamente em ${delay}ms... (Tentativa ${i+1}/${retries})`);
+          const status = error.status || error.response?.status || (error.message?.includes('429') ? 429 : 0);
+          console.warn(`[AI Chain] Tentativa ${i+1}/${retries+1} falhou (Status: ${status})`);
+          
+          if (status === 429 && i < retries) {
+            console.warn(`[AI Chain] Aguardando ${delay}ms para tentar novamente...`);
             await new Promise(resolve => setTimeout(resolve, delay));
             continue;
           }
