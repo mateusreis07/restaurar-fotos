@@ -81,8 +81,7 @@ export async function POST(req: Request) {
               prompt: "A high-quality restored historical photo brought to life with extremely natural and subtle movements: gentle blinking eyes, soft facial expressions, and very slight, realistic head and body movement. The entire scene feels authentic and alive, like a memory coming back to life. No robotic or exaggerated motions.",
               start_image: imageUrl,
               duration: 5,
-              cfg_scale: 0.5,
-              aspect_ratio: "1:1"
+              cfg_scale: 0.5
             },
             webhook: nextWebhookUrl,
             webhook_events_filter: ["completed"]
