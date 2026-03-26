@@ -82,15 +82,15 @@ export default function PricingPage() {
             <ul className="space-y-4 flex-grow">
               <li className="flex items-center space-x-3 text-[#575f6a]">
                 <span className="material-symbols-outlined text-[#0f6b40]">check_circle</span>
-                <span className="font-bold text-[#151c27] text-[15.5px]">10 créditos</span>
+                <span className="font-bold text-[#151c27] text-[15.5px]">12 créditos</span>
               </li>
               <li className="flex items-center space-x-3 text-[#575f6a]">
                 <span className="material-symbols-outlined text-[#0f6b40]">check_circle</span>
-                <span className="text-[15px] font-medium italic">📸 até 10 fotos</span>
+                <span className="text-[15px] font-medium italic">📸 até 12 fotos</span>
               </li>
               <li className="flex items-center space-x-3 text-[#575f6a]">
                 <span className="material-symbols-outlined text-[#0f6b40]">check_circle</span>
-                <span className="text-[15px] font-medium italic">🎬 ou 2 vídeos premium</span>
+                <span className="text-[15px] font-medium italic">🎬 ou 2 fotos + 2 vídeos</span>
               </li>
             </ul>
             <button 
@@ -149,15 +149,15 @@ export default function PricingPage() {
             <ul className="space-y-4 flex-grow">
               <li className="flex items-center space-x-3 text-[#575f6a]">
                 <span className="material-symbols-outlined text-[#0f6b40]">check_circle</span>
-                <span className="font-bold text-[#151c27] text-[15.5px]">60 créditos</span>
+                <span className="font-bold text-[#151c27] text-[15.5px]">72 créditos</span>
               </li>
               <li className="flex items-center space-x-3 text-[#575f6a]">
                 <span className="material-symbols-outlined text-[#0f6b40]">check_circle</span>
-                <span className="text-[15px] font-medium italic">📸 muitas fotos</span>
+                <span className="text-[15px] font-medium italic">📸 muita memória</span>
               </li>
               <li className="flex items-center space-x-3 text-[#575f6a]">
                 <span className="material-symbols-outlined text-[#0f6b40]">check_circle</span>
-                <span className="text-[15px] font-medium italic">🎬 ou 10 fotos + 10 Vídeos</span>
+                <span className="text-[15px] font-medium italic">🎬 ou 12 fotos + 12 Vídeos</span>
               </li>
             </ul>
             <button 
