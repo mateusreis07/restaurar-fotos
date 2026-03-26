@@ -217,56 +217,58 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="bg-surface-container-low p-10 rounded-2xl shadow-sm space-y-8 flex flex-col border border-slate-200/60">
                 <div className="space-y-2">
-                  <h3 className="font-headline font-bold text-xl text-slate-700">Iniciante</h3>
-                  <div className="flex items-baseline space-x-1">
+                  <h3 className="font-headline font-bold text-xl text-slate-700">Entrada</h3>
+                  <p className="text-[11px] font-bold text-primary uppercase tracking-wider">Reviva memórias especiais</p>
+                  <div className="flex items-baseline space-x-1 pt-2">
                     <span className="text-2xl font-bold text-slate-400">R$</span>
-                    <span className="text-5xl font-extrabold text-slate-800">29</span>
+                    <span className="text-5xl font-extrabold text-slate-800">29,90</span>
                   </div>
                 </div>
-                <ul className="space-y-4 flex-grow">
+                <ul className="space-y-4 flex-grow text-sm">
                   <li className="flex items-center space-x-3 text-secondary">
                     <span className="material-symbols-outlined text-emerald-500">check_circle</span>
-                    <span className="font-medium text-slate-700">5 fotos restauradas</span>
+                    <span className="font-bold text-slate-700">10 créditos</span>
                   </li>
                   <li className="flex items-center space-x-3 text-secondary">
-                    <span className="material-symbols-outlined text-emerald-500">check_circle</span>
-                    <span>Alta definição (HD)</span>
+                    <span className="material-symbols-outlined text-emerald-500 text-[18px]">check_circle</span>
+                    <span className="italic">📸 até 10 fotos</span>
                   </li>
                   <li className="flex items-center space-x-3 text-secondary">
-                    <span className="material-symbols-outlined text-emerald-500">check_circle</span>
-                    <span>Download Livre</span>
+                    <span className="material-symbols-outlined text-emerald-500 text-[18px]">check_circle</span>
+                    <span className="italic">🎬 ou 2 vídeos premium</span>
                   </li>
                 </ul>
-                <Link href="/dashboard">
+                <Link href="/dashboard" className="w-full">
                   <button className="w-full py-4 rounded-xl border-2 border-primary text-primary font-headline font-bold hover:bg-primary/5 transition-colors">
                     Adquirir
                   </button>
                 </Link>
               </div>
               <div className="bg-surface p-10 rounded-2xl shadow-2xl ring-2 ring-primary relative space-y-8 flex flex-col scale-105 z-10">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 editorial-gradient text-on-primary text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg">O Maior Retorno</div>
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 editorial-gradient text-on-primary text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg">Mais Escolhido</div>
                 <div className="space-y-2">
-                  <h3 className="font-headline font-bold text-xl text-primary">Baú da Família</h3>
-                  <div className="flex items-baseline space-x-1 text-primary">
+                  <h3 className="font-headline font-bold text-xl text-primary">Mais Vendido</h3>
+                  <p className="text-[11px] font-black text-primary uppercase tracking-wider">Traga suas memórias de volta à vida</p>
+                  <div className="flex items-baseline space-x-1 text-primary pt-2">
                     <span className="text-2xl font-bold">R$</span>
-                    <span className="text-5xl font-extrabold">49</span>
+                    <span className="text-5xl font-extrabold">49,90</span>
                   </div>
                 </div>
-                <ul className="space-y-4 flex-grow">
+                <ul className="space-y-4 flex-grow text-sm">
                   <li className="flex items-center space-x-3">
                     <span className="material-symbols-outlined text-primary">verified</span>
-                    <span className="font-bold text-on-surface">10 fotos restauradas</span>
+                    <span className="font-bold text-on-surface">25 créditos</span>
                   </li>
                   <li className="flex items-center space-x-3 text-secondary">
-                    <span className="material-symbols-outlined text-primary">verified</span>
-                    <span className="font-medium text-slate-700">Restauração facial avançada</span>
+                    <span className="material-symbols-outlined text-primary text-[18px]">verified</span>
+                    <span className="italic font-bold text-on-surface">📸 até 25 fotos</span>
                   </li>
                   <li className="flex items-center space-x-3 text-secondary">
-                    <span className="material-symbols-outlined text-primary">verified</span>
-                    <span>Tratamento Colorido IA</span>
+                    <span className="material-symbols-outlined text-primary text-[18px]">verified</span>
+                    <span className="italic">🎬 ou 5 fotos + 5 Vídeos</span>
                   </li>
                 </ul>
-                <Link href="/dashboard">
+                <Link href="/dashboard" className="w-full">
                   <button className="w-full py-4 rounded-xl editorial-gradient text-on-primary font-headline font-bold shadow-xl hover:shadow-primary/40 active:scale-95 transition-all text-lg tracking-wide">
                     Quero este pacote
                   </button>
@@ -274,23 +276,28 @@ export default function Home() {
               </div>
               <div className="bg-surface-container-low p-10 rounded-2xl shadow-sm space-y-8 flex flex-col border border-slate-200/60">
                 <div className="space-y-2">
-                  <h3 className="font-headline font-bold text-xl text-slate-700">Legado Completo</h3>
-                  <div className="flex items-baseline space-x-1">
+                  <h3 className="font-headline font-bold text-xl text-slate-700">Premium</h3>
+                  <p className="text-[11px] font-bold text-emerald-600 uppercase tracking-wider font-sans">Reviva a sua história</p>
+                  <div className="flex items-baseline space-x-1 pt-2">
                     <span className="text-2xl font-bold text-slate-400">R$</span>
-                    <span className="text-5xl font-extrabold text-slate-800">79</span>
+                    <span className="text-5xl font-extrabold text-slate-800">89,90</span>
                   </div>
                 </div>
-                <ul className="space-y-4 flex-grow">
+                <ul className="space-y-4 flex-grow text-sm">
                   <li className="flex items-center space-x-3 text-secondary">
                     <span className="material-symbols-outlined text-emerald-500">check_circle</span>
-                    <span className="font-medium text-slate-700">20 fotos restauradas</span>
+                    <span className="font-bold text-slate-700">60 créditos</span>
                   </li>
                   <li className="flex items-center space-x-3 text-secondary">
-                    <span className="material-symbols-outlined text-emerald-500">check_circle</span>
-                    <span>Mesmos benefícios anteriores</span>
+                    <span className="material-symbols-outlined text-emerald-500 text-[18px]">check_circle</span>
+                    <span className="italic">📸 muitas fotos</span>
+                  </li>
+                  <li className="flex items-center space-x-3 text-secondary">
+                    <span className="material-symbols-outlined text-emerald-500 text-[18px]">check_circle</span>
+                    <span className="italic">🎬 ou 10 fotos + 10 Vídeos</span>
                   </li>
                 </ul>
-                <Link href="/dashboard">
+                <Link href="/dashboard" className="w-full">
                   <button className="w-full py-4 rounded-xl border-2 border-primary text-primary font-headline font-bold hover:bg-primary/5 transition-colors">
                     Adquirir
                   </button>
