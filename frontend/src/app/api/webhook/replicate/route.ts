@@ -69,12 +69,66 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true, status: 'COMPLETED' }, { status: 200 });
     };
 
-    // GERADOR DE PROMPT INTELIGENTE (Template Tarium Style)
+    // GERADOR DE PROMPT INTELIGENTE (Decision Engine Pro)
     const generateSmartPrompt = (caption: string) => {
-      // Remove o ponto final se houver
-      const baseCaption = caption.replace(/\.$/, "");
+      const lowerCaption = caption.toLowerCase();
       
-      return `${baseCaption}. The person starts to move naturally. Subtle blinking, gentle facial expression changes, slight smile forming. Natural head movement and micro-expressions. Realistic human behavior, cinematic style. No camera movement, no zoom. Focus entirely on the subject's face and natural motion.`;
+      // 1. Regras de Idade
+      let ageRule = "";
+      if (lowerCaption.match(/elderly|old|aged|senior/)) {
+        ageRule = "Movements should be slower, softer, and more delicate, reflecting natural aging.";
+      } else if (lowerCaption.match(/young|teenager|child|kid|baby/)) {
+        ageRule = "Movements can be slightly more dynamic but still natural and subtle.";
+      }
+
+      // 2. Regras de Expressão
+      let expressionRule = "";
+      if (lowerCaption.match(/neutral|calm/)) {
+        expressionRule = "Introduce a very subtle and natural softening of the expression, possibly a faint smile.";
+      } else if (lowerCaption.match(/smil|happy|laugh/)) {
+        expressionRule = "Preserve and slightly enhance the existing smile without exaggeration.";
+      } else if (lowerCaption.match(/serious|sad|angry/)) {
+        expressionRule = "Maintain the serious expression with minimal micro-expressions and slight natural movement.";
+      }
+
+      // 3. Regra de Qualidade
+      let qualityRule = "";
+      if (lowerCaption.match(/blurry|low quality|grainy/)) {
+        qualityRule = "Preserve facial structure and avoid introducing artifacts or unnatural reconstruction.";
+      }
+
+      // 4. Regra de Multiplas Pessoas
+      let peopleRule = "";
+      if (lowerCaption.match(/people|group|crowd|multiple/)) {
+        peopleRule = "Focus only on the main subject. Avoid animating multiple faces simultaneously.";
+      }
+
+      // ASSEMBLY DO PROMPT FINAL (TEMPLATE MASTER)
+      return `
+${caption}. 
+
+A realistic human portrait comes to life. 
+
+The person begins subtle and natural movements, including gentle blinking, slight breathing motion, and minimal head movement. Facial expressions evolve naturally, maintaining the original identity and emotional tone of the person.
+
+${expressionRule}
+${ageRule}
+${peopleRule}
+${qualityRule}
+
+Lighting, skin texture, and facial details must remain consistent and realistic. 
+Focus entirely on the subject. The animation should feel like a real moment captured on video.
+
+STRICT RULES:
+- No camera movement
+- No zoom
+- No scene change
+- No distortion
+- No warping
+- No additional elements
+
+The result should be cinematic, natural, and emotionally subtle.
+`.trim();
     };
 
     // Dispara a animação (MiniMax Video-01-Live) usando o caption gerado
@@ -96,7 +150,7 @@ export async function POST(req: Request) {
             webhook_events_filter: ["completed"]
           });
         });
-        console.log(`[AI Chain] MiniMax disparado com Prompt Inteligente para PhotoId: ${photoId}`);
+        console.log(`[AI Chain] MiniMax disparado com Decision Engine Pro para PhotoId: ${photoId}`);
         return NextResponse.json({ success: true, status: 'ANIMATING' });
       } catch (e: any) {
         console.error(`[AI Chain] Erro MiniMax: ${e.message}`);
