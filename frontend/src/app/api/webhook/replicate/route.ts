@@ -78,10 +78,11 @@ export async function POST(req: Request) {
           await replicate.predictions.create({
             version: "63a990e82809f01ded0ec0375e907870943aa01e7856c7c6455aae4bc30bb8fc", // kwaivgi/kling-v1.5-pro
             input: {
-              prompt: "A high-quality restored historical photo brought to life with extremely natural and subtle movements: gentle blinking eyes, soft facial expressions, and very slight, realistic head and body movement. The entire scene feels authentic and alive, like a memory coming back to life. No robotic or exaggerated motions.",
+              prompt: "Extreme realistic video of the person in the photo blinking their eyes naturally, tilting their head slightly, and showing a soft, real smile. Static camera, stationary background, no camera movement.",
+              negative_prompt: "camera movement, zoom, pan, tilt, sliding, blurry, robotic motion, distorted face, extra limbs, morphing",
               start_image: imageUrl,
               duration: 5,
-              cfg_scale: 0.5
+              cfg_scale: 0.8
             },
             webhook: nextWebhookUrl,
             webhook_events_filter: ["completed"]
