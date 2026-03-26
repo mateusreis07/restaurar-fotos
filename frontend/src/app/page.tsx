@@ -227,11 +227,11 @@ export default function Home() {
                 <ul className="space-y-4 flex-grow text-sm">
                   <li className="flex items-center space-x-3 text-secondary">
                     <span className="material-symbols-outlined text-emerald-500">check_circle</span>
-                    <span className="font-bold text-slate-700">12 créditos</span>
+                    <span className="font-bold text-slate-700">10 créditos</span>
                   </li>
                   <li className="flex items-center space-x-3 text-secondary">
                     <span className="material-symbols-outlined text-emerald-500 text-[18px]">check_circle</span>
-                    <span className="italic">📸 até 12 fotos</span>
+                    <span className="italic">📸 até 10 fotos</span>
                   </li>
                   <li className="flex items-center space-x-3 text-secondary">
                     <span className="material-symbols-outlined text-emerald-500 text-[18px]">check_circle</span>
@@ -286,7 +286,7 @@ export default function Home() {
                 <ul className="space-y-4 flex-grow text-sm">
                   <li className="flex items-center space-x-3 text-secondary">
                     <span className="material-symbols-outlined text-emerald-500">check_circle</span>
-                    <span className="font-bold text-slate-700">72 créditos</span>
+                    <span className="font-bold text-slate-700">60 créditos</span>
                   </li>
                   <li className="flex items-center space-x-3 text-secondary">
                     <span className="material-symbols-outlined text-emerald-500 text-[18px]">check_circle</span>

@@ -6,9 +6,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_...', {
 });
 
 const PLANS = {
-  plan_1: { credits: 12, amount: 2990 }, // 2 + 10 = 12
-  plan_2: { credits: 25, amount: 4990 }, 
-  plan_3: { credits: 72, amount: 8990 }, // 12 + 60 = 72
+  plan_1: { credits: 10, amount: 2990 }, // R$ 29,90
+  plan_2: { credits: 25, amount: 4990 }, // R$ 49,90
+  plan_3: { credits: 60, amount: 8990 }, // R$ 89,90
 };
 
 export async function POST(req: Request) {
