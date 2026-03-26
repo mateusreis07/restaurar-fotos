@@ -68,7 +68,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true, status: 'COMPLETED' }, { status: 200 });
     };
 
-    // Dispara a animação de ultra qualidade (Kling v2.1)
+    // Dispara a animação de alta qualidade (MiniMax Video-01-Live)
     const triggerAnimation = async (imageUrl: string) => {
       const { origin } = new URL(req.url);
       const nextWebhookUrl = `${origin}/api/webhook/replicate?photoId=${photoId}`; 
@@ -76,23 +76,21 @@ export async function POST(req: Request) {
       try {
         await callWithRetry(async () => {
           await replicate.predictions.create({
-            version: "06c8b9d164532b260907e5f134fac92bd03714b2d56c703d15444ca70a4a0a65", // kwaivgi/kling-v2.1
+            version: "3f260322fd5cd71c08d13e317424de4cc7c4ef50949a200bad3e4334354c4f34", // minimax/video-01-live
             input: {
-              prompt: "A cinematic restored photo brought to life with HIGH MOTION and intense realistic movements: several natural eye blinks, visible breathing, gentle but clear head tilts, and a warm genuine smile that develops naturally. Focus 100% on the human subject movement. High dynamic range, realistic skin texture, 4k resolution.",
-              negative_prompt: "camera movement, zoom, lens zoom, camera approach, sliding camera, panning, tilt, rotation, blurry, low quality, static people, robotic motion, distorted faces",
-              start_image: imageUrl,
-              duration: 5,
-              cfg_scale: 1.0, // Força máxima de fidelidade ao prompt de movimento
-              mode: "pro"
+              prompt: "A high-quality restored historical photo brought to life with extremely natural movements: several realistic eye blinks, a warm gentle smile, subtle breathing, and slight head movement. The entire person feels authentic and alive. 4k resolution, cinematic lighting, no robotic motion.",
+              first_frame_image: imageUrl,
+              prompt_optimizer: true
             },
             webhook: nextWebhookUrl,
             webhook_events_filter: ["completed"]
           });
         });
-        console.log(`[AI Chain] Kling v2.1 disparado (Foco: High Motion) para PhotoId: ${photoId}`);
+        console.log(`[AI Chain] MiniMax Video-01-Live disparado com sucesso para PhotoId: ${photoId}`);
         return NextResponse.json({ success: true, status: 'ANIMATING' }, { status: 200 });
       } catch (animError: any) {
-        console.error(`[AI Chain] Erro ao disparar Kling v2.1: ${animError.message}`);
+        console.error(`[AI Chain] Erro ao disparar MiniMax: ${animError.message}`);
+        // Fallback: Se falhar, finaliza com a imagem restaurada
         return await finalizeImage(imageUrl);
       }
     };
@@ -145,7 +143,7 @@ export async function POST(req: Request) {
         }
 
         if (animate) {
-          console.log(`[AI Chain] Iniciando Passo de Animação (SadTalker)...`);
+          console.log(`[AI Chain] Iniciando Passo de Animação Profissional...`);
           return await triggerAnimation(outputUrl);
         }
 
