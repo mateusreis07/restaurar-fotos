@@ -100,79 +100,74 @@ export async function POST(req: Request) {
 
     // Quando o Replicate finaliza, envia o status 'succeeded' ou 'failed'
     if (payload.status === 'succeeded' && payload.output) {
-      // GFPGAN geralmente retorna array de URLs ou string output final.
-      const restoredUrl = Array.isArray(payload.output) 
+      // Normalizar o output (pode vir como string ou array)
+      const outputUrl = Array.isArray(payload.output) 
                           ? payload.output[payload.output.length - 1] 
                           : payload.output;
 
-      if (restoredUrl && !restoredUrl.endsWith('.mp4') && !restoredUrl.endsWith('.mov')) {
+      if (!outputUrl) return NextResponse.json({ error: 'Nenhum output encontrado' });
+
+      // Verificamos se o output é um vídeo (SadTalker) ou imagem (CodeFormer/DDColor)
+      const isVideo = outputUrl.endsWith('.mp4') || outputUrl.endsWith('.mov');
+
+      if (isVideo) {
+        console.log(`[AI Chain] Recebido vídeo de animação. Finalizando...`);
+        return await finalizeImage(outputUrl, true);
+      } else {
+        // É uma imagem (Restaurada ou Colorizada)
+        console.log(`[AI Chain] Recebida imagem (Restauração/Cor). Verificando próximos passos...`);
+        
+        // SEMPRE salvamos a imagem restaurada intermediária para o usuário já ver algo
+        await prisma.photo.update({
+          where: { id: photoId! },
+          data: { restoredUrl: outputUrl }
+        });
 
         if (colorize) {
-          console.log(`[AI Chain] Passo 1: Iniciando Colorização (DDColor)...`);
+          console.log(`[AI Chain] Iniciando Passo de Colorização (DDColor)...`);
           const { origin } = new URL(req.url);
-          // O próximo webhook não terá colorize=true, mas pode ter animate=true
           const nextWebhookUrl = `${origin}/api/webhook/replicate?photoId=${photoId}${animate ? '&animate=true' : ''}`; 
 
           try {
             await callWithRetry(async () => {
               await replicate.predictions.create({
-                version: "ca494ba129e44e45f661d6ece83c4c98a9a7c774309beca01429b58fce8aa695", // piddnad/ddcolor
-                input: {
-                  image: restoredUrl,
-                  model_size: "large"
-                },
+                version: "ca494ba129e44e45f661d6ece83c4c98a9a7c774309beca01429b58fce8aa695", // DDColor
+                input: { image: outputUrl, model_size: "large" },
                 webhook: nextWebhookUrl,
                 webhook_events_filter: ["completed"]
               });
             });
-            return NextResponse.json({ success: true, status: 'COLORIZING' }, { status: 200 });
-          } catch (colorError: any) {
-            console.error(`[AI Chain] Falha definitiva ao disparar DDColor: ${colorError.message}`);
-            // Fallback: Tenta animar mesmo sem cor se animate=true
-            if (animate) {
-               return await triggerAnimation(restoredUrl);
-            }
-            // Se não for para animar, finaliza com a imagem restaurada (sem cor)
-            return await finalizeImage(restoredUrl);
+            return NextResponse.json({ success: true, status: 'COLORIZING' });
+          } catch (e: any) {
+            console.error(`[AI Chain] Falha na cor: ${e.message}`);
+            if (animate) return await triggerAnimation(outputUrl);
+            return await finalizeImage(outputUrl);
           }
         }
 
-        // --- PASSO 2: ANIMAÇÃO (SadTalker) ---
         if (animate) {
-            console.log(`[AI Chain] Passo 2: Iniciando Animação (SadTalker)...`);
-            return await triggerAnimation(restoredUrl);
+          console.log(`[AI Chain] Iniciando Passo de Animação (SadTalker)...`);
+          return await triggerAnimation(outputUrl);
         }
 
-        // --- PASSO FINAL: CLOUDINARY ---
-        // Se nem colorização nem animação foram pedidas, ou se esta é a etapa final de um processo
-        return await finalizeImage(restoredUrl);
+        // Se não houver mais passos, finaliza
+        return await finalizeImage(outputUrl);
       }
     } else if (payload.status === 'failed' || payload.status === 'canceled') {
-      // Se o payload.output é um vídeo (SadTalker), então o photoId é o da imagem original
-      // e o payload.output é o vídeo animado.
-      const isAnimatedVideo = payload.output && (payload.output.endsWith('.mp4') || payload.output.endsWith('.mov'));
-
-      if (isAnimatedVideo) {
-        // Se falhou a animação, mas temos a imagem restaurada, finaliza com ela
-        const photo = await prisma.photo.findUnique({ where: { id: photoId } });
-        if (photo?.restoredUrl) {
-          return await finalizeImage(photo.restoredUrl);
-        }
+      console.error(`[AI Chain] Payload reportou falha ou cancelamento: ${payload.status}`);
+      
+      // Se a animação falhou mas já temos a imagem restaurada na DB, vamos marcar como COMPLETED
+      const photo = await prisma.photo.findUnique({ where: { id: photoId! } });
+      if (photo?.restoredUrl) {
+         await prisma.photo.update({ where: { id: photoId! }, data: { status: 'COMPLETED' } });
+         return NextResponse.json({ success: true, status: 'COMPLETED_FROM_RESTORED_FALLBACK' });
       }
 
-      await prisma.photo.update({
-        where: { id: photoId },
-        data: { status: 'FAILED' }
-      });
-      return NextResponse.json({ success: true, status: 'FAILED' }, { status: 200 });
-    } else if (payload.status === 'succeeded' && payload.output && (payload.output.endsWith('.mp4') || payload.output.endsWith('.mov'))) {
-      // Este bloco lida com o sucesso da animação (SadTalker)
-      const animatedUrl = payload.output;
-      return await finalizeImage(animatedUrl, true);
+      await prisma.photo.update({ where: { id: photoId! }, data: { status: 'FAILED' } });
+      return NextResponse.json({ success: true, status: 'FAILED' });
     }
 
-    // Apenas respondendo que recebemos outro tipo de atualizacao util (e.g. 'processing')
-    return NextResponse.json({ success: true, status: payload.status }, { status: 200 });
+    return NextResponse.json({ success: true, status: payload.status });
   } catch (error) {
     console.error('Webhook Replicate Error:', error);
     return NextResponse.json({ error: 'Webhook processing failed' }, { status: 500 });
