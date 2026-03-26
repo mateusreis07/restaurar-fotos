@@ -81,11 +81,11 @@ export async function POST(req: Request) {
               source_image: imageUrl,
               driven_audio: "https://raw.githubusercontent.com/anars/blank-audio/master/5-seconds-of-silence.mp3",
               use_eyeblink: true,
-              still_mode: true,
+              still_mode: false,
               use_enhancer: true,
               facerender: "facevid2vid",
               size_of_image: 512,
-              preprocess: "crop" 
+              preprocess: "full" 
             },
             webhook: nextWebhookUrl,
             webhook_events_filter: ["completed"]
