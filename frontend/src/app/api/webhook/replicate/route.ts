@@ -76,7 +76,7 @@ export async function POST(req: Request) {
       try {
         await callWithRetry(async () => {
           await replicate.predictions.create({
-            version: "3f260322fd5cd71c08d13e317424de4cc7c4ef50949a200bad3e4334354c4f34", // minimax/video-01-live
+            version: "7574e16b8f1ad52c6332ecb264c0f132e555f46c222255a738131ec1bb614092", // minimax/video-01-live (verificada com o token do usuário)
             input: {
               prompt: "A high-quality restored historical photo brought to life with extremely natural movements: several realistic eye blinks, a warm gentle smile, subtle breathing, and slight head movement. The entire person feels authentic and alive. 4k resolution, cinematic lighting, no robotic motion.",
               first_frame_image: imageUrl,
