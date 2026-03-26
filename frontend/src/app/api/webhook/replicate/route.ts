@@ -19,17 +19,18 @@ export async function POST(req: Request) {
     const photoId = url.searchParams.get('photoId');
     const colorize = url.searchParams.get('colorize') === 'true';
     const animate = url.searchParams.get('animate') === 'true';
+    const step = url.searchParams.get('step');
     
     if (!photoId) {
       return NextResponse.json({ error: 'Missing photoId' }, { status: 400 });
     }
 
     const payload = await req.json();
-    console.log(`[Webhook Replicate] Recebido Status: ${payload.status} | PhotoId: ${photoId} | Colorize: ${colorize} | Animate: ${animate}`);
+    console.log(`[Webhook Replicate] Status: ${payload.status} | PhotoId: ${photoId} | Step: ${step} | Colorize: ${colorize} | Animate: ${animate}`);
 
     // --- FUNÇÕES AUXILIARES DE CHAINING ---
     
-    // Retry em caso de Rate Limit (429) do Replicate (comum em saldo baixo < $5)
+    // Retry em caso de Rate Limit (429) do Replicate
     const callWithRetry = async (replicateCall: () => Promise<any>, retries = 4, delay = 12000) => {
       for (let i = 0; i <= retries; i++) {
         try {
@@ -50,7 +51,7 @@ export async function POST(req: Request) {
 
     // Finaliza a imagem (salva no Cloudinary e DB)
     const finalizeImage = async (urlToUpload: string, isAnimatedVideo = false) => {
-      console.log(`[AI End] Processo finalizado. Fazendo upload permanente para Cloudinary...`);
+      console.log(`[AI End] Processo finalizado para PhotoId: ${photoId}`);
       const uploadResult = await cloudinary.uploader.upload(urlToUpload, {
         folder: 'aura_recall/restored',
         resource_type: isAnimatedVideo ? 'video' : 'image'
@@ -68,17 +69,26 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true, status: 'COMPLETED' }, { status: 200 });
     };
 
-    // Dispara a animação de alta qualidade (MiniMax Video-01-Live)
-    const triggerAnimation = async (imageUrl: string) => {
+    // GERADOR DE PROMPT INTELIGENTE (Template Tarium Style)
+    const generateSmartPrompt = (caption: string) => {
+      // Remove o ponto final se houver
+      const baseCaption = caption.replace(/\.$/, "");
+      
+      return `${baseCaption}. The person starts to move naturally. Subtle blinking, gentle facial expression changes, slight smile forming. Natural head movement and micro-expressions. Realistic human behavior, cinematic style. No camera movement, no zoom. Focus entirely on the subject's face and natural motion.`;
+    };
+
+    // Dispara a animação (MiniMax Video-01-Live) usando o caption gerado
+    const triggerAnimation = async (imageUrl: string, caption: string) => {
       const { origin } = new URL(req.url);
       const nextWebhookUrl = `${origin}/api/webhook/replicate?photoId=${photoId}`; 
+      const smartPrompt = generateSmartPrompt(caption);
 
       try {
         await callWithRetry(async () => {
           await replicate.predictions.create({
-            version: "7574e16b8f1ad52c6332ecb264c0f132e555f46c222255a738131ec1bb614092", // minimax/video-01-live (verificada com o token do usuário)
+            version: "7574e16b8f1ad52c6332ecb264c0f132e555f46c222255a738131ec1bb614092", // MiniMax
             input: {
-              prompt: "A high-quality restored historical photo brought to life with extremely natural movements: several realistic eye blinks, a warm gentle smile, subtle breathing, and slight head movement. The entire person feels authentic and alive. 4k resolution, cinematic lighting, no robotic motion.",
+              prompt: smartPrompt,
               first_frame_image: imageUrl,
               prompt_optimizer: true
             },
@@ -86,78 +96,112 @@ export async function POST(req: Request) {
             webhook_events_filter: ["completed"]
           });
         });
-        console.log(`[AI Chain] MiniMax Video-01-Live disparado com sucesso para PhotoId: ${photoId}`);
-        return NextResponse.json({ success: true, status: 'ANIMATING' }, { status: 200 });
-      } catch (animError: any) {
-        console.error(`[AI Chain] Erro ao disparar MiniMax: ${animError.message}`);
-        // Fallback: Se falhar, finaliza com a imagem restaurada
+        console.log(`[AI Chain] MiniMax disparado com Prompt Inteligente para PhotoId: ${photoId}`);
+        return NextResponse.json({ success: true, status: 'ANIMATING' });
+      } catch (e: any) {
+        console.error(`[AI Chain] Erro MiniMax: ${e.message}`);
         return await finalizeImage(imageUrl);
       }
     };
 
-    // Quando o Replicate finaliza, envia o status 'succeeded' ou 'failed'
+    // Dispara a análise da imagem para gerar o prompt (AI Vision)
+    const triggerCaptioning = async (imageUrl: string) => {
+      const { origin } = new URL(req.url);
+      const nextWebhookUrl = `${origin}/api/webhook/replicate?photoId=${photoId}&step=animating`; 
+
+      try {
+        await callWithRetry(async () => {
+          await replicate.predictions.create({
+            version: "72ccb656353c348c1385df54b237eeb7bfa874bf11486cf0b9473e691b662d31", // Moondream2 (Fast)
+            input: { 
+              image: imageUrl, 
+              prompt: "Describe this person's appearance, age and facial expression in one short, clear sentence starting with 'A portrait of...'. Be objective."
+            },
+            webhook: nextWebhookUrl,
+            webhook_events_filter: ["completed"]
+          });
+        });
+        console.log(`[AI Chain] AI Vision (Moondream2) disparado para PhotoId: ${photoId}`);
+        return NextResponse.json({ success: true, status: 'CAPTIONING' });
+      } catch (e: any) {
+        console.error(`[AI Chain] Erro Vision: ${e.message}`);
+        // Se falhar a visão, tenta animar com prompt genérico
+        return await triggerAnimation(imageUrl, "A realistic human portrait");
+      }
+    };
+
+    // --- LÓGICA PRINCIPAL DO WEBHOOK ---
+
     if (payload.status === 'succeeded' && payload.output) {
-      // Normalizar o output (pode vir como string ou array)
       const outputUrl = Array.isArray(payload.output) 
                           ? payload.output[payload.output.length - 1] 
                           : payload.output;
 
-      if (!outputUrl) return NextResponse.json({ error: 'Nenhum output encontrado' });
+      if (!outputUrl) return NextResponse.json({ error: 'Nenhum output' });
 
-      // Verificamos se o output é um vídeo (SadTalker) ou imagem (CodeFormer/DDColor)
-      const isVideo = outputUrl.endsWith('.mp4') || outputUrl.endsWith('.mov');
-
-      if (isVideo) {
-        console.log(`[AI Chain] Recebido vídeo de animação. Finalizando...`);
-        return await finalizeImage(outputUrl, true);
-      } else {
-        // É uma imagem (Restaurada ou Colorizada)
-        console.log(`[AI Chain] Recebida imagem (Restauração/Cor). Verificando próximos passos...`);
+      // CASO 1: Recebemos o Caption (Step: animating)
+      if (step === 'animating') {
+        const caption = typeof payload.output === 'string' ? payload.output : payload.output.toString();
+        // Precisamos da imagem restaurada que serviu de input para a visão
+        const photo = await prisma.photo.findUnique({ where: { id: photoId! } });
+        const imageUrl = photo?.restoredUrl || outputUrl; // Fallback
         
-        // SEMPRE salvamos a imagem restaurada intermediária para o usuário já ver algo
-        await prisma.photo.update({
-          where: { id: photoId! },
-          data: { restoredUrl: outputUrl }
-        });
-
-        if (colorize) {
-          console.log(`[AI Chain] Iniciando Passo de Colorização (DDColor)...`);
-          const { origin } = new URL(req.url);
-          const nextWebhookUrl = `${origin}/api/webhook/replicate?photoId=${photoId}${animate ? '&animate=true' : ''}`; 
-
-          try {
-            await callWithRetry(async () => {
-              await replicate.predictions.create({
-                version: "ca494ba129e44e45f661d6ece83c4c98a9a7c774309beca01429b58fce8aa695", // DDColor
-                input: { image: outputUrl, model_size: "large" },
-                webhook: nextWebhookUrl,
-                webhook_events_filter: ["completed"]
-              });
-            });
-            return NextResponse.json({ success: true, status: 'COLORIZING' });
-          } catch (e: any) {
-            console.error(`[AI Chain] Falha na cor: ${e.message}`);
-            if (animate) return await triggerAnimation(outputUrl);
-            return await finalizeImage(outputUrl);
-          }
-        }
-
-        if (animate) {
-          console.log(`[AI Chain] Iniciando Passo de Animação Profissional...`);
-          return await triggerAnimation(outputUrl);
-        }
-
-        // Se não houver mais passos, finaliza
-        return await finalizeImage(outputUrl);
+        console.log(`[AI Chain] Vision concluída: "${caption}". Iniciando MiniMax...`);
+        return await triggerAnimation(imageUrl, caption);
       }
-    } else if (payload.status === 'failed' || payload.status === 'canceled') {
-      console.error(`[AI Chain] Payload reportou falha ou cancelamento: ${payload.status}`);
+
+      // CASO 2: Recebemos um Vídeo (Final da Chain)
+      const isVideo = outputUrl.endsWith('.mp4') || outputUrl.endsWith('.mov') || outputUrl.includes('video');
+      if (isVideo) {
+        return await finalizeImage(outputUrl, true);
+      }
+
+      // CASO 3: Recebemos uma Imagem (Restaurada ou Colorizada)
+      console.log(`[AI Chain] Recebida imagem. Verificando próximos passos...`);
       
-      // Se a animação falhou mas já temos a imagem restaurada na DB, vamos marcar como COMPLETED
+      // Salva progresso intermediário
+      await prisma.photo.update({
+        where: { id: photoId! },
+        data: { restoredUrl: outputUrl }
+      });
+
+      // Fluxo de Colorização
+      if (colorize && !url.searchParams.get('colorized')) {
+        console.log(`[AI Chain] Iniciando Colorização...`);
+        const { origin } = new URL(req.url);
+        const nextWebhookUrl = `${origin}/api/webhook/replicate?photoId=${photoId}&animate=${animate}&colorized=true`; 
+
+        try {
+          await callWithRetry(async () => {
+            await replicate.predictions.create({
+              version: "ca494ba129e44e45f661d6ece83c4c98a9a7c774309beca01429b58fce8aa695",
+              input: { image: outputUrl, model_size: "large" },
+              webhook: nextWebhookUrl,
+              webhook_events_filter: ["completed"]
+            });
+          });
+          return NextResponse.json({ success: true, status: 'COLORIZING' });
+        } catch (e: any) {
+          console.error(`[AI Chain] Erro cor: ${e.message}`);
+          if (animate) return await triggerCaptioning(outputUrl);
+          return await finalizeImage(outputUrl);
+        }
+      }
+
+      // Fluxo de Animação (começa com Captioning)
+      if (animate) {
+        return await triggerCaptioning(outputUrl);
+      }
+
+      return await finalizeImage(outputUrl);
+
+    } else if (payload.status === 'failed' || payload.status === 'canceled') {
+      console.error(`[AI Chain] Falha: ${payload.status}`);
       const photo = await prisma.photo.findUnique({ where: { id: photoId! } });
+      
       if (photo?.restoredUrl) {
          await prisma.photo.update({ where: { id: photoId! }, data: { status: 'COMPLETED' } });
-         return NextResponse.json({ success: true, status: 'COMPLETED_FROM_RESTORED_FALLBACK' });
+         return NextResponse.json({ success: true, status: 'COMPLETED_FALLBACK' });
       }
 
       await prisma.photo.update({ where: { id: photoId! }, data: { status: 'FAILED' } });
