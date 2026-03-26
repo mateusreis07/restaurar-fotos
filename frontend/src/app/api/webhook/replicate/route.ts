@@ -68,7 +68,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true, status: 'COMPLETED' }, { status: 200 });
     };
 
-    // Dispara a animação de alta qualidade (Kling v1.5 Pro)
+    // Dispara a animação de ultra qualidade (Kling v2.1)
     const triggerAnimation = async (imageUrl: string) => {
       const { origin } = new URL(req.url);
       const nextWebhookUrl = `${origin}/api/webhook/replicate?photoId=${photoId}`; 
@@ -76,23 +76,23 @@ export async function POST(req: Request) {
       try {
         await callWithRetry(async () => {
           await replicate.predictions.create({
-            version: "63a990e82809f01ded0ec0375e907870943aa01e7856c7c6455aae4bc30bb8fc", // kwaivgi/kling-v1.5-pro
+            version: "06c8b9d164532b260907e5f134fac92bd03714b2d56c703d15444ca70a4a0a65", // kwaivgi/kling-v2.1
             input: {
-              prompt: "Extreme realistic video of the person in the photo blinking their eyes naturally, tilting their head slightly, and showing a soft, real smile. Static camera, stationary background, no camera movement.",
-              negative_prompt: "camera movement, zoom, pan, tilt, sliding, blurry, robotic motion, distorted face, extra limbs, morphing",
+              prompt: "A cinematic restored photo brought to life with HIGH MOTION and intense realistic movements: several natural eye blinks, visible breathing, gentle but clear head tilts, and a warm genuine smile that develops naturally. Focus 100% on the human subject movement. High dynamic range, realistic skin texture, 4k resolution.",
+              negative_prompt: "camera movement, zoom, lens zoom, camera approach, sliding camera, panning, tilt, rotation, blurry, low quality, static people, robotic motion, distorted faces",
               start_image: imageUrl,
               duration: 5,
-              cfg_scale: 0.8
+              cfg_scale: 1.0, // Força máxima de fidelidade ao prompt de movimento
+              mode: "pro"
             },
             webhook: nextWebhookUrl,
             webhook_events_filter: ["completed"]
           });
         });
-        console.log(`[AI Chain] Kling v1.5 disparado com sucesso para PhotoId: ${photoId}`);
+        console.log(`[AI Chain] Kling v2.1 disparado (Foco: High Motion) para PhotoId: ${photoId}`);
         return NextResponse.json({ success: true, status: 'ANIMATING' }, { status: 200 });
       } catch (animError: any) {
-        console.error(`[AI Chain] Erro ao disparar Kling: ${animError.message}`);
-        // Fallback: Se o Kling falhar (ex: custo alto ou erro), finaliza com a imagem restaurada
+        console.error(`[AI Chain] Erro ao disparar Kling v2.1: ${animError.message}`);
         return await finalizeImage(imageUrl);
       }
     };
