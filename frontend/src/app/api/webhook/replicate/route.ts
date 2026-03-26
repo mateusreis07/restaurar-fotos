@@ -68,7 +68,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true, status: 'COMPLETED' }, { status: 200 });
     };
 
-    // Dispara a animação (SadTalker)
+    // Dispara a animação de alta qualidade (Kling v1.5 Pro)
     const triggerAnimation = async (imageUrl: string) => {
       const { origin } = new URL(req.url);
       const nextWebhookUrl = `${origin}/api/webhook/replicate?photoId=${photoId}`; 
@@ -76,24 +76,23 @@ export async function POST(req: Request) {
       try {
         await callWithRetry(async () => {
           await replicate.predictions.create({
-            version: "a519cc0cfebaaeade068b23899165a11ec76aaa1d2b313d40d214f204ec957a3", // cjwbw/sadtalker
+            version: "63a990e82809f01ded0ec0375e907870943aa01e7856c7c6455aae4bc30bb8fc", // kwaivgi/kling-v1.5-pro
             input: {
-              source_image: imageUrl,
-              driven_audio: "https://raw.githubusercontent.com/anars/blank-audio/master/5-seconds-of-silence.mp3",
-              use_eyeblink: true,
-              still_mode: false,
-              use_enhancer: true,
-              facerender: "facevid2vid",
-              size_of_image: 512,
-              preprocess: "full" 
+              prompt: "A high-quality restored historical photo brought to life with extremely natural and subtle movements: gentle blinking eyes, soft facial expressions, and very slight, realistic head and body movement. The entire scene feels authentic and alive, like a memory coming back to life. No robotic or exaggerated motions.",
+              start_image: imageUrl,
+              duration: 5,
+              cfg_scale: 0.5,
+              aspect_ratio: "1:1"
             },
             webhook: nextWebhookUrl,
             webhook_events_filter: ["completed"]
           });
         });
+        console.log(`[AI Chain] Kling v1.5 disparado com sucesso para PhotoId: ${photoId}`);
         return NextResponse.json({ success: true, status: 'ANIMATING' }, { status: 200 });
       } catch (animError: any) {
-        console.error(`[AI Chain] Erro ao disparar SadTalker: ${animError.message}`);
+        console.error(`[AI Chain] Erro ao disparar Kling: ${animError.message}`);
+        // Fallback: Se o Kling falhar (ex: custo alto ou erro), finaliza com a imagem restaurada
         return await finalizeImage(imageUrl);
       }
     };
