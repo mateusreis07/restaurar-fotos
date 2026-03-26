@@ -25,6 +25,7 @@ export async function POST(req: Request) {
     }
 
     const payload = await req.json();
+    console.log(`[Webhook Replicate] Recebido Status: ${payload.status} | PhotoId: ${photoId} | Colorize: ${colorize} | Animate: ${animate}`);
 
     // --- FUNÇÕES AUXILIARES DE CHAINING ---
     
@@ -104,9 +105,8 @@ export async function POST(req: Request) {
 
       if (restoredUrl && !restoredUrl.endsWith('.mp4') && !restoredUrl.endsWith('.mov')) {
 
-        // Se o usuário pediu colorização E ainda não fizemos (para evitar loop infinito)
         if (colorize) {
-          console.log(`[AI Chain] Restaurado com CodeFormer. Agora iniciando Colorização (DeOldify)...`);
+          console.log(`[AI Chain] Passo 1: Iniciando Colorização (DDColor)...`);
           const { origin } = new URL(req.url);
           // O próximo webhook não terá colorize=true, mas pode ter animate=true
           const nextWebhookUrl = `${origin}/api/webhook/replicate?photoId=${photoId}${animate ? '&animate=true' : ''}`; 
@@ -136,8 +136,8 @@ export async function POST(req: Request) {
         }
 
         // --- PASSO 2: ANIMAÇÃO (SadTalker) ---
-        // Se a colorização não foi pedida ou já foi concluída, e a animação foi pedida
         if (animate) {
+            console.log(`[AI Chain] Passo 2: Iniciando Animação (SadTalker)...`);
             return await triggerAnimation(restoredUrl);
         }
 
