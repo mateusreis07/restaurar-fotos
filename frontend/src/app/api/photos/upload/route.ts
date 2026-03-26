@@ -20,9 +20,11 @@ export async function POST(req: Request) {
     if (!file) return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
     if (!userId) return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
 
+    const creditsToDeduct = 1 + (animate ? 4 : 0);
     const user = await prisma.user.findUnique({ where: { id: userId } });
-    if (!user || user.credits <= 0) {
-      return NextResponse.json({ error: 'Insufficient credits' }, { status: 403 });
+    
+    if (!user || user.credits < creditsToDeduct) {
+      return NextResponse.json({ error: `Créditos insuficientes. Você precisa de ${creditsToDeduct} créditos para esta operação.` }, { status: 403 });
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
@@ -44,7 +46,7 @@ export async function POST(req: Request) {
 
     await prisma.user.update({
       where: { id: userId },
-      data: { credits: user.credits - 1 }
+      data: { credits: user.credits - creditsToDeduct }
     });
 
     // Replicate Integration (GFPGAN for Face Verification and Restoration)

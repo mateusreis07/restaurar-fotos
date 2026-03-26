@@ -9,7 +9,7 @@ export default function UploadPage() {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [colorize, setColorize] = useState(false);
+  const [colorize, setColorize] = useState(true);
   const [animate, setAnimate] = useState(false);
   const router = useRouter();
 
@@ -231,8 +231,8 @@ export default function UploadPage() {
                       <span className="material-symbols-outlined text-white text-[24px]">movie</span>
                     </div>
                     <div>
-                      <h4 className="font-headline font-bold text-[#151c27] text-[15px]">Animar Retrato (SadTalker)</h4>
-                      <p className="text-[12px] font-semibold text-[#575f6a]/80">Cria movimento e vida no rosto</p>
+                      <h4 className="font-headline font-bold text-[#151c27] text-[15px]">Animar Retrato (Premium)</h4>
+                      <p className="text-[12px] font-semibold text-[#f43f5e] uppercase tracking-wider">+4 créditos extras</p>
                     </div>
                   </div>
                   <button 
