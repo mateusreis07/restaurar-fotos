@@ -61,6 +61,7 @@ export async function POST(req: Request) {
         where: { id: photoId! },
         data: {
           restoredUrl: isAnimatedVideo ? undefined : uploadResult.secure_url,
+          // @ts-ignore
           animatedUrl: isAnimatedVideo ? uploadResult.secure_url : undefined,
           status: 'COMPLETED'
         }
@@ -213,11 +214,20 @@ The result should be cinematic, natural, and emotionally subtle.
       // CASO 3: Recebemos uma Imagem (Restaurada ou Colorizada)
       console.log(`[AI Chain] Recebida imagem. Verificando próximos passos...`);
       
-      // Salva progresso intermediário
+      // Immediate Cloudinary Backup
+      console.log(`[AI Backup] Backuping to Cloudinary for PhotoId: ${photoId}`);
+      const uploadResult = await cloudinary.uploader.upload(outputUrl, {
+        folder: 'aura_recall/restored',
+      });
+      const secureUrl = uploadResult.secure_url;
+
+      // Salva progresso intermediário (links Cloudinary, não Replicate)
       await prisma.photo.update({
         where: { id: photoId! },
-        data: { restoredUrl: outputUrl }
+        data: { restoredUrl: secureUrl }
       });
+
+      const inputUrl = secureUrl; // Use our backup for next steps
 
       // Fluxo de Colorização
       if (colorize && !url.searchParams.get('colorized')) {
@@ -229,7 +239,7 @@ The result should be cinematic, natural, and emotionally subtle.
           await callWithRetry(async () => {
             await replicate.predictions.create({
               version: "ca494ba129e44e45f661d6ece83c4c98a9a7c774309beca01429b58fce8aa695",
-              input: { image: outputUrl, model_size: "large" },
+              input: { image: inputUrl, model_size: "large" },
               webhook: nextWebhookUrl,
               webhook_events_filter: ["completed"]
             });
@@ -237,17 +247,17 @@ The result should be cinematic, natural, and emotionally subtle.
           return NextResponse.json({ success: true, status: 'COLORIZING' });
         } catch (e: any) {
           console.error(`[AI Chain] Erro cor: ${e.message}`);
-          if (animate) return await triggerCaptioning(outputUrl);
-          return await finalizeImage(outputUrl);
+          if (animate) return await triggerCaptioning(inputUrl);
+          return await finalizeImage(inputUrl);
         }
       }
 
       // Fluxo de Animação (começa com Captioning)
       if (animate) {
-        return await triggerCaptioning(outputUrl);
+        return await triggerCaptioning(inputUrl);
       }
 
-      return await finalizeImage(outputUrl);
+      return await finalizeImage(inputUrl);
 
     } else if (payload.status === 'failed' || payload.status === 'canceled') {
       console.error(`[AI Chain] Falha: ${payload.status}`);

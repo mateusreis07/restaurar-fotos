@@ -17,17 +17,19 @@ export default function Dashboard() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const userId = localStorage.getItem('aura_user_id');
     const savedEmail = localStorage.getItem('aura_email');
-    if (!savedEmail) {
+    
+    if (!userId || !savedEmail) {
       router.push('/login');
       return;
     }
     
     setIsAuthChecking(true);
-    fetch('/api/auth/login', {
+    fetch('/api/auth/me', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: savedEmail })
+      body: JSON.stringify({ userId })
     })
     .then(res => res.json())
     .then(data => {
@@ -36,6 +38,7 @@ export default function Dashboard() {
         loadPhotos(data.user.id);
       } else {
         localStorage.removeItem('aura_email');
+        localStorage.removeItem('aura_user_id');
         router.push('/login');
       }
     })
@@ -48,11 +51,16 @@ export default function Dashboard() {
 
   const loadPhotos = async (userId: string) => {
     try {
+      console.log('Fetching photos for user:', userId);
       const res = await fetch(`/api/photos/history/${userId}`);
+      console.log('History API status:', res.status);
       const data = await res.json();
-      if (data.photos) setPhotos(data.photos);
+      console.log('Photos count:', data.photos?.length);
+      if (data.photos) {
+          setPhotos(data.photos);
+      }
     } catch(err) {
-      console.error(err);
+      console.error('Error loading photos:', err);
     }
   };
 

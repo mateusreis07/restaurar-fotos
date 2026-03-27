@@ -14,16 +14,18 @@ export default function UploadPage() {
   const router = useRouter();
 
   useEffect(() => {
+    const userId = localStorage.getItem('aura_user_id');
     const savedEmail = localStorage.getItem('aura_email');
-    if (!savedEmail) {
+    
+    if (!userId || !savedEmail) {
       router.push('/login');
       return;
     }
     
-    fetch('/api/auth/login', {
+    fetch('/api/auth/me', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: savedEmail })
+      body: JSON.stringify({ userId })
     })
     .then(res => res.json())
     .then(data => {

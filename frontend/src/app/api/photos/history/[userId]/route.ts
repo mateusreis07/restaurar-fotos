@@ -10,6 +10,17 @@ export async function GET(req: Request, { params }: { params: Promise<{ userId: 
 
   const photos = await prisma.photo.findMany({
     where: { userId },
+    select: {
+      id: true,
+      userId: true,
+      originalUrl: true,
+      restoredUrl: true,
+      status: true,
+      createdAt: true,
+      updatedAt: true,
+      // @ts-ignore
+      animatedUrl: true,
+    },
     orderBy: { createdAt: 'desc' }
   });
   

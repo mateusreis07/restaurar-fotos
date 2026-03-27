@@ -10,6 +10,7 @@ datasource db {
 model User {
   id               String        @id @default(uuid())
   email            String        @unique
+  password         String?      // Optional for now
   name             String?
   credits          Int           @default(0)
   stripeCustomerId String?
