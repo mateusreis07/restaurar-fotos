@@ -43,12 +43,8 @@ export default function Home() {
           <div className="hidden md:flex items-center space-x-8">
             <a className="font-headline font-medium text-sm tracking-tight text-slate-600 hover:text-primary transition-colors duration-300" href="#como-funciona">Como funciona</a>
             <a className="font-headline font-medium text-sm tracking-tight text-slate-600 hover:text-primary transition-colors duration-300" href="#precos">Preços</a>
-            <Link href="/dashboard" className="font-headline font-medium text-sm tracking-tight text-slate-600 hover:text-primary transition-colors duration-300">Minha Área</Link>
           </div>
           <div className="flex items-center space-x-4">
-            <Link href="/login" className="hidden sm:block text-slate-600 font-headline font-medium text-sm hover:text-primary transition-colors duration-300">
-              Login
-            </Link>
             <Link href="/dashboard">
               <button className="editorial-gradient text-on-primary px-6 py-2.5 rounded-full font-headline font-semibold text-sm shadow-md active:scale-95 transition-transform duration-150">
                   Começar a Restaurar
@@ -89,25 +85,19 @@ export default function Home() {
           >
             {/* After (Restored) - Base Image */}
             <div 
-              className="absolute inset-0 w-full h-full bg-cover bg-center pointer-events-none"
+              className="absolute inset-0 w-full h-full bg-cover bg-center"
               style={{ backgroundImage: `url(${imageUrl})` }}
             />
             
-            {/* Before (Damaged) - Clipped Overlay */}
+            {/* Before (Damaged) - Clipped Overlay using clip-path */}
             <div 
-              className="absolute inset-0 h-full overflow-hidden pointer-events-none"
-              style={{ width: `${sliderPosition}%` }}
-            >
-              <div 
-                className="absolute inset-0 h-full bg-cover bg-center"
-                style={{ 
-                  backgroundImage: `url(${imageUrl})`,
-                  width: '100vw',
-                  maxWidth: containerRef.current?.offsetWidth || 1000,
-                  filter: 'sepia(80%) grayscale(40%) blur(1px) contrast(80%) brightness(0.9)'
-                }}
-              />
-            </div>
+              className="absolute inset-0 w-full h-full bg-cover bg-center z-10"
+              style={{ 
+                backgroundImage: `url(${imageUrl})`,
+                clipPath: `inset(0 ${100 - sliderPosition}% 0 0)`,
+                filter: 'sepia(80%) grayscale(40%) blur(1px) contrast(80%) brightness(0.9)'
+              }}
+            />
 
             {/* Slider Handle */}
             <div 
@@ -129,6 +119,85 @@ export default function Home() {
           </div>
         </section>
 
+        {/* 🎬 Visual Trio & AI Demonstration */}
+        <section className="bg-white py-24 px-6 overflow-hidden">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-col lg:flex-row items-center gap-16">
+              <div className="flex-1 space-y-6">
+                <div className="inline-flex items-center space-x-2 editorial-gradient text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase">
+                  Tecnologia 2026
+                </div>
+                <h2 className="font-headline font-extrabold text-4xl md:text-5xl text-on-surface leading-tight">
+                  Veja suas memórias <span className="text-primary italic font-serif">ganharem vida</span>
+                </h2>
+                <p className="text-lg text-secondary leading-relaxed">
+                  Nossa IA reconstrói detalhes perdidos, adiciona cor e transforma sua foto estática em um vídeo realista com movimento natural.
+                </p>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
+                  <div className="bg-surface-container-low p-6 rounded-2xl border border-slate-100">
+                    <div className="text-primary font-bold text-lg mb-1">Restauração Profunda</div>
+                    <p className="text-sm text-slate-500">Removemos arranhões e restauramos o brilho nos olhos.</p>
+                  </div>
+                  <div className="bg-surface-container-low p-6 rounded-2xl border border-slate-100">
+                    <div className="text-primary font-bold text-lg mb-1">Movimento Natural</div>
+                    <p className="text-sm text-slate-500">IA que simula a vida com movimentos sutis e realistas.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex-1 relative w-full max-w-2xl">
+                 <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-4">
+                       {/* Example 1: Restoration High Quality */}
+                       <div className="relative aspect-video rounded-2xl overflow-hidden shadow-lg border border-slate-200">
+                          <img src="/examples/example1.png" className="w-full h-full object-cover" alt="Restauração de Alta Qualidade" />
+                          <div className="absolute top-2 left-2 bg-black/60 text-white text-[8px] font-bold px-1.5 py-0.5 rounded uppercase">Antes/Depois</div>
+                       </div>
+                       {/* Example 2: Scratched Photo Restoration */}
+                       <div className="relative aspect-video rounded-2xl overflow-hidden shadow-lg border border-slate-200">
+                          <img src="/examples/example2.png" className="w-full h-full object-cover" alt="Restauração de Foto Rasgada" />
+                          <div className="absolute top-2 left-2 bg-black/60 text-white text-[8px] font-bold px-1.5 py-0.5 rounded uppercase">Remoção de Riscos</div>
+                       </div>
+                       {/* Example 3: Facial Reconstruction Detail */}
+                       <div className="relative aspect-video rounded-2xl overflow-hidden shadow-lg border border-slate-200">
+                          <img src="/examples/example3.png" className="w-full h-full object-cover" alt="Recuperação de Nitidez e Detalhe" />
+                          <div className="absolute top-2 left-2 editorial-gradient text-white text-[8px] font-bold px-1.5 py-0.5 rounded uppercase">Nitidez IA</div>
+                       </div>
+                    </div>
+                    <div className="flex flex-col justify-center space-y-4">
+                       {/* Main Video Demo */}
+                       <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border-4 border-white ring-1 ring-slate-100">
+                          <video 
+                            autoPlay 
+                            loop 
+                            muted 
+                            playsInline
+                            className="w-full h-full object-cover"
+                            poster="/examples/original_video_base.png"
+                          >
+                            <source src="https://res.cloudinary.com/dwzcwtxfv/video/upload/v1774536765/aura_recall/restored/mry0sfxj4k3wt9mhjymp.mp4" type="video/mp4" />
+                          </video>
+                          <div className="absolute bottom-4 left-4 right-4 glass-panel py-3 px-4 rounded-xl flex items-center justify-between">
+                             <span className="text-[10px] font-black text-primary uppercase">Resultado Final (Animado)</span>
+                             <span className="material-symbols-outlined text-primary text-lg">play_circle</span>
+                          </div>
+                       </div>
+                       {/* Example 4: Portrait Detail */}
+                       <div className="relative aspect-video rounded-2xl overflow-hidden shadow-lg border border-slate-200">
+                          <img src="/examples/original_video_base.png" className="w-full h-full object-cover grayscale opacity-80" alt="Foto Original Antes" />
+                          <div className="absolute top-2 left-2 bg-black/60 text-white text-[8px] font-bold px-1.5 py-0.5 rounded uppercase">Foto Original</div>
+                       </div>
+                    </div>
+                 </div>
+                 {/* Decorative elements */}
+                 <div className="absolute -z-10 -top-10 -right-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
+                 <div className="absolute -z-10 -bottom-10 -left-10 w-64 h-64 bg-tertiary/5 rounded-full blur-3xl"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* How it Works */}
         <section id="como-funciona" className="bg-surface-container-low py-24 px-6 border-y border-slate-200/60">
           <div className="max-w-7xl mx-auto">
@@ -137,72 +206,108 @@ export default function Home() {
               <p className="text-secondary max-w-xl mx-auto text-lg">Esqueça softwares complexos de edição gráfica. Traga suas memórias de volta à vida imediatamente.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-              <div className="bg-surface rounded-2xl p-10 space-y-6 shadow-sm hover:-translate-y-2 transition-transform duration-300 border border-slate-100">
+              <div className="bg-surface rounded-3xl p-10 space-y-6 shadow-sm hover:-translate-y-2 transition-transform duration-300 border border-slate-100">
                 <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center transform -rotate-3">
                   <span className="material-symbols-outlined text-primary text-3xl">add_photo_alternate</span>
                 </div>
                 <h3 className="font-headline font-bold text-2xl">1. Faça o Upload</h3>
-                <p className="text-secondary leading-relaxed">Pode ser uma foto escaneada ou até mesmo uma foto tirada do álbum de família com o seu próprio celular.</p>
+                <p className="text-secondary leading-relaxed">Tire uma foto ou escaneie o seu álbum antigo com o celular. Nossa tecnologia cuida do resto.</p>
               </div>
-              <div className="bg-surface rounded-2xl p-10 space-y-6 shadow-sm hover:-translate-y-2 transition-transform duration-300 border border-slate-100 relative">
+              <div className="bg-surface rounded-3xl p-10 space-y-6 shadow-sm hover:-translate-y-2 transition-transform duration-300 border border-slate-100 relative">
                 <div className="absolute top-0 right-10 -translate-y-1/2 editorial-gradient text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">IA Avançada</div>
                 <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center transform rotate-3">
                   <span className="material-symbols-outlined text-primary text-3xl">auto_awesome</span>
                 </div>
-                <h3 className="font-headline font-bold text-2xl">2. Nossa Máquina Analisa</h3>
-                <p className="text-secondary leading-relaxed">Em menos de 10 segundos nossa inteligência artificial mapeia traços, corrige texturas e injeta as cores corretas.</p>
+                <h3 className="font-headline font-bold text-2xl">2. Nossa Máquina Reconstrói</h3>
+                <p className="text-secondary leading-relaxed">Mapeamos cada detalhe, corrigimos texturas, restauramos cores e, se desejar, aplicamos animação cinematográfica.</p>
               </div>
-              <div className="bg-surface rounded-2xl p-10 space-y-6 shadow-sm hover:-translate-y-2 transition-transform duration-300 border border-slate-100">
+              <div className="bg-surface rounded-3xl p-10 space-y-6 shadow-sm hover:-translate-y-2 transition-transform duration-300 border border-slate-100">
                 <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center transform -rotate-3">
                   <span className="material-symbols-outlined text-primary text-3xl">download</span>
                 </div>
                 <h3 className="font-headline font-bold text-2xl">3. Emoção Pronta</h3>
-                <p className="text-secondary leading-relaxed">Emocione sua família. Baixe o retrato restaurado em ultra-definição para imprimir, emoldurar ou postar.</p>
+                <p className="text-secondary leading-relaxed">Baixe em alta definição, pronto para imprimir, emoldurar ou surpreender a família no WhatsApp.</p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Benefits Section */}
-        <section className="bg-surface py-24 px-6">
+        {/* 💎 Benefits Section */}
+        <section className="bg-white py-24 px-6 overflow-hidden">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="font-headline font-extrabold text-4xl text-on-surface mb-4">Feito para suas melhores lembranças</h2>
+              <h2 className="font-headline font-extrabold text-4xl text-on-surface mb-4">Muito mais do que restaurar fotos</h2>
               <p className="text-secondary max-w-2xl mx-auto text-lg">Tecnologia de ponta trabalhando nos bastidores para devolver a perfeição às suas fotos históricas.</p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              <div className="flex flex-col items-center text-center space-y-4 p-8 rounded-2xl bg-surface-container-low border border-slate-200/60 shadow-sm hover:-translate-y-1 transition-transform">
-                <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center text-primary">
-                  <span className="material-symbols-outlined text-3xl">face</span>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[
+                { icon: "psychology", title: "Recupera detalhes perdidos", desc: "Nossa IA 'enxerga' além do borrão, reconstruindo olhos, pele e texturas que o tempo apagou." },
+                { icon: "palette", title: "Adiciona cor automaticamente", desc: "Algoritmos treinados em milhões de fotos históricas para injetar as cores exatas da época." },
+                { icon: "face", title: "Restaura rostos borrados", desc: "Especialistas em reconstrução facial profunda para garantir que a identidade original seja preservada." },
+                { icon: "movie", title: "Transforma foto em vídeo", desc: "Dê vida ao passado com animações realistas que capturam a essência do momento." },
+                { icon: "bolt", title: "Resultado em segundos", desc: "O que antes levava dias para restauradores humanos, agora acontece em menos de 10 segundos." },
+                { icon: "high_quality", title: "Ultra Resolução", desc: "Multiplicamos os pixels para permitir impressões de alta qualidade em grandes formatos." }
+              ].map((benefit, i) => (
+                <div key={i} className="flex flex-col items-start space-y-4 p-8 rounded-3xl bg-surface-container-low border border-slate-100/60 shadow-sm hover:shadow-md transition-all">
+                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
+                    <span className="material-symbols-outlined text-2xl">{benefit.icon}</span>
+                  </div>
+                  <h3 className="font-headline font-bold text-xl">{benefit.title}</h3>
+                  <p className="text-slate-500 text-sm leading-relaxed">{benefit.desc}</p>
                 </div>
-                <h3 className="font-headline font-bold text-xl">Restauração Facial</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">Reconstruímos rostos borrados ou desfocados com uma precisão impressionante, recuperando a identidade original.</p>
-              </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
-              <div className="flex flex-col items-center text-center space-y-4 p-8 rounded-2xl bg-surface-container-low border border-slate-200/60 shadow-sm hover:-translate-y-1 transition-transform">
-                <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center text-primary">
-                  <span className="material-symbols-outlined text-3xl">cleaning_services</span>
-                </div>
-                <h3 className="font-headline font-bold text-xl">Remoção de Danos</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">Adeus a rasgos, manchas de mofo, dobras e riscos de caneta que arruinaram e envelheceram a sua fotografia.</p>
-              </div>
+        {/* ❤️ Emotional Block */}
+        <section className="bg-slate-900 py-32 px-6 relative overflow-hidden">
+          <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/black-linen.png')]"></div>
+          <div className="max-w-4xl mx-auto text-center relative z-10 space-y-10">
+            <h2 className="font-headline font-extrabold text-4xl md:text-5xl text-white leading-tight">
+              Algumas memórias <span className="text-primary-fixed">não podem ser perdidas</span>
+            </h2>
+            <p className="text-xl text-slate-300 leading-relaxed max-w-2xl mx-auto">
+              Fotos antigas guardam momentos únicos. Pessoas que marcaram sua vida. Histórias que o tempo tentou apagar.
+            </p>
+            <p className="text-2xl font-serif italic text-white/90">
+              Agora você pode trazer tudo isso de volta — com vida.
+            </p>
+            <div className="pt-6">
+              <Link href="/dashboard">
+                <button className="editorial-gradient text-on-primary px-10 py-5 rounded-2xl font-headline font-bold text-xl shadow-2xl shadow-primary/40 hover:scale-105 active:scale-95 transition-all">
+                  Restaurar minha foto agora
+                </button>
+              </Link>
+            </div>
+          </div>
+        </section>
 
-              <div className="flex flex-col items-center text-center space-y-4 p-8 rounded-2xl bg-surface-container-low border border-slate-200/60 shadow-sm hover:-translate-y-1 transition-transform">
-                <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center text-primary">
-                  <span className="material-symbols-outlined text-3xl">palette</span>
+        {/* 💬 Social Proof */}
+        <section className="bg-surface-container-low py-24 px-6">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="font-headline font-extrabold text-4xl text-on-surface mb-4">Veja o que as pessoas estão dizendo</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+              {[
+                { quote: "Fiquei emocionado vendo a foto do meu avô se mover. Parecia que ele estava ali de novo.", author: "Ricardo S." },
+                { quote: "Parece mágica, incrível demais o que essa inteligência artificial consegue fazer.", author: "Mariana L." },
+                { quote: "Vale cada centavo. Restaurei o álbum inteiro da minha mãe e ela chorou de alegria.", author: "Cláudia O." }
+              ].map((t, i) => (
+                <div key={i} className="bg-white p-10 rounded-3xl shadow-sm border border-slate-100 flex flex-col justify-center space-y-4 italic">
+                  <div className="text-amber-400">
+                    <span className="material-symbols-outlined">star</span>
+                    <span className="material-symbols-outlined">star</span>
+                    <span className="material-symbols-outlined">star</span>
+                    <span className="material-symbols-outlined">star</span>
+                    <span className="material-symbols-outlined">star</span>
+                  </div>
+                  <p className="text-slate-700 text-lg leading-relaxed">“{t.quote}”</p>
+                  <div className="text-slate-400 font-bold not-italic">— {t.author}</div>
                 </div>
-                <h3 className="font-headline font-bold text-xl">Colorização Mágica</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">Dê vida ao passado e veja seus avós em cores vibrantes transformando fotos preto e branco em pinturas vivas.</p>
-              </div>
-              
-              <div className="flex flex-col items-center text-center space-y-4 p-8 rounded-2xl bg-surface-container-low border border-slate-200/60 shadow-sm hover:-translate-y-1 transition-transform">
-                <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center text-primary">
-                  <span className="material-symbols-outlined text-3xl">high_quality</span>
-                </div>
-                <h3 className="font-headline font-bold text-xl">Ultra Resolução</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">Multiplicamos a qualidade e os pixels das imagens pequenas para o formato 4K, perfeitas para impressão e quadros.</p>
-              </div>
+              ))}
             </div>
           </div>
         </section>
@@ -306,19 +411,38 @@ export default function Home() {
             </div>
           </div>
         </section>
+        {/* 🚀 Final CTA */}
+        <section className="bg-white py-24 px-6 border-t border-slate-100">
+           <div className="max-w-3xl mx-auto text-center space-y-8">
+              <h2 className="font-headline font-extrabold text-4xl text-on-surface">Traga suas memórias de volta à vida agora</h2>
+              <div className="space-y-4">
+                 <Link href="/dashboard" className="inline-block w-full max-w-md">
+                   <button className="w-full editorial-gradient text-on-primary py-5 rounded-2xl font-headline font-bold text-xl shadow-xl shadow-primary/20 hover:shadow-primary/40 active:scale-95 transition-all">
+                       Restaurar minha foto
+                   </button>
+                 </Link>
+                 <p className="text-sm font-medium text-slate-400">⚡ Leva menos de 10 segundos</p>
+              </div>
+           </div>
+        </section>
       </main>
 
-      <footer className="bg-surface-container-low w-full py-16 px-6 mt-auto border-t border-slate-200">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex flex-col items-center md:items-start space-y-2">
-            <div className="text-xl font-bold text-slate-900 font-headline">Aura Recall</div>
-            <p className="font-body text-sm text-slate-500 max-w-sm text-center md:text-left">
-              © 2026 Aura Recall. Suas memórias, perfeitamente preservadas usando o poder da criatividade computacional avançada.
+      <footer className="bg-slate-900 w-full py-16 px-6 mt-auto">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="flex flex-col items-center md:items-start space-y-4">
+            <div className="text-2xl font-bold text-white font-headline">Aura Recall</div>
+            <p className="font-body text-sm text-slate-400 max-w-sm text-center md:text-left leading-relaxed">
+              © 2026 Aura Recall. Suas memórias, perfeitamente preservadas usando o poder da inteligência artificial avançada.
             </p>
           </div>
-          <div className="flex space-x-6 text-slate-400">
-             <Link href="#" className="hover:text-primary transition-colors text-sm">Termos de Uso</Link>
-             <Link href="#" className="hover:text-primary transition-colors text-sm">Privacidade</Link>
+          <div className="flex flex-col items-center md:items-end space-y-4">
+            <div className="flex space-x-8 text-slate-300">
+               <Link href="#" className="hover:text-primary-fixed transition-colors text-sm font-medium">Termos de Uso</Link>
+               <Link href="#" className="hover:text-primary-fixed transition-colors text-sm font-medium">Privacidade</Link>
+            </div>
+            <div className="text-slate-500 text-xs text-center md:text-right">
+               Feito com ❤️ para preservar histórias.
+            </div>
           </div>
         </div>
       </footer>
