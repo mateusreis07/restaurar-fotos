@@ -41,6 +41,7 @@ export default function Home() {
         <div className="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
           <div className="text-2xl font-bold tracking-tighter text-primary font-headline">Aura Recall</div>
           <div className="hidden md:flex items-center space-x-8">
+            <a className="font-headline font-medium text-sm tracking-tight text-slate-600 hover:text-primary transition-colors duration-300" href="#exemplos">Exemplos</a>
             <a className="font-headline font-medium text-sm tracking-tight text-slate-600 hover:text-primary transition-colors duration-300" href="#como-funciona">Como funciona</a>
             <a className="font-headline font-medium text-sm tracking-tight text-slate-600 hover:text-primary transition-colors duration-300" href="#precos">Preços</a>
           </div>
@@ -54,9 +55,9 @@ export default function Home() {
         </div>
       </nav>
       
-      <main className="pt-24 flex-grow">
+      <main className="pt-20 flex-grow">
         {/* Hero Section */}
-        <section className="px-6 py-12 md:py-24 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <section className="px-6 py-8 md:py-16 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">
             <h1 className="font-headline font-extrabold text-5xl md:text-6xl text-on-surface leading-[1.1] tracking-tight">
                 Salve as lembranças da sua família do esquecimento.
@@ -74,10 +75,10 @@ export default function Home() {
             </div>
           </div>
           
-          {/* Interactive Before/After Slider */}
+          {/* Interactive Before/After Slider - Versão Retangular/Horizontal */}
           <div 
             ref={containerRef}
-            className="relative lg:h-[600px] rounded-2xl overflow-hidden shadow-2xl group w-full aspect-[4/5] lg:aspect-auto select-none cursor-ew-resize bg-slate-900 border border-slate-200"
+            className="relative w-full max-w-2xl aspect-video rounded-3xl overflow-hidden shadow-2xl group mx-auto select-none cursor-ew-resize bg-slate-900 border border-slate-200"
             onMouseMove={handleMouseMove}
             onTouchMove={handleTouchMove}
             onMouseDown={(e) => { setIsDragging(true); handleMove(e.clientX); }}
@@ -118,88 +119,78 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* 🎬 Visual Trio & AI Demonstration */}
-        <section className="bg-white py-24 px-6 overflow-hidden">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col lg:flex-row items-center gap-16">
-              <div className="flex-1 space-y-6">
-                <div className="inline-flex items-center space-x-2 editorial-gradient text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase">
-                  Tecnologia 2026
-                </div>
-                <h2 className="font-headline font-extrabold text-4xl md:text-5xl text-on-surface leading-tight">
-                  Veja suas memórias <span className="text-primary italic font-serif">ganharem vida</span>
-                </h2>
-                <p className="text-lg text-secondary leading-relaxed">
-                  Nossa IA reconstrói detalhes perdidos, adiciona cor e transforma sua foto estática em um vídeo realista com movimento natural.
-                </p>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
-                  <div className="bg-surface-container-low p-6 rounded-2xl border border-slate-100">
-                    <div className="text-primary font-bold text-lg mb-1">Restauração Profunda</div>
-                    <p className="text-sm text-slate-500">Removemos arranhões e restauramos o brilho nos olhos.</p>
-                  </div>
-                  <div className="bg-surface-container-low p-6 rounded-2xl border border-slate-100">
-                    <div className="text-primary font-bold text-lg mb-1">Movimento Natural</div>
-                    <p className="text-sm text-slate-500">IA que simula a vida com movimentos sutis e realistas.</p>
-                  </div>
-                </div>
+        {/* ✨ AI Demonstration Grid */}
+        <section id="exemplos" className="bg-white py-12 px-6 relative overflow-hidden">
+           <div className="max-w-7xl mx-auto">
+              <div className="text-center mb-12 max-w-3xl mx-auto">
+                 <h2 className="font-headline font-black text-5xl md:text-6xl text-on-surface mb-6 leading-tight tracking-tighter">
+                    Veja suas memórias <span className="text-primary italic">ganharem vida</span>
+                 </h2>
+                 <p className="text-secondary text-lg md:text-xl leading-relaxed">
+                    Nossa IA reconstrói detalhes perdidos, adiciona cor e transforma sua foto estática em um vídeo realista com movimento natural.
+                 </p>
               </div>
 
-              <div className="flex-1 relative w-full max-w-2xl">
-                 <div className="grid grid-cols-2 gap-4">
+              {/* Grid de Exemplos Otimizado - Mais compacto */}
+              <div className="space-y-12 max-w-5xl mx-auto">
+                 {/* Top Row: Video Demos Side by Side */}
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    {/* Example 1 */}
                     <div className="space-y-4">
-                       {/* Example 1: Restoration High Quality */}
-                       <div className="relative aspect-video rounded-2xl overflow-hidden shadow-lg border border-slate-200">
-                          <img src="/examples/example1.png" className="w-full h-full object-cover" alt="Restauração de Alta Qualidade" />
-                          <div className="absolute top-2 left-2 bg-black/60 text-white text-[8px] font-bold px-1.5 py-0.5 rounded uppercase">Antes/Depois</div>
+                       <div className="relative aspect-video rounded-2xl overflow-hidden shadow-md border border-slate-200">
+                          <img src="/examples/original_video_base.png" className="w-full h-full object-cover" alt="Foto Original 1" />
+                          <div className="absolute top-3 left-3 bg-black/70 text-white text-[10px] font-black px-2 py-1 rounded-md uppercase">Original 1</div>
                        </div>
-                       {/* Example 2: Scratched Photo Restoration */}
-                       <div className="relative aspect-video rounded-2xl overflow-hidden shadow-lg border border-slate-200">
-                          <img src="/examples/example2.png" className="w-full h-full object-cover" alt="Restauração de Foto Rasgada" />
-                          <div className="absolute top-2 left-2 bg-black/60 text-white text-[8px] font-bold px-1.5 py-0.5 rounded uppercase">Remoção de Riscos</div>
-                       </div>
-                       {/* Example 3: Facial Reconstruction Detail */}
-                       <div className="relative aspect-video rounded-2xl overflow-hidden shadow-lg border border-slate-200">
-                          <img src="/examples/example3.png" className="w-full h-full object-cover" alt="Recuperação de Nitidez e Detalhe" />
-                          <div className="absolute top-2 left-2 editorial-gradient text-white text-[8px] font-bold px-1.5 py-0.5 rounded uppercase">Nitidez IA</div>
-                       </div>
-                    </div>
-                    <div className="flex flex-col justify-center space-y-4">
-                       {/* Main Video Demo */}
-                       <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border-4 border-white ring-1 ring-slate-100">
-                          <video 
-                            autoPlay 
-                            loop 
-                            muted 
-                            playsInline
-                            className="w-full h-full object-cover"
-                            poster="/examples/original_video_base.png"
-                          >
-                            <source src="https://res.cloudinary.com/dwzcwtxfv/video/upload/v1774536765/aura_recall/restored/mry0sfxj4k3wt9mhjymp.mp4" type="video/mp4" />
+                       <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-white ring-1 ring-slate-100">
+                          <video autoPlay loop muted playsInline className="w-full h-full object-cover">
+                             <source src="https://res.cloudinary.com/dwzcwtxfv/video/upload/v1774539296/aura_recall/restored/zcqtmp3dp1nvngu0ffzp.mp4" type="video/mp4" />
                           </video>
-                          <div className="absolute bottom-4 left-4 right-4 glass-panel py-3 px-4 rounded-xl flex items-center justify-between">
-                             <span className="text-[10px] font-black text-primary uppercase">Resultado Final (Animado)</span>
-                             <span className="material-symbols-outlined text-primary text-lg">play_circle</span>
+                          <div className="absolute bottom-3 left-3 right-3 glass-panel py-2 px-3 rounded-xl flex items-center justify-between">
+                             <span className="text-[9px] font-black text-primary uppercase">Resultado Animado 1</span>
+                             <span className="material-symbols-outlined text-primary text-base">play_circle</span>
                           </div>
                        </div>
-                       {/* Example 4: Portrait Detail */}
-                       <div className="relative aspect-video rounded-2xl overflow-hidden shadow-lg border border-slate-200">
-                          <img src="/examples/original_video_base.png" className="w-full h-full object-cover grayscale opacity-80" alt="Foto Original Antes" />
-                          <div className="absolute top-2 left-2 bg-black/60 text-white text-[8px] font-bold px-1.5 py-0.5 rounded uppercase">Foto Original</div>
+                    </div>
+
+                    {/* Example 2 */}
+                    <div className="space-y-4">
+                       <div className="relative aspect-video rounded-2xl overflow-hidden shadow-md border border-slate-200">
+                          <img src="/examples/original_video_base2.png" className="w-full h-full object-cover" alt="Foto Original 2" />
+                          <div className="absolute top-3 left-3 bg-black/70 text-white text-[10px] font-black px-2 py-1 rounded-md uppercase">Original 2</div>
+                       </div>
+                       <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-white ring-1 ring-slate-100">
+                          <video autoPlay loop muted playsInline className="w-full h-full object-cover">
+                             <source src="https://res.cloudinary.com/dwzcwtxfv/video/upload/v1774615341/aura_recall/restored/ntmvhg9glprhxprdkcn1.mp4" type="video/mp4" />
+                          </video>
+                          <div className="absolute bottom-3 left-3 right-3 glass-panel py-2 px-3 rounded-xl flex items-center justify-between">
+                             <span className="text-[9px] font-black text-primary uppercase">Resultado Animado 2</span>
+                             <span className="material-symbols-outlined text-primary text-base">play_circle</span>
+                          </div>
                        </div>
                     </div>
                  </div>
-                 {/* Decorative elements */}
-                 <div className="absolute -z-10 -top-10 -right-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
-                 <div className="absolute -z-10 -bottom-10 -left-10 w-64 h-64 bg-tertiary/5 rounded-full blur-3xl"></div>
+
+                 {/* Bottom Row: Static Comparison Grid */}
+                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-10 border-t border-slate-100">
+                    <div className="relative aspect-video rounded-3xl overflow-hidden shadow-lg border-2 border-white ring-1 ring-slate-100">
+                       <img src="/examples/example1.png" className="h-full w-full object-cover" alt="Restauração 1" />
+                       <div className="absolute top-2 left-2 bg-black/60 text-white text-[8px] font-bold px-1.5 py-0.5 rounded uppercase">Antes/Depois</div>
+                    </div>
+                    <div className="relative aspect-video rounded-3xl overflow-hidden shadow-lg border-2 border-white ring-1 ring-slate-100">
+                       <img src="/examples/example2.png" className="h-full w-full object-cover" alt="Restauração 2" />
+                       <div className="absolute top-2 left-2 bg-black/60 text-white text-[8px] font-bold px-1.5 py-0.5 rounded uppercase">Remoção de Riscos</div>
+                    </div>
+                    <div className="relative aspect-video rounded-3xl overflow-hidden shadow-lg border-2 border-white ring-1 ring-slate-100">
+                       <img src="/examples/example3.png" className="h-full w-full object-cover" alt="Restauração 3" />
+                       <div className="absolute top-2 left-2 editorial-gradient text-white text-[8px] font-bold px-1.5 py-0.5 rounded uppercase">Nitidez IA</div>
+                    </div>
+                 </div>
               </div>
-            </div>
-          </div>
+           </div>
         </section>
 
         {/* How it Works */}
-        <section id="como-funciona" className="bg-surface-container-low py-24 px-6 border-y border-slate-200/60">
+        <section id="como-funciona" className="bg-surface-container-low py-12 px-6 border-y border-slate-200/60">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-20">
               <h2 className="font-headline font-extrabold text-4xl text-on-surface mb-4">A magia acontece em 3 cliques</h2>
@@ -233,7 +224,7 @@ export default function Home() {
         </section>
 
         {/* 💎 Benefits Section */}
-        <section className="bg-white py-24 px-6 overflow-hidden">
+        <section className="bg-white py-12 px-6 overflow-hidden">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="font-headline font-extrabold text-4xl text-on-surface mb-4">Muito mais do que restaurar fotos</h2>
@@ -262,7 +253,7 @@ export default function Home() {
         </section>
 
         {/* ❤️ Emotional Block */}
-        <section className="bg-slate-900 py-32 px-6 relative overflow-hidden">
+        <section className="bg-slate-900 py-16 px-6 relative overflow-hidden">
           <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/black-linen.png')]"></div>
           <div className="max-w-4xl mx-auto text-center relative z-10 space-y-10">
             <h2 className="font-headline font-extrabold text-4xl md:text-5xl text-white leading-tight">
@@ -285,7 +276,7 @@ export default function Home() {
         </section>
 
         {/* 💬 Social Proof */}
-        <section className="bg-surface-container-low py-24 px-6">
+        <section className="bg-surface-container-low py-12 px-6">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="font-headline font-extrabold text-4xl text-on-surface mb-4">Veja o que as pessoas estão dizendo</h2>
@@ -313,97 +304,105 @@ export default function Home() {
         </section>
 
         {/* Pricing */}
-        <section id="precos" className="bg-surface-container-low py-24 px-6 border-y border-slate-200/60">
-          <div className="max-w-7xl mx-auto">
+        <section id="precos" className="bg-white py-12 px-6 border-y border-slate-100">
+          <div className="max-w-7xl mx-auto container px-4 relative z-10">
             <div className="text-center mb-16">
-              <h2 className="font-headline font-extrabold text-4xl text-on-surface mb-4">Escolha seu pacote</h2>
-              <p className="text-secondary text-lg">Pague apenas pelo que precisar através da plataforma ultra segura Stripe.</p>
+              <h2 className="font-headline font-black text-4xl md:text-5xl text-slate-900 mb-4 tracking-tighter">Escolha seu pacote</h2>
+              <p className="text-slate-500 max-w-2xl mx-auto text-lg leading-relaxed">Pague apenas pelo que precisar através da plataforma ultra segura Stripe.</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-surface-container-low p-10 rounded-2xl shadow-sm space-y-8 flex flex-col border border-slate-200/60">
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center max-w-6xl mx-auto">
+              {/* Plan 1 - Entrada */}
+              <div className="bg-white rounded-[32px] p-10 border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 md:mt-8 space-y-8 flex flex-col">
                 <div className="space-y-2">
-                  <h3 className="font-headline font-bold text-xl text-slate-700">Entrada</h3>
-                  <p className="text-[11px] font-bold text-primary uppercase tracking-wider">Reviva memórias especiais</p>
-                  <div className="flex items-baseline space-x-1 pt-2">
+                  <h3 className="font-headline font-bold text-2xl text-slate-900 mb-1">Entrada</h3>
+                  <p className="text-[10px] font-black text-primary/60 uppercase tracking-widest">Reviva memórias especiais</p>
+                  <div className="flex items-baseline space-x-1 pt-2 mb-8">
                     <span className="text-2xl font-bold text-slate-400">R$</span>
-                    <span className="text-5xl font-extrabold text-slate-800">29,90</span>
+                    <span className="text-5xl font-black text-slate-900 tracking-tighter">29,90</span>
                   </div>
                 </div>
                 <ul className="space-y-4 flex-grow text-sm">
-                  <li className="flex items-center space-x-3 text-secondary">
-                    <span className="material-symbols-outlined text-emerald-500">check_circle</span>
-                    <span className="font-bold text-slate-700">10 créditos</span>
+                  <li className="flex items-center space-x-3 text-slate-600 font-medium">
+                    <span className="material-symbols-outlined text-green-500 text-xl">check_circle</span>
+                    <span className="font-semibold text-slate-700">10 créditos</span>
                   </li>
-                  <li className="flex items-center space-x-3 text-secondary">
-                    <span className="material-symbols-outlined text-emerald-500 text-[18px]">check_circle</span>
-                    <span className="italic">📸 até 10 fotos</span>
+                  <li className="flex items-center space-x-3 text-slate-500">
+                    <span className="material-symbols-outlined text-green-500 text-xl">check_circle</span>
+                    <span className="italic font-bold text-slate-700">📸 até 10 fotos</span>
                   </li>
-                  <li className="flex items-center space-x-3 text-secondary">
-                    <span className="material-symbols-outlined text-emerald-500 text-[18px]">check_circle</span>
-                    <span className="italic">🎬 ou 2 fotos + 2 vídeos</span>
+                  <li className="flex items-center space-x-3 text-slate-500 italic">
+                    <span className="material-symbols-outlined text-green-500 text-xl">check_circle</span>
+                    <span>🎬 ou 2 fotos + 2 vídeos</span>
                   </li>
                 </ul>
                 <Link href="/dashboard" className="w-full">
-                  <button className="w-full py-4 rounded-xl border-2 border-primary text-primary font-headline font-bold hover:bg-primary/5 transition-colors">
+                  <button className="w-full py-4 rounded-2xl border-2 border-primary text-primary font-headline font-bold hover:bg-primary/5 transition-all active:scale-95">
                     Adquirir
                   </button>
                 </Link>
               </div>
-              <div className="bg-surface p-10 rounded-2xl shadow-2xl ring-2 ring-primary relative space-y-8 flex flex-col scale-105 z-10">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 editorial-gradient text-on-primary text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg">Mais Escolhido</div>
+
+              {/* Plan 2 - Mais Vendido (Featured) */}
+              <div className="bg-white rounded-[32px] p-10 ring-2 ring-primary shadow-2xl shadow-primary/20 scale-105 relative z-20 space-y-8 flex flex-col">
+                <div className="absolute -top-5 left-1/2 -translate-x-1/2 editorial-gradient text-on-primary text-xs font-black px-6 py-2 rounded-full tracking-widest uppercase shadow-lg">
+                  MAIS ESCOLHIDO
+                </div>
                 <div className="space-y-2">
-                  <h3 className="font-headline font-bold text-xl text-primary">Mais Vendido</h3>
-                  <p className="text-[11px] font-black text-primary uppercase tracking-wider">Traga suas memórias de volta à vida</p>
-                  <div className="flex items-baseline space-x-1 text-primary pt-2">
-                    <span className="text-2xl font-bold">R$</span>
-                    <span className="text-5xl font-extrabold">49,90</span>
+                  <h3 className="font-headline font-bold text-3xl text-primary mb-1">Mais Vendido</h3>
+                  <p className="text-[10px] font-black text-primary uppercase tracking-widest leading-relaxed">Traga suas memórias de volta à vida</p>
+                  <div className="flex items-baseline space-x-1 pt-2 mb-8">
+                    <span className="text-primary text-2xl font-bold">R$</span>
+                    <span className="text-6xl font-black text-slate-900 tracking-tight">49,90</span>
                   </div>
                 </div>
-                <ul className="space-y-4 flex-grow text-sm">
-                  <li className="flex items-center space-x-3">
-                    <span className="material-symbols-outlined text-primary">verified</span>
-                    <span className="font-bold text-on-surface">25 créditos</span>
+                <ul className="space-y-4 flex-grow">
+                  <li className="flex items-center space-x-3 text-slate-900">
+                    <span className="material-symbols-outlined text-primary text-2xl">verified</span>
+                    <span className="font-bold text-lg text-on-surface">25 créditos</span>
                   </li>
-                  <li className="flex items-center space-x-3 text-secondary">
-                    <span className="material-symbols-outlined text-primary text-[18px]">verified</span>
+                  <li className="flex items-center space-x-3 text-slate-700 font-semibold">
+                    <span className="material-symbols-outlined text-primary text-xl">verified</span>
                     <span className="italic font-bold text-on-surface">📸 até 25 fotos</span>
                   </li>
-                  <li className="flex items-center space-x-3 text-secondary">
-                    <span className="material-symbols-outlined text-primary text-[18px]">verified</span>
-                    <span className="italic">🎬 ou 5 fotos + 5 Vídeos</span>
+                  <li className="flex items-center space-x-3 text-slate-700 italic">
+                    <span className="material-symbols-outlined text-primary text-xl">verified</span>
+                    <span>🎬 ou 5 fotos + 5 Vídeos</span>
                   </li>
                 </ul>
                 <Link href="/dashboard" className="w-full">
-                  <button className="w-full py-4 rounded-xl editorial-gradient text-on-primary font-headline font-bold shadow-xl hover:shadow-primary/40 active:scale-95 transition-all text-lg tracking-wide">
+                  <button className="w-full py-5 rounded-2xl editorial-gradient text-on-primary font-headline font-black text-lg hover:brightness-110 transition-all shadow-xl shadow-primary/30 hover:scale-[1.02] active:scale-95">
                     Quero este pacote
                   </button>
                 </Link>
               </div>
-              <div className="bg-surface-container-low p-10 rounded-2xl shadow-sm space-y-8 flex flex-col border border-slate-200/60">
+
+              {/* Plan 3 - Premium */}
+              <div className="bg-white rounded-[32px] p-10 border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 md:mt-8 space-y-8 flex flex-col">
                 <div className="space-y-2">
-                  <h3 className="font-headline font-bold text-xl text-slate-700">Premium</h3>
-                  <p className="text-[11px] font-bold text-emerald-600 uppercase tracking-wider font-sans">Reviva a sua história</p>
-                  <div className="flex items-baseline space-x-1 pt-2">
+                  <h3 className="font-headline font-bold text-2xl text-slate-900 mb-1">Premium</h3>
+                  <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Reviva a sua história</p>
+                  <div className="flex items-baseline space-x-1 pt-2 mb-8">
                     <span className="text-2xl font-bold text-slate-400">R$</span>
-                    <span className="text-5xl font-extrabold text-slate-800">89,90</span>
+                    <span className="text-5xl font-black text-slate-900 tracking-tighter">89,90</span>
                   </div>
                 </div>
                 <ul className="space-y-4 flex-grow text-sm">
-                  <li className="flex items-center space-x-3 text-secondary">
-                    <span className="material-symbols-outlined text-emerald-500">check_circle</span>
-                    <span className="font-bold text-slate-700">60 créditos</span>
+                  <li className="flex items-center space-x-3 text-slate-600 font-medium">
+                    <span className="material-symbols-outlined text-green-500 text-xl">check_circle</span>
+                    <span className="font-semibold text-slate-700">60 créditos</span>
                   </li>
-                  <li className="flex items-center space-x-3 text-secondary">
-                    <span className="material-symbols-outlined text-emerald-500 text-[18px]">check_circle</span>
+                  <li className="flex items-center space-x-3 text-slate-500">
+                    <span className="material-symbols-outlined text-green-500 text-xl">check_circle</span>
                     <span className="italic">📸 muitas fotos</span>
                   </li>
-                  <li className="flex items-center space-x-3 text-secondary">
-                    <span className="material-symbols-outlined text-emerald-500 text-[18px]">check_circle</span>
-                    <span className="italic">🎬 ou 12 fotos + 12 Vídeos</span>
+                  <li className="flex items-center space-x-3 text-slate-500 italic">
+                    <span className="material-symbols-outlined text-green-500 text-xl">check_circle</span>
+                    <span>🎬 ou 12 fotos + 12 Vídeos</span>
                   </li>
                 </ul>
                 <Link href="/dashboard" className="w-full">
-                  <button className="w-full py-4 rounded-xl border-2 border-primary text-primary font-headline font-bold hover:bg-primary/5 transition-colors">
+                  <button className="w-full py-4 rounded-2xl border-2 border-primary text-primary font-headline font-bold hover:bg-primary/5 transition-all active:scale-95">
                     Adquirir
                   </button>
                 </Link>
@@ -411,23 +410,26 @@ export default function Home() {
             </div>
           </div>
         </section>
+
         {/* 🚀 Final CTA */}
-        <section className="bg-white py-24 px-6 border-t border-slate-100">
+        <section className="bg-white py-12 px-6 border-t border-slate-100">
            <div className="max-w-3xl mx-auto text-center space-y-8">
-              <h2 className="font-headline font-extrabold text-4xl text-on-surface">Traga suas memórias de volta à vida agora</h2>
+              <h2 className="font-headline font-extrabold text-4xl text-on-surface leading-tight tracking-tight">Traga suas memórias de volta à vida agora</h2>
               <div className="space-y-4">
-                 <Link href="/dashboard" className="inline-block w-full max-w-md">
-                   <button className="w-full editorial-gradient text-on-primary py-5 rounded-2xl font-headline font-bold text-xl shadow-xl shadow-primary/20 hover:shadow-primary/40 active:scale-95 transition-all">
-                       Restaurar minha foto
-                   </button>
-                 </Link>
+                 <div className="flex justify-center">
+                    <Link href="/dashboard" className="w-full max-w-md">
+                      <button className="w-full editorial-gradient text-on-primary py-5 rounded-2xl font-headline font-bold text-xl shadow-xl shadow-primary/20 hover:shadow-primary/40 active:scale-95 transition-all">
+                          Restaurar minha foto
+                      </button>
+                    </Link>
+                 </div>
                  <p className="text-sm font-medium text-slate-400">⚡ Leva menos de 10 segundos</p>
               </div>
            </div>
         </section>
       </main>
 
-      <footer className="bg-slate-900 w-full py-16 px-6 mt-auto">
+      <footer className="bg-slate-900 w-full py-10 px-6 mt-auto">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex flex-col items-center md:items-start space-y-4">
             <div className="text-2xl font-bold text-white font-headline">Aura Recall</div>
