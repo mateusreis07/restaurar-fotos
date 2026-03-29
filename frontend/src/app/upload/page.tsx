@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Footer from '../components/Footer';
 
 export default function UploadPage() {
   const [user, setUser] = useState<any>(null);
@@ -97,7 +98,8 @@ export default function UploadPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col pt-8 md:pt-24 pb-32 px-4 sm:px-6 lg:px-8 relative font-sans">
+    <div className="min-h-screen bg-[#F8FAFC] flex flex-col relative font-sans">
+      <div className="pt-8 md:pt-24 pb-32 px-4 sm:px-6 lg:px-8 flex-1">
       
       {/* Back Button - Desktop Only */}
       <Link href="/dashboard" className="hidden md:flex absolute top-6 left-6 items-center text-slate-500 hover:text-[#604AF0] transition-colors font-medium text-sm bg-white border border-slate-200 shadow-sm px-4 py-2 rounded-full z-50">
@@ -281,6 +283,7 @@ export default function UploadPage() {
         </div>
 
       </div>
+      </div>
 
       {/* Modal de Sem Créditos */}
       {showNoCreditsModal && (
@@ -311,10 +314,10 @@ export default function UploadPage() {
               </button>
             </div>
             
-            <p className="text-center text-[11px] font-extrabold text-[#a0abbb] uppercase tracking-widest pt-2">Aura Recall © 2026</p>
           </div>
         </div>
       )}
+      <Footer />
     </div>
   );
 }

@@ -148,54 +148,8 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="bg-[#f9f9ff] font-sans text-[#151c27] flex min-h-screen overflow-x-hidden">
-      {/* Sidebar */}
-      <aside className="hidden md:flex flex-col h-screen w-[280px] bg-[#f9f9ff] p-4 space-y-2 sticky top-0 shrink-0 border-r border-[#c7c4d7]/30">
-        <div className="px-5 py-6 mb-2">
-          <span className="text-[22px] font-black tracking-tight text-[#483ede] font-headline">Aura Recall</span>
-        </div>
-
-        <div className="mb-8 px-5">
-          <p className="text-[#151c27] font-headline font-extrabold text-[19px] leading-tight tracking-tight">Bem-vindo de volta</p>
-          <p className="text-[#575f6a] text-[14px] font-medium mt-1">Preservando seu legado</p>
-        </div>
-
-        <nav className="flex-1 space-y-1.5 px-2">
-          <Link href="/dashboard" className="flex items-center gap-3.5 px-4 py-3.5 bg-[#dce2f3] text-[#483ede] rounded-[14px] font-bold transition-transform duration-200 hover:translate-x-1 shadow-sm shadow-[#dce2f3]/50">
-            <span className="material-symbols-outlined text-[22px]" style={{ fontVariationSettings: "'FILL' 1" }}>photo_library</span>
-            <span className="text-[15px]">Minha Galeria</span>
-          </Link>
-          <Link href="/upload" className="flex items-center gap-3.5 px-4 py-3.5 text-[#575f6a] hover:text-[#151c27] hover:bg-[#f0f3ff] rounded-[14px] font-semibold transition-transform duration-200 hover:translate-x-1">
-            <span className="material-symbols-outlined text-[22px]">auto_fix_high</span>
-            <span className="text-[15px]">Nova Restauração</span>
-          </Link>
-          <Link href="/pricing" className="w-full flex items-center gap-3.5 px-4 py-3.5 text-[#575f6a] hover:text-[#151c27] hover:bg-[#f0f3ff] rounded-[14px] font-semibold transition-transform duration-200 hover:translate-x-1">
-            <span className="material-symbols-outlined text-[22px]">payments</span>
-            <span className="text-[15px]">Créditos</span>
-          </Link>
-        </nav>
-
-        {/* Credit Display */}
-        <div className="mt-auto mx-2 px-5 py-6 rounded-[1.25rem] bg-[#f0f3ff] mb-4 border border-[#e2e8f8]">
-          <p className="text-[10.5px] uppercase tracking-widest text-[#575f6a] font-extrabold mb-1.5">Créditos restantes</p>
-          <div className="flex items-baseline gap-1.5 mb-2">
-            <span className="text-[34px] font-headline font-black tracking-tighter text-[#483ede]">{user.credits}</span>
-          </div>
-          <Link href="/pricing" className="w-full mt-3 flex justify-center py-3 bg-[#483ede] text-white rounded-[12px] font-bold text-[14px] hover:bg-[#3b32c6] shadow-md shadow-[#483ede]/20 active:scale-95 transition-all">
-            Comprar Créditos
-          </Link>
-        </div>
-
-        <div className="pt-4 border-t border-[#c7c4d7]/30 mx-2 space-y-1 mb-2">
-          <button onClick={() => { localStorage.removeItem('aura_email'); router.push('/login'); }} className="w-full flex items-center gap-3.5 px-4 py-2.5 text-[#575f6a] hover:text-[#ba1a1a] hover:bg-[#ffdad6]/50 rounded-[12px] font-semibold transition-colors">
-            <span className="material-symbols-outlined text-[20px]">logout</span>
-            <span className="text-[14px]">Sair da Conta</span>
-          </button>
-        </div>
-      </aside>
-
-      {/* Main Content Canvas */}
-      <main className="flex-1 flex flex-col min-w-0 bg-[#f9f9ff] pb-16 md:pb-0 relative">
+    <div className="flex-1 flex flex-col min-w-0 bg-[#f9f9ff] pb-16 md:pb-0 relative">
+      <div className="flex-1 overflow-y-auto">
 
 
         <div className="p-6 md:p-8 lg:p-12 max-w-[1280px] w-full mx-auto space-y-10">
@@ -371,7 +325,7 @@ export default function Dashboard() {
             </div>
           </div>
         </footer>
-      </main>
+      </div>
 
       {/* COMPARAÇÃO INTERATIVA MODAL */}
       {comparingPhoto && (
@@ -472,7 +426,7 @@ export default function Dashboard() {
               ) : (
                 <button
                   onClick={() => {
-                    handleAnimate(animationPhotoId);
+                    handleAnimate(animationPhotoId as string);
                     setAnimationPhotoId(null);
                   }}
                   className="w-full bg-[#483ede] text-white py-4 rounded-[16px] font-bold text-[16px] hover:bg-[#3b32c6] shadow-lg shadow-[#483ede]/30 active:scale-95 transition-all"
