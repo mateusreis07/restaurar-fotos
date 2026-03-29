@@ -439,8 +439,10 @@ export default function Home() {
           </div>
           <div className="flex flex-col items-center md:items-end space-y-4">
             <div className="flex space-x-8 text-slate-300">
-               <Link href="#" className="hover:text-primary-fixed transition-colors text-sm font-medium">Termos de Uso</Link>
-               <Link href="#" className="hover:text-primary-fixed transition-colors text-sm font-medium">Privacidade</Link>
+               <Link href="/terms" className="hover:text-primary-fixed transition-colors text-sm font-medium">Termos de Uso</Link>
+               <Link href="/privacy" className="hover:text-primary-fixed transition-colors text-sm font-medium">Privacidade</Link>
+               <Link href="/security" className="hover:text-primary-fixed transition-colors text-sm font-medium">Segurança</Link>
+               <Link href="/quality" className="hover:text-primary-fixed transition-colors text-sm font-medium">Qualidade</Link>
             </div>
             <div className="text-slate-500 text-xs text-center md:text-right">
                Feito com ❤️ para preservar histórias.

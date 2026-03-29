@@ -56,13 +56,13 @@ export default function PricingPage() {
   if (!user) return <div className="min-h-screen bg-[#f9f9ff] flex items-center justify-center"></div>;
 
   return (
-    <div className="bg-[#f9f9ff] py-16 px-6 min-h-screen flex items-center justify-center relative font-sans">
-      <Link href="/dashboard" className="absolute top-6 left-6 md:top-10 md:left-10 flex items-center gap-2 text-[#575f6a] hover:text-[#483ede] font-bold transition-colors z-[100] bg-white/70 backdrop-blur-md px-5 py-2.5 rounded-full shadow-sm hover:shadow-md border border-[#c7c4d7]/30">
+    <div className="bg-[#f9f9ff] pt-8 md:pt-24 pb-32 px-6 min-h-screen flex flex-col items-center justify-center relative font-sans">
+      <Link href="/dashboard" className="hidden md:flex absolute top-6 left-6 md:top-10 md:left-10 items-center gap-2 text-[#575f6a] hover:text-[#483ede] font-bold transition-colors z-[100] bg-white/70 backdrop-blur-md px-5 py-2.5 rounded-full shadow-sm hover:shadow-md border border-[#c7c4d7]/30">
         <span className="material-symbols-outlined text-[20px]">arrow_back</span>
         Voltar para Galeria
       </Link>
 
-      <div className="max-w-7xl mx-auto w-full mt-12 md:mt-0">
+      <div className="max-w-7xl mx-auto w-full mt-2 md:mt-0">
         <div className="text-center mb-16 space-y-4">
           <div className="inline-block px-4 py-1.5 bg-[#483ede]/10 text-[#483ede] text-[12px] font-extrabold uppercase tracking-widest rounded-full mb-2">LOJA DE CRÉDITOS</div>
           <h2 className="font-headline font-extrabold text-[36px] md:text-[48px] text-[#151c27] tracking-tight">Escolha seu pacote de restauração</h2>

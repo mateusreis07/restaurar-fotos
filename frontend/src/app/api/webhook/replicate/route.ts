@@ -261,8 +261,30 @@ The result should be cinematic, natural, and emotionally subtle.
 
     } else if (payload.status === 'failed' || payload.status === 'canceled') {
       console.error(`[AI Chain] Falha: ${payload.status}`);
-      const photo = await prisma.photo.findUnique({ where: { id: photoId! } });
+      const photo = await prisma.photo.findUnique({ 
+        where: { id: photoId! },
+        include: { user: true }
+      });
       
+      // LÓGICA DE REEMBOLSO AUTOMÁTICO (Caso Animação Falhe)
+      if (animate && photo && !photo.isRefunded) {
+          console.log(`[AI Refund] Falha detectada na animação. Devolvendo 4 créditos para usuário ${photo.userId}`);
+          await prisma.$transaction([
+              prisma.user.update({
+                  where: { id: photo.userId },
+                  data: { credits: { increment: 4 } }
+              }),
+              prisma.photo.update({
+                  where: { id: photoId! },
+                  data: { 
+                      isRefunded: true,
+                      status: 'FAILED' 
+                  }
+              })
+          ]);
+          return NextResponse.json({ success: true, status: 'FAILED_REFUNDED' });
+      }
+
       if (photo?.restoredUrl) {
          await prisma.photo.update({ where: { id: photoId! }, data: { status: 'COMPLETED' } });
          return NextResponse.json({ success: true, status: 'COMPLETED_FALLBACK' });

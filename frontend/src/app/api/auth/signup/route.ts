@@ -25,7 +25,7 @@ export async function POST(req: Request) {
         email,
         password, // Ideally hashed
         name,
-        credits: 1 // 1 free credit for first signup
+        credits: 0 // New users start with 0 credits
       }
     });
 

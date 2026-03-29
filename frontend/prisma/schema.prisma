@@ -28,6 +28,7 @@ model Photo {
   restoredUrl String?
   animatedUrl String?
   status      String   @default("PENDING") // PENDING, PROCESSING, COMPLETED, FAILED
+  isRefunded  Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

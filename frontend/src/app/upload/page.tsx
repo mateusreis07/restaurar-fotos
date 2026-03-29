@@ -11,6 +11,7 @@ export default function UploadPage() {
   const [uploading, setUploading] = useState(false);
   const [colorize, setColorize] = useState(true);
   const [animate, setAnimate] = useState(false);
+  const [showNoCreditsModal, setShowNoCreditsModal] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -51,8 +52,7 @@ export default function UploadPage() {
     if (!file || !user) return;
 
     if (user.credits <= 0) {
-      alert('Seus créditos esgotaram. Escolha um novo pacote na Loja de Créditos para continuar salvando suas memórias!');
-      router.push('/pricing');
+      setShowNoCreditsModal(true);
       return;
     }
 
@@ -97,10 +97,10 @@ export default function UploadPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col pt-32 pb-16 px-4 sm:px-6 lg:px-8 relative font-sans">
+    <div className="min-h-screen bg-[#F8FAFC] flex flex-col pt-8 md:pt-24 pb-32 px-4 sm:px-6 lg:px-8 relative font-sans">
       
-      {/* Back Button */}
-      <Link href="/dashboard" className="absolute top-6 left-6 flex items-center text-slate-500 hover:text-[#604AF0] transition-colors font-medium text-sm bg-white border border-slate-200 shadow-sm px-4 py-2 rounded-full z-50">
+      {/* Back Button - Desktop Only */}
+      <Link href="/dashboard" className="hidden md:flex absolute top-6 left-6 items-center text-slate-500 hover:text-[#604AF0] transition-colors font-medium text-sm bg-white border border-slate-200 shadow-sm px-4 py-2 rounded-full z-50">
         <span className="material-symbols-outlined mr-2 text-[18px]">arrow_back</span>
         Voltar para Galeria
       </Link>
@@ -281,6 +281,40 @@ export default function UploadPage() {
         </div>
 
       </div>
+
+      {/* Modal de Sem Créditos */}
+      {showNoCreditsModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-300">
+          <div className="bg-white rounded-[2.5rem] w-full max-w-[440px] p-8 md:p-10 shadow-2xl space-y-8 animate-in zoom-in-95 duration-300">
+            <div className="text-center space-y-6">
+              <div className="w-20 h-20 bg-[#f0f3ff] rounded-full flex items-center justify-center mx-auto shadow-inner border border-slate-100/50">
+                <span className="material-symbols-outlined text-[#483ede] text-[42px]" style={{fontVariationSettings: "'FILL' 1"}}>payments</span>
+              </div>
+              
+              <div className="space-y-3">
+                <h3 className="text-[28px] font-headline font-black text-[#151c27] tracking-tight leading-tight">Créditos Insuficientes</h3>
+                <p className="text-[#575f6a] text-[15.5px] font-medium leading-relaxed">
+                  Para restaurar suas memórias, você precisa adquirir ou recarregar seus créditos. Escolha um pacote proporcional ao que você precisa!
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-3 pt-2">
+              <Link href="/pricing" className="w-full bg-[#483ede] text-white py-4.5 rounded-2xl font-bold text-[16px] hover:bg-[#3b32c6] shadow-lg shadow-[#483ede]/20 text-center transition-all active:scale-[0.98]">
+                Ver pacotes de créditos
+              </Link>
+              <button 
+                onClick={() => setShowNoCreditsModal(false)}
+                className="w-full py-4 rounded-2xl font-bold text-[14px] text-[#575f6a] hover:bg-slate-50 transition-colors"
+              >
+                Voltar depois
+              </button>
+            </div>
+            
+            <p className="text-center text-[11px] font-extrabold text-[#a0abbb] uppercase tracking-widest pt-2">Aura Recall © 2026</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

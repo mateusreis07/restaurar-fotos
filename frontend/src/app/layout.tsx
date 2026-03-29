@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import MobileNav from './components/MobileNav';
+import GlobalHeader from './components/GlobalHeader';
 
 export const metadata: Metadata = {
   title: 'Aura Recall | Restaure suas memórias com IA',
@@ -33,7 +35,9 @@ export default function RootLayout({
         `}} />
       </head>
       <body className="bg-surface font-body text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed-variant flex flex-col min-h-screen" suppressHydrationWarning>
+        <GlobalHeader />
         {children}
+        <MobileNav />
       </body>
     </html>
   );
