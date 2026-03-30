@@ -1,19 +1,20 @@
+'use client';
+
 import type { Metadata } from 'next';
 import './globals.css';
 import MobileNav from './components/MobileNav';
 import GlobalHeader from './components/GlobalHeader';
 import Sidebar from './components/Sidebar';
-
-export const metadata: Metadata = {
-  title: 'Aura Recall | Restaure suas memórias com IA',
-  description: 'Transforme fotos desbotadas, riscadas ou embaçadas em recordações vívidas e cristalinas.',
-};
+import { usePathname } from 'next/navigation';
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  const isPublicMemoryPage = pathname?.startsWith('/memory/');
+
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <head>
@@ -36,14 +37,14 @@ export default function RootLayout({
         `}} />
       </head>
       <body className="bg-surface font-body text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed-variant flex flex-col min-h-screen" suppressHydrationWarning>
-        <GlobalHeader />
+        {!isPublicMemoryPage && <GlobalHeader />}
         <div className="flex flex-1 flex-row min-h-0 overflow-hidden">
-          <Sidebar />
+          {!isPublicMemoryPage && <Sidebar />}
           <div className="flex-1 flex flex-col overflow-y-auto relative">
             {children}
           </div>
         </div>
-        <MobileNav />
+        {!isPublicMemoryPage && <MobileNav />}
       </body>
     </html>
   );

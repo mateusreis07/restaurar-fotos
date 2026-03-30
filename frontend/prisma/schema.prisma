@@ -16,6 +16,7 @@ model User {
   stripeCustomerId String?
   photos           Photo[]
   transactions     Transaction[]
+  sharedMemories   SharedMemory[]
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
 }
@@ -43,4 +44,18 @@ model Transaction {
   status          String   @default("PENDING") // PENDING, COMPLETED
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+}
+
+model SharedMemory {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  recipientName String
+  message       String?  @db.Text
+  fileIds       String[] // Store as an array of Photo IDs
+  accessCount   Int      @default(0)
+  status        String   @default("ACTIVE") // ACTIVE, INACTIVE
+  expiresAt     DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }

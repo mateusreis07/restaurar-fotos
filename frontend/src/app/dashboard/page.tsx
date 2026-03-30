@@ -19,6 +19,8 @@ export default function Dashboard() {
   // Modal for animation confirmation
   const [animationPhotoId, setAnimationPhotoId] = useState<string | null>(null);
 
+  // Selection removed (moved to /present)
+
   useEffect(() => {
     const userId = localStorage.getItem('aura_user_id');
     const savedEmail = localStorage.getItem('aura_email');
@@ -143,6 +145,7 @@ export default function Dashboard() {
     return () => { document.body.style.overflow = 'auto'; }
   }, [comparingPhoto, animationPhotoId]);
 
+
   if (isAuthChecking || !user) {
     return <div className="min-h-screen bg-[#f9f9ff] flex items-center justify-center"></div>;
   }
@@ -156,12 +159,22 @@ export default function Dashboard() {
 
           <section className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-2">
             <div className="space-y-3">
-              <h1 className="font-headline text-[32px] md:text-[44px] font-extrabold tracking-tight text-[#151c27] leading-tight">Minha Galeria</h1>
-              <p className="text-[#575f6a] text-[17px] font-medium max-w-xl leading-relaxed">Suas relíquias digitais, restauradas com precisão clínica e profundidade emocional.</p>
+              <h1 className="font-headline text-[32px] md:text-[44px] font-extrabold tracking-tight text-[#151c27] leading-tight">
+                Minha Galeria
+              </h1>
+              <p className="text-[#575f6a] text-[17px] font-medium max-w-xl leading-relaxed">
+                Suas relíquias digitais, restauradas com precisão clínica e profundidade emocional.
+              </p>
             </div>
             <div className="flex gap-3">
+              <Link href="/present">
+                <button className="flex items-center gap-2 bg-[#f43f5e] px-6 py-3.5 rounded-[14px] text-white font-bold shadow-lg shadow-[#f43f5e]/30 hover:scale-[1.03] active:scale-[0.98] transition-transform text-[15px] cursor-pointer">
+                  <span className="material-symbols-outlined text-[20px] font-bold">card_giftcard</span>
+                  Presentear
+                </button>
+              </Link>
               <Link href="/upload">
-                <button className="flex items-center gap-2 bg-[#483ede] px-6 py-3.5 rounded-[14px] text-white font-bold shadow-lg shadow-[#483ede]/30 hover:scale-[1.03] active:scale-[0.98] transition-transform text-[15px]">
+                <button className="flex items-center gap-2 bg-[#483ede] px-6 py-3.5 rounded-[14px] text-white font-bold shadow-lg shadow-[#483ede]/30 hover:scale-[1.03] active:scale-[0.98] transition-transform text-[15px] cursor-pointer">
                   <span className="material-symbols-outlined text-[20px] font-bold">auto_fix_high</span>
                   Nova Restauração
                 </button>
@@ -237,7 +250,7 @@ export default function Dashboard() {
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                     )}
-                    <div className="absolute top-4 right-4 z-10">
+                    <div className="absolute top-4 right-4 z-10 flex gap-2">
                       <span className={`px-3.5 py-1.5 rounded-full text-[10.5px] font-extrabold uppercase tracking-widest shadow-lg ${photo.animatedUrl ? 'bg-[#ffdad6] text-[#ba1a1a]' : 'bg-[#e2f9ec] text-[#0f6b40]'}`}>
                         {photo.animatedUrl ? 'ANIMADA' : 'PRONTA'}
                       </span>

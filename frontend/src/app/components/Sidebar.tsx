@@ -51,6 +51,10 @@ export default function Sidebar() {
                 <span className="material-symbols-outlined text-[22px]" style={{fontVariationSettings: isActive('/dashboard') ? "'FILL' 1" : "'FILL' 0"}}>photo_library</span>
                 <span className="text-[15px]">Minha Galeria</span>
             </Link>
+            <Link href="/present" className={`flex items-center gap-3.5 px-4 py-3.5 rounded-[14px] font-bold transition-transform duration-200 hover:translate-x-1 ${isActive('/present') ? 'bg-[#dce2f3] text-[#483ede] shadow-sm shadow-[#dce2f3]/50' : 'text-[#575f6a] hover:text-[#151c27] hover:bg-[#f0f3ff]'}`}>
+                <span className="material-symbols-outlined text-[22px]" style={{fontVariationSettings: isActive('/present') ? "'FILL' 1" : "'FILL' 0"}}>card_giftcard</span>
+                <span className="text-[15px]">Presentear Memória</span>
+            </Link>
             <Link href="/upload" className={`flex items-center gap-3.5 px-4 py-3.5 rounded-[14px] font-bold transition-transform duration-200 hover:translate-x-1 ${isActive('/upload') ? 'bg-[#dce2f3] text-[#483ede] shadow-sm shadow-[#dce2f3]/50' : 'text-[#575f6a] hover:text-[#151c27] hover:bg-[#f0f3ff]'}`}>
                 <span className="material-symbols-outlined text-[22px]" style={{fontVariationSettings: isActive('/upload') ? "'FILL' 1" : "'FILL' 0"}}>auto_fix_high</span>
                 <span className="text-[15px]">Nova Restauração</span>
