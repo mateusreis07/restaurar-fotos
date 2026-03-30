@@ -31,7 +31,7 @@ export async function POST(req: Request) {
         {
           price_data: {
             currency: 'brl',
-            product_data: { name: `Pacote de ${plan.credits} Fotos - Aura Recall` },
+            product_data: { name: `Pacote de ${plan.credits} Fotos - Reviva` },
             unit_amount: plan.amount,
           },
           quantity: 1,
