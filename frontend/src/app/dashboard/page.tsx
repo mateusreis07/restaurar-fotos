@@ -2,13 +2,17 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function Dashboard() {
   const [user, setUser] = useState<any>(null);
   const [photos, setPhotos] = useState<any[]>([]);
   const [isAuthChecking, setIsAuthChecking] = useState(true);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Purchase success modal
+  const [showPurchaseSuccess, setShowPurchaseSuccess] = useState(false);
 
   // Slider State
   const [comparingPhoto, setComparingPhoto] = useState<any>(null);
@@ -53,6 +57,15 @@ export default function Dashboard() {
       })
       .finally(() => setIsAuthChecking(false));
   }, [router]);
+
+  // Detect successful purchase from Stripe redirect
+  useEffect(() => {
+    if (searchParams.get('success') === 'true') {
+      setShowPurchaseSuccess(true);
+      // Clean the URL without reloading
+      window.history.replaceState({}, '', '/dashboard');
+    }
+  }, [searchParams]);
 
   const [isProcessingAnimation, setIsProcessingAnimation] = useState<string | null>(null);
 
@@ -456,6 +469,58 @@ export default function Dashboard() {
                 Agora não
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Confirmação de Compra */}
+      {showPurchaseSuccess && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 bg-[#151c27]/60 backdrop-blur-md animate-in fade-in duration-300">
+          <div className="bg-white rounded-[2.5rem] w-full max-w-[460px] overflow-hidden shadow-2xl border border-[#c7c4d7]/40 p-10 text-center space-y-8 animate-in zoom-in-95 duration-500">
+            
+            {/* Ícone de Sucesso */}
+            <div className="relative mx-auto w-24 h-24">
+              <div className="absolute inset-0 bg-[#e2f9ec] rounded-full animate-ping opacity-30"></div>
+              <div className="relative w-24 h-24 bg-[#e2f9ec] rounded-full flex items-center justify-center shadow-lg border-4 border-white">
+                <span className="material-symbols-outlined text-[48px] text-[#0f6b40]" style={{fontVariationSettings: "'FILL' 1"}}>check_circle</span>
+              </div>
+            </div>
+
+            {/* Mensagem */}
+            <div className="space-y-3">
+              <h2 className="font-headline text-[28px] font-black text-[#151c27] tracking-tight leading-tight">Compra Confirmada!</h2>
+              <p className="text-[#575f6a] text-[16px] leading-relaxed font-medium">
+                Seus créditos foram adicionados com sucesso à sua conta. Agora você pode restaurar e dar vida às suas memórias mais preciosas.
+              </p>
+            </div>
+
+            {/* Saldo Atualizado */}
+            <div className="bg-[#f0f3ff] p-6 rounded-[2rem] border border-[#dce2f3] space-y-2">
+              <p className="text-[12px] font-black uppercase tracking-[0.2em] text-[#483ede]">Saldo Atualizado</p>
+              <div className="flex items-center justify-center gap-2">
+                <span className="material-symbols-outlined text-[32px] text-[#483ede]" style={{fontVariationSettings: "'FILL' 1"}}>toll</span>
+                <span className="text-[44px] font-black text-[#151c27] tracking-tighter">{user?.credits || 0}</span>
+                <span className="text-[18px] font-bold text-[#575f6a] self-end pb-2">créditos</span>
+              </div>
+            </div>
+
+            {/* Ações */}
+            <div className="space-y-3 pt-2">
+              <Link 
+                href="/upload"
+                className="w-full bg-[#483ede] text-white py-5 rounded-[18px] font-black text-[17px] hover:bg-[#3b32c6] shadow-xl shadow-[#483ede]/30 active:scale-95 transition-all flex items-center justify-center gap-2"
+              >
+                <span className="material-symbols-outlined text-[22px]">auto_fix_high</span>
+                Restaurar uma Foto Agora
+              </Link>
+              <button
+                onClick={() => setShowPurchaseSuccess(false)}
+                className="w-full py-4 text-[#575f6a] font-extrabold text-[15px] hover:text-[#151c27] transition-colors"
+              >
+                Continuar para a Galeria
+              </button>
+            </div>
+
           </div>
         </div>
       )}

@@ -2,13 +2,23 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Footer from '../components/Footer';
 
 export default function PricingPage() {
   const [user, setUser] = useState<any>(null);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+  const [showCanceled, setShowCanceled] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Detect canceled purchase from Stripe redirect
+  useEffect(() => {
+    if (searchParams.get('canceled') === 'true') {
+      setShowCanceled(true);
+      window.history.replaceState({}, '', '/pricing');
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     const userId = localStorage.getItem('aura_user_id');
@@ -184,6 +194,45 @@ export default function PricingPage() {
         </div>
       </div>
       <Footer />
+
+      {/* Modal de Compra Cancelada */}
+      {showCanceled && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 bg-[#151c27]/60 backdrop-blur-md animate-in fade-in duration-300">
+          <div className="bg-white rounded-[2.5rem] w-full max-w-[440px] overflow-hidden shadow-2xl border border-[#c7c4d7]/40 p-10 text-center space-y-8 animate-in zoom-in-95 duration-500">
+            
+            {/* Ícone */}
+            <div className="w-24 h-24 bg-[#fff7ed] rounded-full flex items-center justify-center mx-auto shadow-lg border-4 border-white">
+              <span className="material-symbols-outlined text-[48px] text-[#f59e0b]" style={{fontVariationSettings: "'FILL' 1"}}>info</span>
+            </div>
+
+            {/* Mensagem */}
+            <div className="space-y-3">
+              <h2 className="font-headline text-[26px] font-black text-[#151c27] tracking-tight leading-tight">Compra Não Finalizada</h2>
+              <p className="text-[#575f6a] text-[15px] leading-relaxed font-medium">
+                Parece que o pagamento não foi concluído. Nenhuma cobrança foi realizada. Você pode tentar novamente quando quiser — suas memórias estarão esperando!
+              </p>
+            </div>
+
+            {/* Ações */}
+            <div className="space-y-3 pt-2">
+              <button
+                onClick={() => setShowCanceled(false)}
+                className="w-full bg-[#483ede] text-white py-5 rounded-[18px] font-black text-[17px] hover:bg-[#3b32c6] shadow-xl shadow-[#483ede]/30 active:scale-95 transition-all flex items-center justify-center gap-2"
+              >
+                <span className="material-symbols-outlined text-[22px]">shopping_cart</span>
+                Escolher um Pacote
+              </button>
+              <Link
+                href="/dashboard"
+                className="w-full py-4 text-[#575f6a] font-extrabold text-[15px] hover:text-[#151c27] transition-colors flex items-center justify-center"
+              >
+                Voltar para a Galeria
+              </Link>
+            </div>
+
+          </div>
+        </div>
+      )}
     </div>
   );
 }
