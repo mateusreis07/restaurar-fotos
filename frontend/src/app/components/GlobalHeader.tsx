@@ -13,7 +13,7 @@ export default function GlobalHeader() {
 
   useEffect(() => {
     if (isHidden) return;
-    const userId = localStorage.getItem('aura_user_id');
+    const userId = localStorage.getItem('reviva_user_id');
     if (userId) {
       fetch('/api/auth/me', {
         method: 'POST',
@@ -31,8 +31,10 @@ export default function GlobalHeader() {
   if (isHidden) return null;
 
   return (
-    <header className="md:hidden flex items-center justify-between px-6 py-4 bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-[#c7c4d7]/30 shadow-sm">
-        <span className="text-[20px] font-headline font-black tracking-tight text-[#483ede]">Aura Recall</span>
+    <header className="md:hidden flex items-center justify-between px-6 py-3 bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-[#c7c4d7]/30 shadow-sm">
+        <Link href="/" className="px-5 py-4 mb-2 flex items-center active:scale-95 transition-transform group">
+             <img src="/examples/logo-reviva-sem-fundo.png" alt="Reviva Logo" className="h-6 w-auto object-contain" title="Reviva" />
+        </Link>
         <Link href="/pricing" className="flex items-center gap-2 bg-[#f0f3ff] px-4 py-2 rounded-full border border-[#dce2f3] active:scale-95 transition-all">
             <span className="material-symbols-outlined text-[18px] text-[#483ede]" style={{fontVariationSettings: "'FILL' 1"}}>payments</span>
             <span className="text-[#483ede] font-extrabold text-[14px]">{user?.credits ?? 0}</span>

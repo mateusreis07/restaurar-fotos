@@ -101,11 +101,6 @@ export default function UploadPage() {
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col relative font-sans">
       <div className="pt-8 md:pt-24 pb-32 px-4 sm:px-6 lg:px-8 flex-1">
       
-      {/* Back Button - Desktop Only */}
-      <Link href="/dashboard" className="hidden md:flex absolute top-6 left-6 items-center text-slate-500 hover:text-[#604AF0] transition-colors font-medium text-sm bg-white border border-slate-200 shadow-sm px-4 py-2 rounded-full z-50">
-        <span className="material-symbols-outlined mr-2 text-[18px]">arrow_back</span>
-        Voltar para Galeria
-      </Link>
 
       <div className="max-w-[1100px] w-full mx-auto my-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center z-10">
         

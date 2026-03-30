@@ -37,9 +37,9 @@ export default function Sidebar() {
 
   return (
     <aside className="hidden md:flex flex-col h-screen w-[280px] bg-[#f9f9ff] p-4 space-y-2 sticky top-0 shrink-0 border-r border-[#c7c4d7]/30">
-        <div className="px-5 py-6 mb-2">
-            <span className="text-[22px] font-black tracking-tight text-[#483ede] font-headline">Aura Recall</span>
-        </div>
+        <Link href="/" className="py-2 transform active:scale-95 transition-transform w-fit h-fit">
+            <img src="/examples/logo-reviva-sem-fundo.png" alt="Reviva Logo" className="h-8 w-auto object-contain" title="Reviva" />
+        </Link>
 
         <div className="mb-8 px-5">
             <p className="text-[#151c27] font-headline font-extrabold text-[19px] leading-tight tracking-tight">Bem-vindo de volta</p>

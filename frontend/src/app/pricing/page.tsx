@@ -59,10 +59,6 @@ export default function PricingPage() {
   return (
     <div className="bg-[#f9f9ff] flex flex-col min-h-screen relative font-sans">
       <div className="pt-8 md:pt-24 pb-32 px-6 flex flex-col items-center justify-center flex-1">
-        <Link href="/dashboard" className="hidden md:flex absolute top-6 left-6 md:top-10 md:left-10 items-center gap-2 text-[#575f6a] hover:text-[#483ede] font-bold transition-colors z-[100] bg-white/70 backdrop-blur-md px-5 py-2.5 rounded-full shadow-sm hover:shadow-md border border-[#c7c4d7]/30">
-          <span className="material-symbols-outlined text-[20px]">arrow_back</span>
-          Voltar para Galeria
-        </Link>
 
         <div className="max-w-7xl mx-auto w-full mt-2 md:mt-0">
           <div className="text-center mb-16 space-y-4">
@@ -95,6 +91,10 @@ export default function PricingPage() {
                 <li className="flex items-center space-x-3 text-[#575f6a]">
                   <span className="material-symbols-outlined text-[#0f6b40]">check_circle</span>
                   <span className="text-[15px] font-medium italic">🎬 ou 2 fotos + 2 vídeos</span>
+                </li>
+                <li className="flex items-center space-x-3 text-[#f43f5e] font-black">
+                  <span className="material-symbols-outlined text-[18px]" style={{fontVariationSettings: "'FILL' 1"}}>card_giftcard</span>
+                  <span className="text-[14px]">Página de Presente Digital Incluída</span>
                 </li>
               </ul>
               <button 
@@ -130,6 +130,10 @@ export default function PricingPage() {
                   <span className="material-symbols-outlined text-[#483ede] font-bold">verified</span>
                   <span className="text-[15px] font-medium">🎬 ou 5 fotos + 5 Vídeos</span>
                 </li>
+                <li className="flex items-center space-x-3 text-[#f43f5e] font-black">
+                  <span className="material-symbols-outlined text-[20px]" style={{fontVariationSettings: "'FILL' 1"}}>card_giftcard</span>
+                  <span className="text-[15px]">Página de Presente Digital Incluída</span>
+                </li>
               </ul>
               <button 
                 onClick={() => handleBuyCredits('plan_2')}
@@ -162,6 +166,10 @@ export default function PricingPage() {
                 <li className="flex items-center space-x-3 text-[#575f6a]">
                   <span className="material-symbols-outlined text-[#0f6b40]">check_circle</span>
                   <span className="text-[15px] font-medium italic">🎬 ou 12 fotos + 12 Vídeos</span>
+                </li>
+                <li className="flex items-center space-x-3 text-[#f43f5e] font-black">
+                  <span className="material-symbols-outlined text-[18px]" style={{fontVariationSettings: "'FILL' 1"}}>card_giftcard</span>
+                  <span className="text-[14px]">Página de Presente Digital Incluída</span>
                 </li>
               </ul>
               <button 

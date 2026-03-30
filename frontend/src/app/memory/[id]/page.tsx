@@ -60,9 +60,14 @@ export default function MemoryPage({ params }: { params: Promise<{ id: string }>
              <div className="w-20 h-20 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center mb-6 border border-white/20 shadow-2xl">
                <span className="material-symbols-outlined text-[32px] text-[#fecdd3]" style={{fontVariationSettings: "'FILL' 1"}}>favorite</span>
              </div>
-             <div className="space-y-4">
-                <h1 className="text-[14px] font-black uppercase tracking-[0.3em] text-[#fecdd3]">Uma lembrança para você</h1>
-                <h2 className="text-5xl md:text-7xl font-headline font-black tracking-tight leading-tight">Olá, {memory.recipientName}!</h2>
+             <div className="flex flex-col items-center justify-center space-y-6">
+                <Link href="/" className="active:scale-95 transition-transform">
+                  <img src="/examples/logo-reviva-sem-fundo.png" alt="Reviva Logo" className="h-12 w-auto object-contain brightness-0 invert" />
+                </Link>
+                <div className="space-y-1 text-center">
+                  <h1 className="text-[14px] font-black uppercase tracking-[0.3em] text-[#fecdd3]">Uma lembrança para você</h1>
+                  <h2 className="text-5xl md:text-7xl font-headline font-black tracking-tight leading-tight">Olá, {memory.recipientName}!</h2>
+                </div>
              </div>
           </div>
 
@@ -120,13 +125,13 @@ export default function MemoryPage({ params }: { params: Promise<{ id: string }>
              <div className="relative z-10 space-y-4">
                 <h3 className="text-3xl md:text-5xl font-black tracking-tight">E as suas memórias?</h3>
                 <p className="text-lg md:text-xl text-white/80 font-medium max-w-xl mx-auto">
-                  Também tem fotos antigas que gostaria de ver com nitidez e cor? Experimente o Aura Recall agora.
+                  Também tem fotos antigas que gostaria de ver com nitidez e cor? Experimente o Reviva agora.
                 </p>
              </div>
 
              <div className="relative z-10">
                 <Link href="/" className="inline-flex items-center gap-3 bg-white text-[#483ede] px-10 py-5 rounded-full font-black text-lg hover:scale-105 active:scale-[0.98] transition-all shadow-xl shadow-black/20">
-                  Experimentar Aura Recall
+                  Experimentar Reviva
                   <span className="material-symbols-outlined text-[24px]">arrow_forward</span>
                 </Link>
              </div>
@@ -134,10 +139,13 @@ export default function MemoryPage({ params }: { params: Promise<{ id: string }>
              <p className="relative z-10 text-[13px] font-bold text-white/40 uppercase tracking-[0.2em] pt-4">Restauração • Assistente de Cor • Animação IA</p>
           </div>
           
-          <div className="mt-20 opacity-30 flex items-center justify-center gap-4 grayscale">
-            <span className="text-xl font-headline font-black">Aura Recall</span>
-            <div className="w-1 h-1 bg-white rounded-full"></div>
-            <span className="text-[12px] font-bold uppercase tracking-widest">Memórias Preservadas</span>
+          <div className="mt-20 opacity-30 flex flex-col items-center justify-center gap-4 grayscale">
+            <img src="/examples/logo-reviva-sem-fundo.png" alt="Reviva Logo" className="h-12 w-auto object-contain brightness-0 invert" />
+            <div className="flex items-center gap-4">
+              <div className="w-1 h-1 bg-white rounded-full"></div>
+              <span className="text-[12px] font-bold uppercase tracking-widest text-white">Memórias Preservadas</span>
+              <div className="w-1 h-1 bg-white rounded-full"></div>
+            </div>
           </div>
         </footer>
 

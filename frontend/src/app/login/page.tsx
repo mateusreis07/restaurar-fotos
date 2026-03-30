@@ -45,8 +45,8 @@ export default function Login() {
     <div className="min-h-screen bg-surface flex">
       {/* Left side: Form */}
       <div className="w-full lg:w-1/2 flex flex-col justify-center px-6 md:px-16 lg:px-24">
-        <Link href="/">
-          <div className="text-2xl font-bold tracking-tighter text-primary font-headline mb-12">Aura Recall</div>
+        <Link href="/" className="mb-12 transform active:scale-95 transition-transform w-fit h-fit">
+          <img src="/examples/logo-reviva-sem-fundo.png" alt="Reviva Logo" className="h-12 w-auto object-contain" />
         </Link>
 
         <div className="max-w-md w-full mx-auto lg:mx-0">
@@ -91,7 +91,7 @@ export default function Login() {
               type="button"
               onClick={handleLogin}
               disabled={loading}
-              className="w-full editorial-gradient text-on-primary py-4 rounded-xl font-headline font-bold text-lg shadow-lg hover:shadow-primary/30 active:scale-95 transition-all disabled:opacity-70 flex justify-center items-center"
+              className="w-full editorial-gradient text-on-primary py-4 rounded-xl font-headline font-bold text-lg shadow-lg hover:shadow-primary/30 active:scale-95 transition-all disabled:opacity-70"
             >
               {loading ? 'Entrando...' : 'Acessar meu painel'}
             </button>
@@ -131,7 +131,7 @@ export default function Login() {
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-slate-900/40 z-20"></div>
 
         <div className="absolute bottom-12 left-12 right-12 z-30 text-white border-l-4 border-primary pl-6">
-          <h2 className="font-headline font-bold text-3xl mb-3 leading-tight">"O tempo tenta apagar, mas a Aura Recall ajuda você a lembrar."</h2>
+          <h2 className="font-headline font-bold text-3xl mb-3 leading-tight">"O tempo tenta apagar, mas a Reviva ajuda você a lembrar."</h2>
           <p className="text-slate-200 font-medium tracking-wide uppercase text-sm">— Cada crédito é uma história recuperada</p>
         </div>
       </div>

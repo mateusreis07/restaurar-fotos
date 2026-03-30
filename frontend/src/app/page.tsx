@@ -38,8 +38,10 @@ export default function Home() {
   return (
     <>
       <nav className="fixed top-0 w-full z-50 glass-panel shadow-sm">
-        <div className="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
-          <div className="text-2xl font-bold tracking-tighter text-primary font-headline">Aura Recall</div>
+        <div className="flex justify-between items-center w-full px-6 py-2 max-w-7xl mx-auto">
+          <Link href="/" className="py-2 transform active:scale-95 transition-transform w-fit h-fit">
+            <img src="/examples/logo-reviva-sem-fundo.png" alt="Reviva Logo" className="h-8 w-auto object-contain" />
+          </Link>
           <div className="hidden md:flex items-center space-x-8">
             <a className="font-headline font-medium text-sm tracking-tight text-slate-600 hover:text-primary transition-colors duration-300" href="#exemplos">Exemplos</a>
             <a className="font-headline font-medium text-sm tracking-tight text-slate-600 hover:text-primary transition-colors duration-300" href="#como-funciona">Como funciona</a>
@@ -183,6 +185,121 @@ export default function Home() {
                     <div className="relative aspect-video rounded-3xl overflow-hidden shadow-lg border-2 border-white ring-1 ring-slate-100">
                        <img src="/examples/example3.png" className="h-full w-full object-cover" alt="Restauração 3" />
                        <div className="absolute top-2 left-2 editorial-gradient text-white text-[8px] font-bold px-1.5 py-0.5 rounded uppercase">Nitidez IA</div>
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </section>
+
+        {/* 🎁 New "Present Memory" Section */}
+        <section className="bg-slate-50 py-20 px-6 relative overflow-hidden overflow-visible border-y border-slate-200/50">
+           {/* Decorative Elements */}
+           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
+           <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#f43f5e]/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/4 pointer-events-none"></div>
+           
+           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <div className="order-2 lg:order-1 space-y-10 relative">
+                 <div className="inline-flex items-center gap-2 bg-[#fff1f2] text-[#f43f5e] px-4 py-2 rounded-full border border-[#fecdd3]/50">
+                    <span className="material-symbols-outlined text-[18px] font-bold" style={{fontVariationSettings: "'FILL' 1"}}>card_giftcard</span>
+                    <span className="text-[12px] font-black uppercase tracking-widest">Nova Funcionalidade</span>
+                 </div>
+                 
+                 <div className="space-y-6">
+                    <h2 className="font-headline font-black text-4xl md:text-5xl text-on-surface tracking-tighter leading-tight">
+                       Transforme memórias em um <span className="text-[#f43f5e]">presente inesquecível</span>
+                    </h2>
+                    <p className="text-secondary text-lg md:text-xl leading-relaxed max-w-xl">
+                       Agora você pode criar uma página personalizada com as fotos e vídeos restaurados para surpreender quem você ama. Uma experiência digital emocionante, pronta para ser compartilhada.
+                    </p>
+                 </div>
+
+                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                    <div className="space-y-3">
+                       <div className="w-10 h-10 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center text-[#f43f5e]">
+                          <span className="material-symbols-outlined text-[20px] font-bold">link</span>
+                       </div>
+                       <h4 className="font-bold text-slate-900">Link de Acesso Único</h4>
+                       <p className="text-slate-500 text-sm leading-relaxed">Gere um endereço exclusivo para cada presenteado, com acesso instantâneo.</p>
+                    </div>
+                    <div className="space-y-3">
+                       <div className="w-10 h-10 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center text-[#f43f5e]">
+                          <span className="material-symbols-outlined text-[20px] font-bold">chat_bubble</span>
+                       </div>
+                       <h4 className="font-bold text-slate-900">Mensagem do Coração</h4>
+                       <p className="text-slate-500 text-sm leading-relaxed">Adicione uma dedicatória especial que aparecerá antes de revelarem as fotos.</p>
+                    </div>
+                    <div className="space-y-3">
+                       <div className="w-10 h-10 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center text-[#f43f5e]">
+                          <span className="material-symbols-outlined text-[20px] font-bold">devices</span>
+                       </div>
+                       <h4 className="font-bold text-slate-900">100% Mobile Optimized</h4>
+                       <p className="text-slate-500 text-sm leading-relaxed">Uma experiência imersiva feita para ser aberta no WhatsApp e emocionante de ver.</p>
+                    </div>
+                    <div className="space-y-3">
+                       <div className="w-10 h-10 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center text-[#f43f5e]">
+                          <span className="material-symbols-outlined text-[20px] font-bold">share</span>
+                       </div>
+                       <h4 className="font-bold text-slate-900">Compartilhamento Fácil</h4>
+                       <p className="text-slate-500 text-sm leading-relaxed">Um clique para enviar por qualquer rede social ou copiar o link secreto.</p>
+                    </div>
+                 </div>
+
+                 <div className="pt-4">
+                    <Link href="/dashboard">
+                       <button className="bg-[#f43f5e] text-on-primary px-8 py-4 rounded-2xl font-headline font-bold text-md shadow-2xl shadow-[#f43f5e]/30 hover:scale-105 active:scale-95 transition-all flex items-center gap-3 group">
+                          Criar meu primeiro presente
+                          <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                       </button>
+                    </Link>
+                 </div>
+              </div>
+
+              <div className="order-1 lg:order-2 relative">
+                 {/* Mockup or Visual Representation - Updated to match real /memory/[id] design */}
+                 <div className="relative z-10 bg-white rounded-[3.5rem] p-4 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] border border-slate-200">
+                    <div className="rounded-[2.8rem] overflow-hidden aspect-[4/5] relative bg-gradient-to-br from-[#0c1221] via-[#151c27] to-[#0c1221] flex flex-col items-center justify-center p-8 text-center space-y-8">
+                       {/* Floating Heart Icon */}
+                       <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-2">
+                          <span className="material-symbols-outlined text-[#f43f5e] text-2xl" style={{fontVariationSettings: "'FILL' 1"}}>favorite</span>
+                       </div>
+
+                       <div className="space-y-4">
+                          <p className="text-[10px] font-black text-[#f43f5e] uppercase tracking-[0.3em]">Uma lembrança para você</p>
+                          <h3 className="text-4xl font-black text-white tracking-tight">Olá, Maria!</h3>
+                       </div>
+
+                       {/* Translucent Message Card */}
+                       <div className="w-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-8 space-y-6 relative overflow-hidden group">
+                          <div className="absolute -top-4 -left-2 opacity-10">
+                             <span className="material-symbols-outlined text-6xl text-white">format_quote</span>
+                          </div>
+                          <p className="text-white text-lg font-medium italic leading-relaxed relative z-10">
+                             "Reuni alguns dos nossos momentos mais especiais que ganharam vida nova na Reviva. Espero que se emocione tanto quanto eu."
+                          </p>
+                          <div className="pt-4 border-t border-white/5">
+                             <p className="text-[10px] font-black text-white/50 uppercase tracking-[0.2em]">
+                                — Com carinho, João
+                             </p>
+                          </div>
+                       </div>
+
+                       <div className="pt-10 flex flex-col items-center gap-4">
+                           <div className="w-12 h-12 rounded-full border-2 border-white/20 flex items-center justify-center animate-pulse">
+                              <span className="material-symbols-outlined text-white/40 text-xl">expand_more</span>
+                           </div>
+                           <p className="text-[9px] font-black text-white/30 uppercase tracking-widest">Role para ver as fotos</p>
+                       </div>
+                    </div>
+                 </div>
+                 
+                 {/* Floating Badges */}
+                 <div className="absolute -top-6 -right-6 z-20 bg-white p-5 rounded-3xl shadow-2xl border border-slate-100 animate-bounce group hover:animate-none transition-all">
+                    <span className="material-symbols-outlined text-[#f43f5e] text-3xl" style={{fontVariationSettings: "'FILL' 1"}}>card_giftcard</span>
+                 </div>
+                 <div className="absolute -bottom-8 -left-6 z-20 bg-slate-900 px-8 py-5 rounded-[2rem] shadow-2xl text-white border border-white/10">
+                    <div className="flex items-center gap-4">
+                       <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse shadow-[0_0_15px_rgba(34,197,94,0.5)]"></div>
+                       <p className="text-[11px] font-black uppercase tracking-[0.15em] text-white/90">Experiência Criada</p>
                     </div>
                  </div>
               </div>
@@ -335,6 +452,10 @@ export default function Home() {
                     <span className="material-symbols-outlined text-green-500 text-xl">check_circle</span>
                     <span>🎬 ou 2 fotos + 2 vídeos</span>
                   </li>
+                  <li className="flex items-center space-x-3 text-[#f43f5e] font-black">
+                    <span className="material-symbols-outlined text-xl" style={{fontVariationSettings: "'FILL' 1"}}>card_giftcard</span>
+                    <span>🎁 Página de Presente Digital Incluída</span>
+                  </li>
                 </ul>
                 <Link href="/dashboard" className="w-full">
                   <button className="w-full py-4 rounded-2xl border-2 border-primary text-primary font-headline font-bold hover:bg-primary/5 transition-all active:scale-95">
@@ -369,6 +490,10 @@ export default function Home() {
                     <span className="material-symbols-outlined text-primary text-xl">verified</span>
                     <span>🎬 ou 5 fotos + 5 Vídeos</span>
                   </li>
+                  <li className="flex items-center space-x-3 text-[#f43f5e] font-black">
+                    <span className="material-symbols-outlined text-xl" style={{fontVariationSettings: "'FILL' 1"}}>card_giftcard</span>
+                    <span className="text-lg">🎁 Página de Presente Digital Incluída</span>
+                  </li>
                 </ul>
                 <Link href="/dashboard" className="w-full">
                   <button className="w-full py-5 rounded-2xl editorial-gradient text-on-primary font-headline font-black text-lg hover:brightness-110 transition-all shadow-xl shadow-primary/30 hover:scale-[1.02] active:scale-95">
@@ -399,6 +524,10 @@ export default function Home() {
                   <li className="flex items-center space-x-3 text-slate-500 italic">
                     <span className="material-symbols-outlined text-green-500 text-xl">check_circle</span>
                     <span>🎬 ou 12 fotos + 12 Vídeos</span>
+                  </li>
+                  <li className="flex items-center space-x-3 text-[#f43f5e] font-black">
+                    <span className="material-symbols-outlined text-xl" style={{fontVariationSettings: "'FILL' 1"}}>card_giftcard</span>
+                    <span>🎁 Página de Presente Digital Incluída</span>
                   </li>
                 </ul>
                 <Link href="/dashboard" className="w-full">
@@ -432,9 +561,11 @@ export default function Home() {
       <footer className="bg-slate-900 w-full py-10 px-6 mt-auto">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex flex-col items-center md:items-start space-y-4">
-            <div className="text-2xl font-bold text-white font-headline">Aura Recall</div>
+            <Link href="/" className="opacity-90 hover:opacity-100 transition-opacity">
+               <img src="/examples/logo-reviva-sem-fundo.png" alt="Reviva Logo" className="h-12 w-auto object-contain brightness-0 invert" />
+            </Link>
             <p className="font-body text-sm text-slate-400 max-w-sm text-center md:text-left leading-relaxed">
-              © 2026 Aura Recall. Suas memórias, perfeitamente preservadas usando o poder da inteligência artificial avançada.
+              © 2026 Reviva. Suas memórias, perfeitamente preservadas usando o poder da inteligência artificial avançada.
             </p>
           </div>
           <div className="flex flex-col items-center md:items-end space-y-4">

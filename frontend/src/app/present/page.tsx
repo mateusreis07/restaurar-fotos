@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Footer from '../components/Footer';
 
 export default function PresentPage() {
   const [user, setUser] = useState<any>(null);
@@ -116,30 +117,26 @@ export default function PresentPage() {
     }
   };
 
-  if (isAuthChecking || !user) {
-    return <div className="min-h-screen bg-[#f9f9ff] flex items-center justify-center"></div>;
-  }
-
   const getFullShareLink = (id: string) => {
     return `${window.location.protocol}//${window.location.host}/memory/${id}`;
   };
 
+  if (isAuthChecking || !user) {
+    return <div className="min-h-screen bg-[#f9f9ff] flex items-center justify-center"></div>;
+  }
+
   return (
-    <div className="flex-1 flex flex-col min-w-0 bg-[#f9f9ff] pb-32">
-      <div className="p-6 md:p-8 lg:p-12 max-w-[1200px] w-full mx-auto space-y-16">
-        
-        {/* Header com Voltar */}
-        <section className="flex flex-col gap-4">
-          <Link href="/dashboard" className="flex items-center gap-2 text-[#575f6a] hover:text-[#483ede] font-bold text-[14px] w-fit transition-colors">
-            <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-            Voltar para Galeria
-          </Link>
+    <div className="bg-[#f9faff] flex flex-col min-h-screen relative font-sans">
+      <div className="p-6 md:p-8 lg:p-12 max-w-[1200px] w-full mx-auto space-y-16 flex-1">
+      
+      {/* Header com Voltar */}
+      <section className="flex flex-col gap-4">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="space-y-2">
               <h1 className="font-headline text-[32px] md:text-[40px] font-black tracking-tight text-[#151c27] leading-tight">Presentear Memória</h1>
               <p className="text-[#575f6a] text-[17px] font-medium max-w-xl">
                 {currentStep === 1 
-                  ? "Selecione os momentos que deseja compartilhar nesta experiência única." 
+                  ? "Selecione os momentos que deseja compartilhar nesta experiência única. Também tem fotos antigas que gostaria de ver com nitidez e cor? Experimente o Reviva agora." 
                   : "Agora, personalize a mensagem e os detalhes do destinatário."
                 }
               </p>
@@ -283,9 +280,9 @@ export default function PresentPage() {
 
             {/* Gerenciador de Links Existentes */}
             <section className="space-y-10 pt-16 border-t border-[#c7c4d7]/30">
-              <div className="space-y-2">
-                <h2 className="text-[28px] font-black text-[#151c27]">Histórico de Presentes</h2>
-                <p className="text-[#575f6a] text-[17px] font-medium">Gerencie e compartilhe novamente as mídias que você já presenteou.</p>
+              <div className="space-y-3 text-center md:text-left">
+                <h2 className="text-[28px] font-black text-[#151c27]">Seu Histórico de Presentes</h2>
+                <p className="font-body text-[15px] text-[#575f6a] font-medium leading-relaxed">Gerencie e compartilhe novamente as experiências que você já criou.</p>
               </div>
 
               {isLoadingMemories ? (
@@ -331,7 +328,7 @@ export default function PresentPage() {
                               try {
                                 await navigator.share({
                                   title: 'Memória Especial 🎁',
-                                  text: `Oi ${mem.recipientName}, preparei algo especial para você rever alguns momentos que ganharam vida nova na Aura Recall! ✨`,
+                                  text: `Oi ${mem.recipientName}, preparei algo especial para você rever alguns momentos que ganharam vida nova na Reviva! ✨`,
                                   url: link,
                                 });
                               } catch (err) {
@@ -436,6 +433,7 @@ export default function PresentPage() {
         )}
 
       </div>
+      <Footer />
     </div>
   );
 }
