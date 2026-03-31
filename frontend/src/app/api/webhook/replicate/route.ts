@@ -159,6 +159,60 @@ The result should be cinematic, natural, and emotionally subtle.
       }
     };
 
+    // Dispara a restauração facial e de detalhes (CodeFormer)
+    const triggerRestoration = async (imageUrl: string) => {
+      const { origin } = new URL(req.url);
+      const nextWebhookUrl = `${origin}/api/webhook/replicate?photoId=${photoId}&colorize=${colorize}&animate=${animate}&step=restored`; 
+
+      try {
+        await callWithRetry(async () => {
+          await replicate.predictions.create({
+            version: "7de2ea26c616d5bf2245ad0d5e24f0ff9a6204578a5c876db53142edd9d2cd56", // CodeFormer
+            input: {
+              image: imageUrl,
+              upscale: 2,
+              face_upsample: true,
+              background_enhance: true,
+              codeformer_fidelity: 0.7
+            },
+            webhook: nextWebhookUrl,
+            webhook_events_filter: ["completed"]
+          });
+        });
+        console.log(`[AI Chain] Step 2 (CodeFormer) disparado para PhotoId: ${photoId}`);
+        return NextResponse.json({ success: true, status: 'RESTORING' });
+      } catch (e: any) {
+        console.error(`[AI Chain] Erro CodeFormer: ${e.message}`);
+        // Se falhar a restauração de detalhes, tenta seguir com o que temos da limpeza
+        if (colorize) return await triggerColorization(imageUrl);
+        if (animate) return await triggerCaptioning(imageUrl);
+        return await finalizeImage(imageUrl);
+      }
+    };
+
+    // Dispara a colorização (DDColor)
+    const triggerColorization = async (imageUrl: string) => {
+      const { origin } = new URL(req.url);
+      const nextWebhookUrl = `${origin}/api/webhook/replicate?photoId=${photoId}&animate=${animate}&colorized=true`; 
+
+      try {
+        await callWithRetry(async () => {
+          await replicate.predictions.create({
+            version: "ca494ba129e44e45f661d6ece83c4c98a9a7c774309beca01429b58fce8aa695",
+            input: { image: imageUrl, model_size: "large" },
+            webhook: nextWebhookUrl,
+            webhook_events_filter: ["completed"]
+          });
+        });
+        console.log(`[AI Chain] DDColor disparado para PhotoId: ${photoId}`);
+        return NextResponse.json({ success: true, status: 'COLORIZING' });
+      } catch (e: any) {
+        console.error(`[AI Chain] Erro cor: ${e.message}`);
+        if (animate) return await triggerCaptioning(imageUrl);
+        return await finalizeImage(imageUrl);
+      }
+    };
+
     // Dispara a análise da imagem para gerar o prompt (AI Vision)
     const triggerCaptioning = async (imageUrl: string) => {
       const { origin } = new URL(req.url);
@@ -193,6 +247,12 @@ The result should be cinematic, natural, and emotionally subtle.
                           : payload.output;
 
       if (!outputUrl) return NextResponse.json({ error: 'Nenhum output' });
+
+      // CASO 0: Recebemos a limpeza inicial (Step: cleanup)
+      if (step === 'cleanup') {
+        console.log(`[AI Chain] Cleanup (Microsoft) concluído. Iniciando CodeFormer...`);
+        return await triggerRestoration(outputUrl);
+      }
 
       // CASO 1: Recebemos o Caption (Step: animating)
       if (step === 'animating') {
@@ -231,25 +291,7 @@ The result should be cinematic, natural, and emotionally subtle.
 
       // Fluxo de Colorização
       if (colorize && !url.searchParams.get('colorized')) {
-        console.log(`[AI Chain] Iniciando Colorização...`);
-        const { origin } = new URL(req.url);
-        const nextWebhookUrl = `${origin}/api/webhook/replicate?photoId=${photoId}&animate=${animate}&colorized=true`; 
-
-        try {
-          await callWithRetry(async () => {
-            await replicate.predictions.create({
-              version: "ca494ba129e44e45f661d6ece83c4c98a9a7c774309beca01429b58fce8aa695",
-              input: { image: inputUrl, model_size: "large" },
-              webhook: nextWebhookUrl,
-              webhook_events_filter: ["completed"]
-            });
-          });
-          return NextResponse.json({ success: true, status: 'COLORIZING' });
-        } catch (e: any) {
-          console.error(`[AI Chain] Erro cor: ${e.message}`);
-          if (animate) return await triggerCaptioning(inputUrl);
-          return await finalizeImage(inputUrl);
-        }
+        return await triggerColorization(inputUrl);
       }
 
       // Fluxo de Animação (começa com Captioning)

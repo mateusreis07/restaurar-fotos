@@ -60,22 +60,20 @@ export async function POST(req: Request) {
 
     try {
       const token = process.env.REPLICATE_API_TOKEN || '';
-      console.log(`[Replicate] Iniciando predição (Token: ${token.substring(0, 5)}...)`);
+      console.log(`[Replicate] Iniciando pipeline de restauração (Token: ${token.substring(0, 5)}...)`);
       console.log(`[Replicate] Webhook Target: ${webhookUrl}`);
-      // Usando CodeFormer (Muito superior: restaura rosto, fundo e faz upscale real)
+      // STEP 1: "Bringing Old Photos Back to Life" (Microsoft) - Remove arranhões, dobras e danos físicos
+      const cleanupWebhookUrl = `${webhookUrl}&step=cleanup`;
       const prediction = await replicate.predictions.create({
-        version: "7de2ea26c616d5bf2245ad0d5e24f0ff9a6204578a5c876db53142edd9d2cd56", // CodeFormer
+        version: "c75db81db6cbd809d93cc3b7e7a088a351a3349c9fa02b6d393e35e0d51ba799", // Microsoft - Bringing Old Photos Back to Life
         input: {
           image: uploadResult.secure_url,
-          upscale: 2,
-          face_upsample: true,
-          background_enhance: true,
-          codeformer_fidelity: 0.7
+          HR: true // High Resolution mode com detecção de arranhões
         },
-        webhook: webhookUrl,
+        webhook: cleanupWebhookUrl,
         webhook_events_filter: ["completed"]
       });
-      console.log(`[Replicate] Predição iniciada com sucesso! ID: ${prediction.id} | Status: ${prediction.status}`);
+      console.log(`[Replicate] Step 1 (Limpeza de danos) iniciada! ID: ${prediction.id} | Status: ${prediction.status}`);
     } catch (repError: any) {
       console.error("[Replicate] Falha ao disparar predição:", repError.message || JSON.stringify(repError));
       // Se a IA der pau, vamos marcar a foto como FAILED para não ficar processando infinito!
