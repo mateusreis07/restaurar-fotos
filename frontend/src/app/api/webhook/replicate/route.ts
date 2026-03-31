@@ -198,16 +198,17 @@ The result should be cinematic, natural, and emotionally subtle.
       try {
         await callWithRetry(async () => {
           await replicate.predictions.create({
-            version: "81242c7333d4e73003cf923f66c9ba4c1aa5613349c9fa02b6d393e35e0d51ba799", // DeOldify Artistic (Official)
+            version: "0da600fab0c45a66211339f1c16b71345d22f26ef5fea3dca1bb90bb5711e950", // DeOldify Artistic (Verified Active)
             input: { 
-              image: imageUrl, 
-              render_factor: 35 // Equilíbrio entre cor vibrante e nitidez
+              input_image: imageUrl, 
+              model_name: "Artistic",
+              render_factor: 35 
             },
             webhook: nextWebhookUrl,
             webhook_events_filter: ["completed"]
           });
         });
-        console.log(`[AI Chain] DeOldify Artistic disparado para PhotoId: ${photoId}`);
+        console.log(`[AI Chain] DeOldify Artistic (Ariel) disparado para PhotoId: ${photoId}`);
         return NextResponse.json({ success: true, status: 'COLORIZING' });
       } catch (e: any) {
         console.error(`[AI Chain] Erro cor: ${e.message}`);
