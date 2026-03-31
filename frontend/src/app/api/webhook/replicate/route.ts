@@ -190,7 +190,7 @@ The result should be cinematic, natural, and emotionally subtle.
       }
     };
 
-    // Dispara a colorização (DDColor)
+    // Dispara a colorização (DeOldify Artistic - Mais vibrante para fotos amareladas/sepia)
     const triggerColorization = async (imageUrl: string) => {
       const { origin } = new URL(req.url);
       const nextWebhookUrl = `${origin}/api/webhook/replicate?photoId=${photoId}&animate=${animate}&colorized=true`; 
@@ -198,13 +198,16 @@ The result should be cinematic, natural, and emotionally subtle.
       try {
         await callWithRetry(async () => {
           await replicate.predictions.create({
-            version: "ca494ba129e44e45f661d6ece83c4c98a9a7c774309beca01429b58fce8aa695",
-            input: { image: imageUrl, model_size: "large" },
+            version: "06354ef3967d4ccae6451e041da928230559e31d45de9bab8d61794b6139f408", // DeOldify Artistic
+            input: { 
+              image: imageUrl, 
+              render_factor: 35 // Equilíbrio entre cor vibrante e nitidez
+            },
             webhook: nextWebhookUrl,
             webhook_events_filter: ["completed"]
           });
         });
-        console.log(`[AI Chain] DDColor disparado para PhotoId: ${photoId}`);
+        console.log(`[AI Chain] DeOldify Artistic disparado para PhotoId: ${photoId}`);
         return NextResponse.json({ success: true, status: 'COLORIZING' });
       } catch (e: any) {
         console.error(`[AI Chain] Erro cor: ${e.message}`);
