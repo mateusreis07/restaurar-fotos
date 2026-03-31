@@ -8,6 +8,7 @@ import Footer from '../components/Footer';
 
 export default function UploadPage() {
   const { data: session, status } = useSession();
+  const [realCredits, setRealCredits] = useState<number | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -23,6 +24,15 @@ export default function UploadPage() {
     if (status === 'unauthenticated') {
       router.push('/login');
     }
+    
+    if (status === 'authenticated') {
+      // Sincroniza o saldo real imediatamente
+      fetch('/api/user/credits')
+        .then(res => res.json())
+        .then(data => {
+          if (typeof data.credits === 'number') setRealCredits(data.credits);
+        });
+    }
   }, [status, router]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,7 +47,11 @@ export default function UploadPage() {
   const handleUpload = async () => {
     if (!file || !user) return;
 
-    if (user.credits <= 0) {
+    // Verificação baseada no saldo REAL sincronizado
+    const currentCredits = realCredits ?? user.credits ?? 0;
+    const creditsToDeduct = 1 + (animate ? 4 : 0);
+
+    if (currentCredits < creditsToDeduct) {
       setShowNoCreditsModal(true);
       return;
     }
