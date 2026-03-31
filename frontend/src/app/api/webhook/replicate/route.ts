@@ -198,7 +198,7 @@ The result should be cinematic, natural, and emotionally subtle.
       try {
         await callWithRetry(async () => {
           await replicate.predictions.create({
-            version: "06354ef3967d4ccae6451e041da928230559e31d45de9bab8d61794b6139f408", // DeOldify Artistic
+            version: "81242c7333d4e73003cf923f66c9ba4c1aa5613349c9fa02b6d393e35e0d51ba799", // DeOldify Artistic (Official)
             input: { 
               image: imageUrl, 
               render_factor: 35 // Equilíbrio entre cor vibrante e nitidez
