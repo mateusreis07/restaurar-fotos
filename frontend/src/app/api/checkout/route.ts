@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { auth } from '@/auth';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_...', {
   apiVersion: '2023-10-16' as any
@@ -13,10 +14,17 @@ const PLANS = {
 
 export async function POST(req: Request) {
   try {
-    const { userId, planId } = await req.json();
+    const session_auth = await auth();
+    const userId = (session_auth?.user as any)?.id;
+
+    if (!userId) {
+      return NextResponse.json({ error: 'Nao autorizado' }, { status: 401 });
+    }
+
+    const { planId } = await req.json();
     
-    if (!userId || !planId || !PLANS[planId as keyof typeof PLANS]) {
-      return NextResponse.json({ error: 'Invalid parameters' }, { status: 400 });
+    if (!planId || !PLANS[planId as keyof typeof PLANS]) {
+      return NextResponse.json({ error: 'Parâmetros inválidos.' }, { status: 400 });
     }
 
     const plan = PLANS[planId as keyof typeof PLANS];

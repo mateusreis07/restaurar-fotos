@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { signIn } from 'next-auth/react';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -13,30 +14,32 @@ export default function Login() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email || !password) {
+      setError('Por favor, preencha todos os campos.');
+      return;
+    }
+    
     setLoading(true);
     setError('');
-    console.log('Tentando login para:', email);
+
     try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'ngrok-skip-browser-warning': 'true'
-        },
-        body: JSON.stringify({ email, password })
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
       });
-      const data = await res.json();
-      if (res.ok && data.user) {
-        localStorage.setItem('aura_email', email);
-        localStorage.setItem('aura_user_id', data.user.id);
-        router.push('/dashboard');
+
+      if (result?.error) {
+        setError('E-mail ou senha incorretos.');
+        setLoading(false);
       } else {
-        setError(data.error || 'Erro ao entrar.');
+        // O NextAuth cuida do cookie de sessão agora.
+        router.push('/dashboard');
+        router.refresh();
       }
     } catch (err) {
       console.error(err);
-      setError('Erro de conexão ao servidor.');
-    } finally {
+      setError('Erro ao tentar entrar.');
       setLoading(false);
     }
   };

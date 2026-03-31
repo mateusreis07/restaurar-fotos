@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { v2 as cloudinary } from 'cloudinary';
 import Replicate from 'replicate';
+import { auth } from '@/auth'; // Importado para segurança
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -11,14 +12,19 @@ cloudinary.config({
 
 export async function POST(req: Request) {
   try {
+    const session = await auth();
+    const userId = (session?.user as any)?.id;
+
+    if (!userId) {
+      return NextResponse.json({ error: 'Sessão expirada. Faça login novamente.' }, { status: 401 });
+    }
+
     const formData = await req.formData();
     const file = formData.get('file') as Blob;
-    const userId = formData.get('userId') as string;
     const colorize = formData.get('colorize') === 'true';
     const animate = formData.get('animate') === 'true';
 
-    if (!file) return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
-    if (!userId) return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
+    if (!file) return NextResponse.json({ error: 'Nenhum arquivo enviado.' }, { status: 400 });
 
     const creditsToDeduct = 1 + (animate ? 4 : 0);
     const user = await prisma.user.findUnique({ where: { id: userId } });
@@ -54,9 +60,12 @@ export async function POST(req: Request) {
       auth: process.env.REPLICATE_API_TOKEN,
     });
 
-    // Detectar a URL base de forma infalível baseada na própria requisição atual
-    const { origin } = new URL(req.url);
-    const webhookUrl = `${origin}/api/webhook/replicate?photoId=${photo.id}${colorize ? '&colorize=true' : ''}${animate ? '&animate=true' : ''}`;
+    // Detect environment base URL (Prioritize FRONTEND_URL or request origin)
+    const baseUrl = process.env.FRONTEND_URL || (req.headers.get('origin')) || 'http://localhost:3000';
+    
+    // Webhook MUST be HTTPS for Replicate to accept it
+    const secureBaseUrl = baseUrl.replace('http://', 'https://');
+    const webhookUrl = `${secureBaseUrl}/api/webhook/replicate?photoId=${photo.id}${colorize ? '&colorize=true' : ''}${animate ? '&animate=true' : ''}`;
 
     try {
       const token = process.env.REPLICATE_API_TOKEN || '';

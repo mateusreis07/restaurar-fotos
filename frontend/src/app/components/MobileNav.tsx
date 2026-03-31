@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 
 export default function MobileNav() {
   const pathname = usePathname();
@@ -37,9 +38,7 @@ export default function MobileNav() {
         <div className="h-6 w-px bg-[#dce2f3]/60 shrink-0" />
         <button 
           onClick={() => { 
-            localStorage.removeItem('aura_email'); 
-            localStorage.removeItem('aura_user_id');
-            router.push('/login'); 
+            signOut({ callbackUrl: '/login' }); 
           }} 
           className="flex flex-col items-center gap-1.5 text-[#a0abbb] hover:text-[#ba1a1a] w-full transition-colors"
         >

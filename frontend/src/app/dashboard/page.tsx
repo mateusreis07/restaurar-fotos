@@ -3,15 +3,16 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 export default function Dashboard() {
-  const [user, setUser] = useState<any>(null);
+  const { data: session, status, update } = useSession();
   const [photos, setPhotos] = useState<any[]>([]);
-  const [isAuthChecking, setIsAuthChecking] = useState(true);
   const router = useRouter();
 
   // Purchase success modal
   const [showPurchaseSuccess, setShowPurchaseSuccess] = useState(false);
+  const [purchaseCredits, setPurchaseCredits] = useState<number>(0);
 
   // Slider State
   const [comparingPhoto, setComparingPhoto] = useState<any>(null);
@@ -22,48 +23,34 @@ export default function Dashboard() {
   // Modal for animation confirmation
   const [animationPhotoId, setAnimationPhotoId] = useState<string | null>(null);
 
-  // Selection removed (moved to /present)
-
   useEffect(() => {
-    const userId = localStorage.getItem('aura_user_id');
-    const savedEmail = localStorage.getItem('aura_email');
-
-    if (!userId || !savedEmail) {
-      router.push('/login');
-      return;
+    if (status === 'authenticated' && session?.user?.id) {
+      loadPhotos((session.user as any).id);
     }
+  }, [status, session]);
 
-    setIsAuthChecking(true);
-    fetch('/api/auth/me', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId })
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.user) {
-          setUser(data.user);
-          loadPhotos(data.user.id);
-        } else {
-          localStorage.removeItem('aura_email');
-          localStorage.removeItem('aura_user_id');
-          router.push('/login');
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        router.push('/login');
-      })
-      .finally(() => setIsAuthChecking(false));
-  }, [router]);
+  // Loading state while auth is being checked
+  const isAuthChecking = status === 'loading';
+  const user = session?.user as any;
 
   // Detect successful purchase from Stripe redirect (runs once on mount)
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get('success') === 'true') {
-      setShowPurchaseSuccess(true);
-      // Clean the URL using Next.js router so internal state is updated
-      router.replace('/dashboard', { scroll: false });
+      // Forçamos a busca do saldo REAL no banco antes de mostrar o modal
+      fetch('/api/user/credits')
+        .then(res => res.json())
+        .then(data => {
+          if (typeof data.credits === 'number') {
+            setPurchaseCredits(data.credits);
+            setShowPurchaseSuccess(true);
+            // Atualiza a sessão do NextAuth para refletir os novos créditos
+            update();
+            // Clean the URL using Next.js router so internal state is updated
+            router.replace('/dashboard', { scroll: false });
+          }
+        })
+        .catch(err => console.error('Error syncing credits on success', err));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -502,52 +489,50 @@ export default function Dashboard() {
       {/* Modal de Confirmação de Compra */}
       {showPurchaseSuccess && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 bg-[#151c27]/60 backdrop-blur-md animate-in fade-in duration-300">
-          <div className="bg-white rounded-[2.5rem] w-full max-w-[460px] overflow-hidden shadow-2xl border border-[#c7c4d7]/40 p-10 text-center space-y-8 animate-in zoom-in-95 duration-500">
-            
-            {/* Ícone de Sucesso */}
-            <div className="relative mx-auto w-24 h-24">
-              <div className="absolute inset-0 bg-[#e2f9ec] rounded-full animate-ping opacity-30"></div>
-              <div className="relative w-24 h-24 bg-[#e2f9ec] rounded-full flex items-center justify-center shadow-lg border-4 border-white">
-                <span className="material-symbols-outlined text-[48px] text-[#0f6b40]" style={{fontVariationSettings: "'FILL' 1"}}>check_circle</span>
+          <div className="bg-white w-full max-w-[540px] rounded-[3.5rem] shadow-[0_30px_80px_rgba(0,0,0,0.25)] relative overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-8 duration-500 max-h-[90vh] flex flex-col">
+            <div className="overflow-y-auto p-8 md:p-10 space-y-6 custom-scrollbar">
+              
+              {/* Ícone de Sucesso Animado */}
+              <div className="flex justify-center -mt-2">
+                <div className="w-20 h-20 bg-[#f0fdf4] rounded-full flex items-center justify-center border-4 border-white shadow-xl animate-bounce">
+                   <span className="material-symbols-outlined text-[44px] text-[#16a34a]" style={{fontVariationSettings: "'FILL' 1"}}>check_circle</span>
+                </div>
+              </div>
+
+              <div className="text-center space-y-3">
+                <h2 className="font-headline text-[28px] md:text-[32px] font-black text-[#151c27] tracking-tight leading-none">Compra Confirmada!</h2>
+                <p className="text-[#575f6a] text-[14px] leading-relaxed font-medium">
+                  Seus créditos foram adicionados com sucesso à sua conta. Agora você pode restaurar e dar vida às suas memórias mais preciosas.
+                </p>
+                
+                <div className="bg-[#f0f3ff] p-5 rounded-[2rem] border border-[#e2e8f8] space-y-2 shadow-inner">
+                  <div className="flex flex-col items-center">
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#483ede] mb-1">Saldo Atualizado</p>
+                    <div className="flex items-center gap-2">
+                       <span className="material-symbols-outlined text-[20px] text-[#483ede]" style={{ fontVariationSettings: "'FILL' 1" }}>toll</span>
+                       <span className="text-[48px] font-headline font-black tracking-tighter text-[#151c27]">{purchaseCredits}</span>
+                       <span className="text-[14px] font-bold text-[#575f6a] mt-2">créditos</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-2 pt-1">
+                <button 
+                  onClick={() => setShowPurchaseSuccess(false)}
+                  className="w-full bg-[#483ede] text-white py-4 rounded-[18px] font-black text-[16px] hover:bg-[#3b32c6] shadow-xl shadow-[#483ede]/30 active:scale-95 transition-all flex items-center justify-center gap-2 group"
+                >
+                  <span className="material-symbols-outlined text-[20px]">auto_fix_high</span>
+                  Restaurar uma Foto Agora
+                </button>
+                <button 
+                  onClick={() => setShowPurchaseSuccess(false)}
+                  className="w-full py-3 text-[#575f6a] font-bold text-[14px] hover:text-[#151c27] transition-all"
+                >
+                  Continuar para a Galeria
+                </button>
               </div>
             </div>
-
-            {/* Mensagem */}
-            <div className="space-y-3">
-              <h2 className="font-headline text-[28px] font-black text-[#151c27] tracking-tight leading-tight">Compra Confirmada!</h2>
-              <p className="text-[#575f6a] text-[16px] leading-relaxed font-medium">
-                Seus créditos foram adicionados com sucesso à sua conta. Agora você pode restaurar e dar vida às suas memórias mais preciosas.
-              </p>
-            </div>
-
-            {/* Saldo Atualizado */}
-            <div className="bg-[#f0f3ff] p-6 rounded-[2rem] border border-[#dce2f3] space-y-2">
-              <p className="text-[12px] font-black uppercase tracking-[0.2em] text-[#483ede]">Saldo Atualizado</p>
-              <div className="flex items-center justify-center gap-2">
-                <span className="material-symbols-outlined text-[32px] text-[#483ede]" style={{fontVariationSettings: "'FILL' 1"}}>toll</span>
-                <span className="text-[44px] font-black text-[#151c27] tracking-tighter">{user?.credits || 0}</span>
-                <span className="text-[18px] font-bold text-[#575f6a] self-end pb-2">créditos</span>
-              </div>
-            </div>
-
-            {/* Ações */}
-            <div className="space-y-3 pt-2">
-              <Link 
-                href="/upload"
-                onClick={() => setShowPurchaseSuccess(false)}
-                className="w-full bg-[#483ede] text-white py-5 rounded-[18px] font-black text-[17px] hover:bg-[#3b32c6] shadow-xl shadow-[#483ede]/30 active:scale-95 transition-all flex items-center justify-center gap-2"
-              >
-                <span className="material-symbols-outlined text-[22px]">auto_fix_high</span>
-                Restaurar uma Foto Agora
-              </Link>
-              <button
-                onClick={() => setShowPurchaseSuccess(false)}
-                className="w-full py-4 text-[#575f6a] font-extrabold text-[15px] hover:text-[#151c27] transition-colors"
-              >
-                Continuar para a Galeria
-              </button>
-            </div>
-
           </div>
         </div>
       )}

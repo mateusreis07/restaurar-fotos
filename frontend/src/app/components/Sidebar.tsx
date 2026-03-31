@@ -3,33 +3,35 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { useSession, signOut } from 'next-auth/react';
 
 const hideOnPaths = ['/login', '/signup', '/', '/terms', '/privacy', '/security', '/quality'];
 
 export default function Sidebar() {
-  const [user, setUser] = useState<any>(null);
+  const { data: session } = useSession();
+  const [credits, setCredits] = useState<number>(0);
   const pathname = usePathname();
   const router = useRouter();
 
   const isHidden = hideOnPaths.includes(pathname);
 
   useEffect(() => {
-    if (isHidden) return;
+    if (isHidden || !session?.user) return;
     
-    const userId = localStorage.getItem('aura_user_id');
-    if (userId) {
-      fetch('/api/auth/me', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.user) setUser(data.user);
-      })
-      .catch(err => console.error('Sidebar fetch error', err));
-    }
-  }, [pathname, isHidden]);
+    const refreshCredits = async () => {
+      try {
+        const res = await fetch('/api/user/credits');
+        const data = await res.json();
+        if (typeof data.credits === 'number') {
+           setCredits(data.credits);
+        }
+      } catch (err) {
+        console.error('Sidebar fetch error', err);
+      }
+    };
+
+    refreshCredits();
+  }, [pathname, isHidden, session]);
 
   if (isHidden) return null;
 
@@ -69,7 +71,7 @@ export default function Sidebar() {
         <div className="mt-auto mx-2 px-5 py-6 rounded-[1.25rem] bg-[#f0f3ff] mb-4 border border-[#e2e8f8]">
             <p className="text-[10.5px] uppercase tracking-widest text-[#575f6a] font-extrabold mb-1.5">Créditos restantes</p>
             <div className="flex items-baseline gap-1.5 mb-2">
-                <span className="text-[34px] font-headline font-black tracking-tighter text-[#483ede]">{user?.credits ?? 0}</span>
+                <span className="text-[34px] font-headline font-black tracking-tighter text-[#483ede]">{credits ?? 0}</span>
             </div>
             <Link href="/pricing" className="w-full mt-3 flex justify-center py-3 bg-[#483ede] text-white rounded-[12px] font-bold text-[14px] hover:bg-[#3b32c6] shadow-md shadow-[#483ede]/20 active:scale-95 transition-all text-center">
                 Comprar Créditos
@@ -79,9 +81,7 @@ export default function Sidebar() {
         <div className="pt-4 border-t border-[#c7c4d7]/30 mx-2 space-y-1 mb-2">
             <button 
               onClick={() => { 
-                localStorage.removeItem('aura_email'); 
-                localStorage.removeItem('aura_user_id');
-                router.push('/login'); 
+                signOut({ callbackUrl: '/login' }); 
               }} 
               className="w-full flex items-center gap-3.5 px-4 py-2.5 text-[#575f6a] hover:text-[#ba1a1a] hover:bg-[#ffdad6]/50 rounded-[12px] font-semibold transition-colors"
             >

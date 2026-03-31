@@ -3,10 +3,11 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import Footer from '../components/Footer';
 
 export default function UploadPage() {
-  const [user, setUser] = useState<any>(null);
+  const { data: session, status } = useSession();
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -15,30 +16,14 @@ export default function UploadPage() {
   const [showNoCreditsModal, setShowNoCreditsModal] = useState(false);
   const router = useRouter();
 
+  const isAuthChecking = status === 'loading';
+  const user = session?.user as any;
+
   useEffect(() => {
-    const userId = localStorage.getItem('aura_user_id');
-    const savedEmail = localStorage.getItem('aura_email');
-    
-    if (!userId || !savedEmail) {
+    if (status === 'unauthenticated') {
       router.push('/login');
-      return;
     }
-    
-    fetch('/api/auth/me', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.user) {
-        setUser(data.user);
-      } else {
-        router.push('/login');
-      }
-    })
-    .catch(() => router.push('/login'));
-  }, [router]);
+  }, [status, router]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
@@ -60,7 +45,6 @@ export default function UploadPage() {
     setUploading(true);
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('userId', user.id);
     formData.append('colorize', colorize.toString());
     formData.append('animate', animate.toString());
 

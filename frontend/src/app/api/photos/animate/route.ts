@@ -1,13 +1,21 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import Replicate from 'replicate';
+import { auth } from '@/auth';
 
 export async function POST(req: Request) {
   try {
-    const { photoId, userId } = await req.json();
+    const session = await auth();
+    const userId = (session?.user as any)?.id;
 
-    if (!photoId || !userId) {
-      return NextResponse.json({ error: 'Missing photoId or userId' }, { status: 400 });
+    if (!userId) {
+      return NextResponse.json({ error: 'Sessão expirada.' }, { status: 401 });
+    }
+
+    const { photoId } = await req.json();
+
+    if (!photoId) {
+      return NextResponse.json({ error: 'Missing photoId' }, { status: 400 });
     }
 
     const user = await prisma.user.findUnique({ where: { id: userId } });
@@ -15,6 +23,11 @@ export async function POST(req: Request) {
 
     if (!user || !photo) {
       return NextResponse.json({ error: 'User or Photo not found' }, { status: 404 });
+    }
+
+    // Security: Check if photo belongs to user
+    if (photo.userId !== userId) {
+      return NextResponse.json({ error: 'Acesso negado.' }, { status: 403 });
     }
 
     // Credits: 4 for animation

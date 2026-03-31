@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { signIn } from 'next-auth/react';
 
 export default function Signup() {
   const [name, setName] = useState('');
@@ -14,6 +15,11 @@ export default function Signup() {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!name || !email || !password) {
+      setError('Todos os campos são obrigatórios.');
+      return;
+    }
+    
     setLoading(true);
     setError('');
     
@@ -27,9 +33,19 @@ export default function Signup() {
       const data = await res.json();
       
       if (res.ok && data.user) {
-        localStorage.setItem('aura_email', email);
-        localStorage.setItem('aura_user_id', data.user.id);
-        router.push('/dashboard');
+        // Login automático após cadastro
+        const loginResult = await signIn('credentials', {
+          email,
+          password,
+          redirect: false,
+        });
+
+        if (loginResult?.error) {
+          router.push('/login');
+        } else {
+          router.push('/dashboard');
+          router.refresh();
+        }
       } else {
         setError(data.error || 'Erro ao criar conta.');
       }

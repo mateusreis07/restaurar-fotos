@@ -3,13 +3,13 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import Footer from '../components/Footer';
 
 export default function PresentPage() {
-  const [user, setUser] = useState<any>(null);
+  const { data: session, status } = useSession();
   const [photos, setPhotos] = useState<any[]>([]);
   const [selectedPhotos, setSelectedPhotos] = useState<string[]>([]);
-  const [isAuthChecking, setIsAuthChecking] = useState(true);
   const [isSharing, setIsSharing] = useState(false);
   const [shareLink, setShareLink] = useState<string | null>(null);
   const [memories, setMemories] = useState<any[]>([]);
@@ -19,34 +19,15 @@ export default function PresentPage() {
   const [message, setMessage] = useState('');
   const router = useRouter();
 
+  const isAuthChecking = status === 'loading';
+  const user = session?.user as any;
+
   useEffect(() => {
-    const userId = localStorage.getItem('aura_user_id');
-    const savedEmail = localStorage.getItem('aura_email');
-
-    if (!userId || !savedEmail) {
-      router.push('/login');
-      return;
+    if (status === 'authenticated' && user?.id) {
+       loadPhotos(user.id);
+       loadMemories();
     }
-
-    setIsAuthChecking(true);
-    fetch('/api/auth/me', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId })
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.user) {
-          setUser(data.user);
-          loadPhotos(data.user.id);
-          loadMemories(data.user.id);
-        } else {
-          router.push('/login');
-        }
-      })
-      .catch(() => router.push('/login'))
-      .finally(() => setIsAuthChecking(false));
-  }, [router]);
+  }, [status, user?.id]);
 
   const loadPhotos = async (userId: string) => {
     try {
@@ -60,10 +41,11 @@ export default function PresentPage() {
     }
   };
 
-  const loadMemories = async (userId: string) => {
+  const loadMemories = async () => {
     setIsLoadingMemories(true);
     try {
-      const res = await fetch(`/api/share-memory?userId=${userId}`);
+      // Agora a rota descobre o ID pela sessão no servidor
+      const res = await fetch(`/api/share-memory`);
       const data = await res.json();
       if (data.memories) {
         setMemories(data.memories);
@@ -92,7 +74,6 @@ export default function PresentPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          userId: user.id,
           recipientName,
           message,
           fileIds: selectedPhotos
@@ -105,7 +86,7 @@ export default function PresentPage() {
           ? data.url 
           : `${window.location.protocol}//${window.location.host}${data.url}`;
         setShareLink(fullUrl);
-        loadMemories(user.id); // Refresh history
+        loadMemories(); // Refresh history
       } else {
         alert(data.error || 'Erro ao gerar link.');
       }
