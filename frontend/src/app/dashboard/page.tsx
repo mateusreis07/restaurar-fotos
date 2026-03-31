@@ -110,6 +110,24 @@ export default function Dashboard() {
     }
   };
 
+  const handleDownload = async (url: string, filename: string) => {
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      console.error('Download error:', err);
+      window.open(url, '_blank');
+    }
+  };
+
   useEffect(() => {
     // Polling contínuo apenas se houver fotos processando
     const hasProcessing = photos.some(p => p.status === 'PROCESSING');
@@ -298,10 +316,17 @@ export default function Dashboard() {
                         <span className="material-symbols-outlined text-[18px]">contrast</span>
                         Comparar
                       </button>
-                      <a href={photo.animatedUrl || photo.restoredUrl || photo.originalUrl} target="_blank" download className="flex items-center justify-center gap-2 bg-[#483ede] text-white px-4 py-3 rounded-[12px] font-bold text-[14px] hover:bg-[#3b32c6] transition-colors shadow-md shadow-[#483ede]/20">
+                      <button
+                        onClick={() => {
+                          const url = photo.animatedUrl || photo.restoredUrl || photo.originalUrl;
+                          const extension = photo.animatedUrl ? 'mp4' : 'png';
+                          handleDownload(url, `reviva-${photo.id.substring(0, 8)}.${extension}`);
+                        }}
+                        className="flex items-center justify-center gap-2 bg-[#483ede] text-white px-4 py-3 rounded-[12px] font-bold text-[14px] hover:bg-[#3b32c6] transition-colors shadow-md shadow-[#483ede]/20 cursor-pointer"
+                      >
                         <span className="material-symbols-outlined text-[18px]">download</span>
                         Baixar
-                      </a>
+                      </button>
                     </div>
                   </div>
                 </div>
