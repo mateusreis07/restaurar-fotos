@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Footer from '../components/Footer';
 
-export default function PricingPage() {
+function PricingContent() {
   const [user, setUser] = useState<any>(null);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [showCanceled, setShowCanceled] = useState(false);
@@ -234,5 +234,13 @@ export default function PricingPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function PricingPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#f9f9ff] flex items-center justify-center"></div>}>
+      <PricingContent />
+    </Suspense>
   );
 }

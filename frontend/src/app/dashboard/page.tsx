@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function Dashboard() {
+function DashboardContent() {
   const [user, setUser] = useState<any>(null);
   const [photos, setPhotos] = useState<any[]>([]);
   const [isAuthChecking, setIsAuthChecking] = useState(true);
@@ -525,5 +525,13 @@ export default function Dashboard() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function Dashboard() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#f9f9ff] flex items-center justify-center"></div>}>
+      <DashboardContent />
+    </Suspense>
   );
 }
