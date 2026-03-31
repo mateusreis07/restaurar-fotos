@@ -14,8 +14,11 @@ function PricingContent() {
 
   // Detect canceled purchase from Stripe redirect
   useEffect(() => {
-    if (searchParams.get('canceled') === 'true') {
+    if (searchParams.get('canceled') === 'true' && !sessionStorage.getItem('canceled_modal_shown')) {
+      sessionStorage.setItem('canceled_modal_shown', 'true');
       setShowCanceled(true);
+    }
+    if (searchParams.get('canceled')) {
       window.history.replaceState({}, '', '/pricing');
     }
   }, [searchParams]);
@@ -216,7 +219,7 @@ function PricingContent() {
             {/* Ações */}
             <div className="space-y-3 pt-2">
               <button
-                onClick={() => setShowCanceled(false)}
+                onClick={() => { sessionStorage.removeItem('canceled_modal_shown'); setShowCanceled(false); }}
                 className="w-full bg-[#483ede] text-white py-5 rounded-[18px] font-black text-[17px] hover:bg-[#3b32c6] shadow-xl shadow-[#483ede]/30 active:scale-95 transition-all flex items-center justify-center gap-2"
               >
                 <span className="material-symbols-outlined text-[22px]">shopping_cart</span>
@@ -224,6 +227,7 @@ function PricingContent() {
               </button>
               <Link
                 href="/dashboard"
+                onClick={() => { sessionStorage.removeItem('canceled_modal_shown'); setShowCanceled(false); }}
                 className="w-full py-4 text-[#575f6a] font-extrabold text-[15px] hover:text-[#151c27] transition-colors flex items-center justify-center"
               >
                 Voltar para a Galeria

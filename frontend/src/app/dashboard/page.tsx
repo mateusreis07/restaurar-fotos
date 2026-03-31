@@ -60,9 +60,12 @@ function DashboardContent() {
 
   // Detect successful purchase from Stripe redirect
   useEffect(() => {
-    if (searchParams.get('success') === 'true') {
+    if (searchParams.get('success') === 'true' && !sessionStorage.getItem('purchase_modal_shown')) {
+      sessionStorage.setItem('purchase_modal_shown', 'true');
       setShowPurchaseSuccess(true);
-      // Clean the URL without reloading
+    }
+    // Always clean the URL
+    if (searchParams.get('success')) {
       window.history.replaceState({}, '', '/dashboard');
     }
   }, [searchParams]);
@@ -508,13 +511,14 @@ function DashboardContent() {
             <div className="space-y-3 pt-2">
               <Link 
                 href="/upload"
+                onClick={() => { sessionStorage.removeItem('purchase_modal_shown'); setShowPurchaseSuccess(false); }}
                 className="w-full bg-[#483ede] text-white py-5 rounded-[18px] font-black text-[17px] hover:bg-[#3b32c6] shadow-xl shadow-[#483ede]/30 active:scale-95 transition-all flex items-center justify-center gap-2"
               >
                 <span className="material-symbols-outlined text-[22px]">auto_fix_high</span>
                 Restaurar uma Foto Agora
               </Link>
               <button
-                onClick={() => setShowPurchaseSuccess(false)}
+                onClick={() => { sessionStorage.removeItem('purchase_modal_shown'); setShowPurchaseSuccess(false); }}
                 className="w-full py-4 text-[#575f6a] font-extrabold text-[15px] hover:text-[#151c27] transition-colors"
               >
                 Continuar para a Galeria
