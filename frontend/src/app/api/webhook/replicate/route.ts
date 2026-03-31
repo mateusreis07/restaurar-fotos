@@ -173,7 +173,7 @@ The result should be cinematic, natural, and emotionally subtle.
               upscale: 2,
               face_upsample: true,
               background_enhance: true,
-              codeformer_fidelity: 0.5
+              codeformer_fidelity: 0.8
             },
             webhook: nextWebhookUrl,
             webhook_events_filter: ["completed"]
