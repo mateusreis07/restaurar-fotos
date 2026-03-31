@@ -22,7 +22,6 @@ export async function POST(req: Request) {
     const plan = PLANS[planId as keyof typeof PLANS];
 
     // Read the HOST from the incoming request to compute the absolute return URL
-    // Useful for Vercel without setting an explicit env var during dev/testing
     const host = req.headers.get('origin') || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
     const session = await stripe.checkout.sessions.create({

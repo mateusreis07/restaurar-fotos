@@ -47,7 +47,7 @@ export default function PricingPage() {
     if (!user) return;
     setLoadingPlan(planId);
     try {
-      const res = await fetch('/api/webhook/checkout', {
+      const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user.id, planId })
