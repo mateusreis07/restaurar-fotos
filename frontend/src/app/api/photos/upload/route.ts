@@ -68,7 +68,8 @@ export async function POST(req: Request) {
         version: "c75db81db6cbd809d93cc3b7e7a088a351a3349c9fa02b6d393e35e0d51ba799", // Microsoft - Bringing Old Photos Back to Life
         input: {
           image: uploadResult.secure_url,
-          HR: true // High Resolution mode com detecção de arranhões
+          HR: true, // High Resolution mode
+          with_scratch: true // Habilita a remoção profunda de arranhões e danos físicos
         },
         webhook: cleanupWebhookUrl,
         webhook_events_filter: ["completed"]
