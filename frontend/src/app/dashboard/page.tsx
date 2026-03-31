@@ -24,8 +24,8 @@ export default function Dashboard() {
   const [animationPhotoId, setAnimationPhotoId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (status === 'authenticated' && session?.user?.id) {
-      loadPhotos((session.user as any).id);
+    if (status === 'authenticated') {
+      loadPhotos();
     }
   }, [status, session]);
 
@@ -57,13 +57,10 @@ export default function Dashboard() {
 
   const [isProcessingAnimation, setIsProcessingAnimation] = useState<string | null>(null);
 
-  const loadPhotos = async (userId: string) => {
+  const loadPhotos = async () => {
     try {
-      console.log('Fetching photos for user:', userId);
-      const res = await fetch(`/api/photos/history/${userId}`);
-      console.log('History API status:', res.status);
+      const res = await fetch('/api/photos/history');
       const data = await res.json();
-      console.log('Photos count:', data.photos?.length);
       if (data.photos) {
         setPhotos(data.photos);
       }
@@ -80,12 +77,12 @@ export default function Dashboard() {
       const res = await fetch('/api/photos/animate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ photoId, userId: user.id })
+        body: JSON.stringify({ photoId })
       });
 
       if (res.ok) {
         // Refresh photos after a small delay to show PROCESSING
-        setTimeout(() => loadPhotos(user.id), 800);
+        setTimeout(() => loadPhotos(), 800);
       } else {
         const error = await res.json();
         alert(error.error || 'Falha ao iniciar animação.');
@@ -120,7 +117,7 @@ export default function Dashboard() {
     const hasProcessing = photos.some(p => p.status === 'PROCESSING');
     if (hasProcessing && user) {
       const interval = setInterval(() => {
-        loadPhotos(user.id);
+        loadPhotos();
       }, 4000);
       return () => clearInterval(interval);
     }
@@ -219,7 +216,7 @@ export default function Dashboard() {
                   </div>
                   <div className="p-6 pb-7 space-y-1.5">
                     <h3 className="font-headline font-bold text-[20px] text-[#151c27] truncate">Foto {photos.length - idx}</h3>
-                    <p className="text-[#575f6a] text-[14px] font-semibold tracking-wide">Tempo estimado: ~2 minutos</p>
+                    <p className="text-[#575f6a] text-[14px] font-semibold tracking-wide">Processando sua foto com IA...</p>
                   </div>
                 </div>
               );

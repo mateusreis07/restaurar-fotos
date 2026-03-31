@@ -23,15 +23,15 @@ export default function PresentPage() {
   const user = session?.user as any;
 
   useEffect(() => {
-    if (status === 'authenticated' && user?.id) {
-       loadPhotos(user.id);
+    if (status === 'authenticated') {
+       loadPhotos();
        loadMemories();
     }
-  }, [status, user?.id]);
+  }, [status]);
 
-  const loadPhotos = async (userId: string) => {
+  const loadPhotos = async () => {
     try {
-      const res = await fetch(`/api/photos/history/${userId}`);
+      const res = await fetch('/api/photos/history');
       const data = await res.json();
       if (data.photos) {
         setPhotos(data.photos.filter((p: any) => p.status === 'COMPLETED'));

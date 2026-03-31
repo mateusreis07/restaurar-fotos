@@ -3,45 +3,37 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import Footer from '../components/Footer';
 
 export default function PricingPage() {
-  const [user, setUser] = useState<any>(null);
+  const { data: session, status } = useSession();
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [showCanceled, setShowCanceled] = useState(false);
   const router = useRouter();
 
+  const user = session?.user as any;
+  const isAuthChecking = status === 'loading';
+
   // Detect canceled purchase from Stripe redirect (runs once on mount)
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.get('canceled') === 'true') {
+    const hasCanceledParam = params.get('canceled') === 'true';
+    const alreadyShown = sessionStorage.getItem('purchase_canceled_modal_shown');
+
+    if (hasCanceledParam && !alreadyShown) {
       setShowCanceled(true);
+      sessionStorage.setItem('purchase_canceled_modal_shown', 'true');
+      // Clean the URL immediately
       router.replace('/pricing', { scroll: false });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [router]);
 
   useEffect(() => {
-    const userId = localStorage.getItem('aura_user_id');
-    const savedEmail = localStorage.getItem('aura_email');
-    
-    if (!userId || !savedEmail) {
+    if (status === 'unauthenticated') {
       router.push('/login');
-      return;
     }
-    
-    fetch('/api/auth/me', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.user) setUser(data.user);
-      else router.push('/login');
-    })
-    .catch(() => router.push('/login'));
-  }, [router]);
+  }, [status, router]);
 
   const handleBuyCredits = async (planId: string) => {
     if (!user) return;
@@ -50,7 +42,7 @@ export default function PricingPage() {
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.id, planId })
+        body: JSON.stringify({ planId }) // userId agora é pego na API via Sessão
       });
       const data = await res.json();
       if (data.url) {
