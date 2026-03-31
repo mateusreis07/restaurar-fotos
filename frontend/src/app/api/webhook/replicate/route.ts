@@ -159,7 +159,7 @@ The result should be cinematic, natural, and emotionally subtle.
       }
     };
 
-    // Dispara a restauração facial e de detalhes (CodeFormer)
+    // Dispara a restauração facial e de detalhes (GFPGAN - Mais realista que CodeFormer)
     const triggerRestoration = async (imageUrl: string) => {
       const { origin } = new URL(req.url);
       const nextWebhookUrl = `${origin}/api/webhook/replicate?photoId=${photoId}&colorize=${colorize}&animate=${animate}&step=restored`; 
@@ -167,22 +167,20 @@ The result should be cinematic, natural, and emotionally subtle.
       try {
         await callWithRetry(async () => {
           await replicate.predictions.create({
-            version: "7de2ea26c616d5bf2245ad0d5e24f0ff9a6204578a5c876db53142edd9d2cd56", // CodeFormer
+            version: "9283608cc6b7c93427498c8c6cd14357497d34aef997a06a6c0e5f6f4faeb680", // GFPGAN v1.4
             input: {
-              image: imageUrl,
-              upscale: 2,
-              face_upsample: true,
-              background_enhance: true,
-              codeformer_fidelity: 0.8
+              img: imageUrl,
+              version: "v1.4",
+              scale: 2
             },
             webhook: nextWebhookUrl,
             webhook_events_filter: ["completed"]
           });
         });
-        console.log(`[AI Chain] Step 2 (CodeFormer) disparado para PhotoId: ${photoId}`);
+        console.log(`[AI Chain] Step 2 (GFPGAN) disparado para PhotoId: ${photoId}`);
         return NextResponse.json({ success: true, status: 'RESTORING' });
       } catch (e: any) {
-        console.error(`[AI Chain] Erro CodeFormer: ${e.message}`);
+        console.error(`[AI Chain] Erro GFPGAN: ${e.message}`);
         // Se falhar a restauração de detalhes, tenta seguir com o que temos da limpeza
         if (colorize) return await triggerColorization(imageUrl);
         if (animate) return await triggerCaptioning(imageUrl);
