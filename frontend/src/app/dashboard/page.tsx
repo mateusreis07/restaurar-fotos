@@ -1,15 +1,14 @@
 'use client';
 
-import { useState, useEffect, useRef, Suspense } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
-function DashboardContent() {
+export default function Dashboard() {
   const [user, setUser] = useState<any>(null);
   const [photos, setPhotos] = useState<any[]>([]);
   const [isAuthChecking, setIsAuthChecking] = useState(true);
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   // Purchase success modal
   const [showPurchaseSuccess, setShowPurchaseSuccess] = useState(false);
@@ -58,17 +57,16 @@ function DashboardContent() {
       .finally(() => setIsAuthChecking(false));
   }, [router]);
 
-  // Detect successful purchase from Stripe redirect
+  // Detect successful purchase from Stripe redirect (runs once on mount)
   useEffect(() => {
-    if (searchParams.get('success') === 'true' && !sessionStorage.getItem('purchase_modal_shown')) {
-      sessionStorage.setItem('purchase_modal_shown', 'true');
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('success') === 'true') {
       setShowPurchaseSuccess(true);
+      // Clean the URL using Next.js router so internal state is updated
+      router.replace('/dashboard', { scroll: false });
     }
-    // Always clean the URL
-    if (searchParams.get('success')) {
-      window.history.replaceState({}, '', '/dashboard');
-    }
-  }, [searchParams]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [isProcessingAnimation, setIsProcessingAnimation] = useState<string | null>(null);
 
@@ -511,14 +509,14 @@ function DashboardContent() {
             <div className="space-y-3 pt-2">
               <Link 
                 href="/upload"
-                onClick={() => { sessionStorage.removeItem('purchase_modal_shown'); setShowPurchaseSuccess(false); }}
+                onClick={() => setShowPurchaseSuccess(false)}
                 className="w-full bg-[#483ede] text-white py-5 rounded-[18px] font-black text-[17px] hover:bg-[#3b32c6] shadow-xl shadow-[#483ede]/30 active:scale-95 transition-all flex items-center justify-center gap-2"
               >
                 <span className="material-symbols-outlined text-[22px]">auto_fix_high</span>
                 Restaurar uma Foto Agora
               </Link>
               <button
-                onClick={() => { sessionStorage.removeItem('purchase_modal_shown'); setShowPurchaseSuccess(false); }}
+                onClick={() => setShowPurchaseSuccess(false)}
                 className="w-full py-4 text-[#575f6a] font-extrabold text-[15px] hover:text-[#151c27] transition-colors"
               >
                 Continuar para a Galeria
@@ -529,13 +527,5 @@ function DashboardContent() {
         </div>
       )}
     </div>
-  );
-}
-
-export default function Dashboard() {
-  return (
-    <Suspense fallback={<div className="min-h-screen bg-[#f9f9ff] flex items-center justify-center"></div>}>
-      <DashboardContent />
-    </Suspense>
   );
 }

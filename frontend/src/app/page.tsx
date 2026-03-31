@@ -198,7 +198,7 @@ export default function Home() {
            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#f43f5e]/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/4 pointer-events-none"></div>
            
            <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <div className="order-2 lg:order-1 space-y-10 relative">
+              <div className="space-y-10 relative">
                  <div className="inline-flex items-center gap-2 bg-[#fff1f2] text-[#f43f5e] px-4 py-2 rounded-full border border-[#fecdd3]/50">
                     <span className="material-symbols-outlined text-[18px] font-bold" style={{fontVariationSettings: "'FILL' 1"}}>card_giftcard</span>
                     <span className="text-[12px] font-black uppercase tracking-widest">Nova Funcionalidade</span>
@@ -254,37 +254,37 @@ export default function Home() {
                  </div>
               </div>
 
-              <div className="order-1 lg:order-2 relative">
+              <div className="relative">
                  {/* Mockup or Visual Representation - Updated to match real /memory/[id] design */}
                  <div className="relative z-10 bg-white rounded-[3.5rem] p-4 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] border border-slate-200">
-                    <div className="rounded-[2.8rem] overflow-hidden aspect-[4/5] relative bg-gradient-to-br from-[#0c1221] via-[#151c27] to-[#0c1221] flex flex-col items-center justify-center p-8 text-center space-y-8">
+                    <div className="rounded-[2.8rem] overflow-hidden lg:aspect-[9/16] relative bg-gradient-to-br from-[#0c1221] via-[#151c27] to-[#0c1221] flex flex-col items-center justify-center p-6 sm:p-8 py-10 sm:py-12 text-center space-y-6 sm:space-y-8">
                        {/* Floating Heart Icon */}
-                       <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-2">
+                       <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
                           <span className="material-symbols-outlined text-[#f43f5e] text-2xl" style={{fontVariationSettings: "'FILL' 1"}}>favorite</span>
                        </div>
 
-                       <div className="space-y-4">
+                       <div className="space-y-3 sm:space-y-4">
                           <p className="text-[10px] font-black text-[#f43f5e] uppercase tracking-[0.3em]">Uma lembrança para você</p>
-                          <h3 className="text-4xl font-black text-white tracking-tight">Olá, Maria!</h3>
+                          <h3 className="text-3xl sm:text-4xl font-black text-white tracking-tight">Olá, Maria!</h3>
                        </div>
 
                        {/* Translucent Message Card */}
-                       <div className="w-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-8 space-y-6 relative overflow-hidden group">
+                       <div className="w-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-[1.5rem] sm:rounded-[2.5rem] p-5 sm:p-8 space-y-4 sm:space-y-6 relative overflow-hidden group">
                           <div className="absolute -top-4 -left-2 opacity-10">
                              <span className="material-symbols-outlined text-6xl text-white">format_quote</span>
                           </div>
-                          <p className="text-white text-lg font-medium italic leading-relaxed relative z-10">
+                          <p className="text-white text-base sm:text-lg font-medium italic leading-relaxed relative z-10">
                              "Reuni alguns dos nossos momentos mais especiais que ganharam vida nova na Reviva. Espero que se emocione tanto quanto eu."
                           </p>
-                          <div className="pt-4 border-t border-white/5">
+                          <div className="pt-3 sm:pt-4 border-t border-white/5">
                              <p className="text-[10px] font-black text-white/50 uppercase tracking-[0.2em]">
                                 — Com carinho, João
                              </p>
                           </div>
                        </div>
 
-                       <div className="pt-10 flex flex-col items-center gap-4">
-                           <div className="w-12 h-12 rounded-full border-2 border-white/20 flex items-center justify-center animate-pulse">
+                       <div className="pt-6 sm:pt-10 flex flex-col items-center gap-3 sm:gap-4">
+                           <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white/20 flex items-center justify-center animate-pulse">
                               <span className="material-symbols-outlined text-white/40 text-xl">expand_more</span>
                            </div>
                            <p className="text-[9px] font-black text-white/30 uppercase tracking-widest">Role para ver as fotos</p>

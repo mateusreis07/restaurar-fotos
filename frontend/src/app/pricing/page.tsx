@@ -1,27 +1,25 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Footer from '../components/Footer';
 
-function PricingContent() {
+export default function PricingPage() {
   const [user, setUser] = useState<any>(null);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [showCanceled, setShowCanceled] = useState(false);
   const router = useRouter();
-  const searchParams = useSearchParams();
 
-  // Detect canceled purchase from Stripe redirect
+  // Detect canceled purchase from Stripe redirect (runs once on mount)
   useEffect(() => {
-    if (searchParams.get('canceled') === 'true' && !sessionStorage.getItem('canceled_modal_shown')) {
-      sessionStorage.setItem('canceled_modal_shown', 'true');
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('canceled') === 'true') {
       setShowCanceled(true);
+      router.replace('/pricing', { scroll: false });
     }
-    if (searchParams.get('canceled')) {
-      window.history.replaceState({}, '', '/pricing');
-    }
-  }, [searchParams]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const userId = localStorage.getItem('aura_user_id');
@@ -238,13 +236,5 @@ function PricingContent() {
         </div>
       )}
     </div>
-  );
-}
-
-export default function PricingPage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen bg-[#f9f9ff] flex items-center justify-center"></div>}>
-      <PricingContent />
-    </Suspense>
   );
 }
